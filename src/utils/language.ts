@@ -3,11 +3,15 @@ export const translations = {
     language_set: "Your language has been set to English!",
     invalid_language: "Invalid language selection.",
     balance: "Your balance is {coins} coins.",
+    start_prompt: "🧚 Please use `/start` first to create your account!",
+    not_started: "🧚 This user has not started their journey yet!",
   },
   es: {
     language_set: "¡Tu idioma ha sido configurado a Español!",
     invalid_language: "Selección de idioma no válida.",
     balance: "Tu saldo es de {coins} monedas.",
+    start_prompt: "🧚 ¡Usa `/start` primero para crear tu cuenta!",
+    not_started: "🧚 ¡Este usuario aún no ha comenzado su viaje!",
   }
 };
 

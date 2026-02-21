@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readdir } from 'fs/promises';
 import { createServer } from 'http';
+import { supabase } from './database/supabase.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -25,9 +25,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   if (!user) {
     const lang = (interaction as any).userLanguage || 'en';
     await interaction.editReply({ 
-      content: targetUser.id === interaction.user.id 
-        ? (lang === 'es' ? '🧚 ¡Usa `/start` primero para crear tu cuenta!' : '🧚 Please use `/start` first to create your account!')
-        : (lang === 'es' ? '🧚 ¡Este usuario aún no ha comenzado su viaje!' : '🧚 This user has not started their journey yet!') 
+      content: getTranslation(lang, targetUser.id === interaction.user.id ? 'start_prompt' : 'not_started')
     });
     return;
   }
