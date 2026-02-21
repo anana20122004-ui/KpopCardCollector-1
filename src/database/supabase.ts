@@ -14,6 +14,7 @@ export interface User {
   last_drop: string | null;
   last_booster: string | null;
   last_bonanza: string | null;
+  language: 'en' | 'es';
   created_at: string;
 }
 
