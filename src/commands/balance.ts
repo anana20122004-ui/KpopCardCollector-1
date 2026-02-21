@@ -1,5 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
+import { getTranslation } from '../utils/language.js';
 
 export const data = new SlashCommandBuilder()
   .setName('balance')
@@ -22,18 +23,19 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     .single();
 
   if (!user) {
+    const lang = (interaction as any).userLanguage || 'en';
     await interaction.editReply({ 
       content: targetUser.id === interaction.user.id 
-        ? '🧚 Please use `/start` first to create your account!' 
-        : '🧚 This user has not started their journey yet!' 
+        ? (lang === 'es' ? '🧚 ¡Usa `/start` primero para crear tu cuenta!' : '🧚 Please use `/start` first to create your account!')
+        : (lang === 'es' ? '🧚 ¡Este usuario aún no ha comenzado su viaje!' : '🧚 This user has not started their journey yet!') 
     });
     return;
   }
 
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
-    .setTitle(`${targetUser.username}'s Balance`)
-    .setDescription(`🧚 **${user.coins}** coins`)
+    .setTitle(user.language === 'es' ? `Saldo de ${targetUser.username}` : `${targetUser.username}'s Balance`)
+    .setDescription(`🧚 **${user.coins}** ${user.language === 'es' ? 'monedas' : 'coins'}`)
     .setThumbnail(targetUser.displayAvatarURL());
 
   await interaction.editReply({ embeds: [embed] });

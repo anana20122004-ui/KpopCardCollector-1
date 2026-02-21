@@ -134,6 +134,16 @@ client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
   const command = commands.get(interaction.commandName);
   if (!command) return;
+
+  // Fetch user language preference
+  const { data: userData } = await supabase
+    .from('users')
+    .select('language')
+    .eq('user_id', interaction.user.id)
+    .single();
+  
+  (interaction as any).userLanguage = userData?.language || 'en';
+
   try { await command.execute(interaction); } catch (error) { console.error(error); }
 });
 
