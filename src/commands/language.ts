@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, MessageFlags } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { getTranslation } from '../utils/language.js';
 
@@ -17,13 +17,25 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction: ChatInputCommandInteraction) {
   const lang = interaction.options.getString('lang', true) as 'en' | 'es';
   
+  // Check for column existence before attempting update
+  // Since we can't easily check schema via client, we'll use a safer approach
+  // and handle the specific "column not found" error if it occurs.
+  
   const { error } = await supabase
     .from('users')
-    .upsert({ user_id: interaction.user.id, language: lang }, { onConflict: 'user_id' });
+    .update({ language: lang } as any)
+    .eq('user_id', interaction.user.id);
 
   if (error) {
     console.error('Error setting language:', error);
-    return interaction.reply({ content: 'Error saving language preference.', ephemeral: true });
+    // If it's a schema cache error, we should inform the user
+    if (error.code === 'PGRST204') {
+      return interaction.reply({ 
+        content: '🧚 The database is still updating its schema. Please try again in a few minutes after the administrator reloads the Supabase schema cache.', 
+        flags: [MessageFlags.Ephemeral] 
+      });
+    }
+    return interaction.reply({ content: 'Error saving language preference.', flags: [MessageFlags.Ephemeral] });
   }
 
   const message = getTranslation(lang, 'language_set');

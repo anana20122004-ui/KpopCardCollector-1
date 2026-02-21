@@ -136,14 +136,14 @@ client.on(Events.InteractionCreate, async (interaction) => {
   const command = commands.get(interaction.commandName);
   if (!command) return;
 
-  // Fetch user language preference
-  const { data: userData } = await supabase
+  // Fetch user language preference safely
+  const { data: userData, error: langError } = await supabase
     .from('users')
-    .select('language')
+    .select('*')
     .eq('user_id', interaction.user.id)
-    .single();
+    .maybeSingle();
   
-  (interaction as any).userLanguage = userData?.language || 'en';
+  (interaction as any).userLanguage = (userData as any)?.language || 'en';
 
   try { await command.execute(interaction); } catch (error) { console.error(error); }
 });
