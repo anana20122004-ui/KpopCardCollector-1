@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { getRandomRarity } from '../utils/cards.js';
+import { getTranslation } from '../utils/language.js';
 
 const PACKS = [
   { id: '1', name: 'Magic Seeds', cost: 500, cards: 1 },
@@ -16,9 +17,10 @@ export const data = new SlashCommandBuilder()
   )));
 
 export async function execute(interaction: ChatInputCommandInteraction) {
+  const lang = (interaction as any).userLanguage || 'en';
   const sub = interaction.options.getSubcommand();
   if (sub === 'browse') {
-    const embed = new EmbedBuilder().setTitle('🌸 Shop').setDescription(PACKS.map(p => `**${p.name}** - ${p.cost} coins`).join('\n'));
+    const embed = new EmbedBuilder().setTitle(getTranslation(lang, 'shop_title')).setDescription(PACKS.map(p => `**${p.name}** - ${p.cost} ${lang === 'es' ? 'monedas' : 'coins'}`).join('\n'));
     return interaction.reply({ embeds: [embed] });
   }
   
@@ -27,10 +29,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const pack = PACKS.find(p => p.id === packId);
   const { data: user } = await supabase.from('users').select('*').eq('user_id', interaction.user.id).single();
   
-  if (!user || (user as any).coins < (pack as any).cost) return interaction.editReply('Not enough coins!');
+  if (!user || (user as any).coins < (pack as any).cost) return interaction.editReply(getTranslation(lang, 'shop_not_enough'));
   
   const { data: cards } = await supabase.from('cards').select('*').eq('droppable', true);
-  if (!cards || cards.length === 0) return interaction.editReply('No cards available!');
+  if (!cards || cards.length === 0) return interaction.editReply(getTranslation(lang, 'shop_no_cards'));
 
   const pulled = [];
   for (let i = 0; i < (pack as any).cards; i++) {
@@ -47,5 +49,5 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   }
 
   await supabase.from('users').update({ coins: (user as any).coins - (pack as any).cost }).eq('user_id', interaction.user.id);
-  await interaction.editReply(`Bought **${(pack as any).name}**! Pulled: ${pulled.map(c => c.name).join(', ')}`);
+  await interaction.editReply(getTranslation(lang, 'shop_bought', { pack: (pack as any).name, list: pulled.map(c => c.name).join(', ') }));
 }

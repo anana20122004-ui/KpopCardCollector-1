@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { getCooldownRemaining, formatCooldown } from '../utils/cooldowns.js';
+import { getTranslation } from '../utils/language.js';
 
 export const data = new SlashCommandBuilder()
   .setName('cooldowns')
@@ -8,16 +9,17 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();
+  const lang = (interaction as any).userLanguage || 'en';
   const userId = interaction.user.id;
 
   const { data: user } = await supabase
     .from('users')
     .select('*')
     .eq('user_id', userId)
-    .single();
+    .maybeSingle();
 
   if (!user) {
-    await interaction.editReply({ content: '🧚 Please use `/start` first to create your account!' });
+    await interaction.editReply({ content: getTranslation(lang, 'start_prompt') });
     return;
   }
 
@@ -28,14 +30,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
-    .setTitle('⏰ Cooldowns')
+    .setTitle(getTranslation(lang, 'cooldowns_title'))
     .addFields(
-      { name: '📅 Daily Reward', value: formatCooldown(dailyCooldown) },
-      { name: '📆 Weekly Reward', value: formatCooldown(weeklyCooldown) },
-      { name: '🧚 Explore', value: formatCooldown(exploreCooldown) },
-      { name: '🦋 Drop', value: formatCooldown(dropCooldown) }
+      { name: lang === 'es' ? '📅 Recompensa Diaria' : '📅 Daily Reward', value: formatCooldown(dailyCooldown) },
+      { name: lang === 'es' ? '📆 Recompensa Semanal' : '📆 Weekly Reward', value: formatCooldown(weeklyCooldown) },
+      { name: lang === 'es' ? '🧚 Explorar' : '🧚 Explore', value: formatCooldown(exploreCooldown) },
+      { name: lang === 'es' ? '🦋 Drop' : '🦋 Drop', value: formatCooldown(dropCooldown) }
     )
-    .setFooter({ text: 'All times are approximate' });
+    .setFooter({ text: getTranslation(lang, 'cooldowns_footer') });
 
   await interaction.editReply({ embeds: [embed] });
 }

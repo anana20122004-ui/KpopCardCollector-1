@@ -4,6 +4,7 @@ import { getRandomRarity, getRarityColor, getRarityEmoji } from '../utils/cards.
 import { isAdminUser } from '../utils/constants.js';
 import { scheduleReminder } from '../utils/reminders.js';
 import { mergeCardImages } from '../utils/imageUtils.js';
+import { getTranslation } from '../utils/language.js';
 
 const COOLDOWN_MINUTES = 2;
 
@@ -14,6 +15,7 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();
   const userId = interaction.user.id;
+  const lang = (interaction as any).userLanguage || 'en';
 
   const { data: user, error: userError } = await supabase
     .from('users')
@@ -22,17 +24,17 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     .maybeSingle();
 
   if (userError || !user) {
-    return interaction.editReply({ content: '🧚 Please use `/start` first to create your account!' });
+    return interaction.editReply({ content: getTranslation(lang, 'start_prompt') });
   }
 
   const lastDrop = user.last_drop ? new Date(user.last_drop).getTime() : 0;
   if (!isAdminUser(userId) && Date.now() - lastDrop < COOLDOWN_MINUTES * 60 * 1000) {
     const remaining = Math.ceil((COOLDOWN_MINUTES * 60 * 1000 - (Date.now() - lastDrop)) / 1000);
-    return interaction.editReply({ content: `⏳ Wait **${remaining}s** before next drop!` });
+    return interaction.editReply({ content: getTranslation(lang, 'drop_wait', { time: remaining }) });
   }
 
   const { data: allCards } = await supabase.from('cards').select('*').eq('droppable', true);
-  if (!allCards || allCards.length < 3) return interaction.editReply('🧚 Not enough cards in the garden!');
+  if (!allCards || allCards.length < 3) return interaction.editReply(getTranslation(lang, 'not_enough_cards'));
 
   const selectedCards: any[] = [];
   for (let i = 0; i < 3; i++) {
@@ -59,23 +61,23 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
-    .setTitle('🦋 Magical Cards Appear!')
-    .setDescription(`Three cards have appeared from the mist! Choose **one** to claim.\n\n${cardList}`)
-    .setFooter({ text: 'Only you can claim a card! (Expires in 30s)' });
+    .setTitle(getTranslation(lang, 'drop_title'))
+    .setDescription(getTranslation(lang, 'drop_desc', { list: cardList }))
+    .setFooter({ text: getTranslation(lang, 'drop_footer') });
 
   if (attachment) embed.setImage('attachment://drop.png');
 
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-    new ButtonBuilder().setCustomId('claim_0').setLabel('Card 1').setStyle(ButtonStyle.Primary),
-    new ButtonBuilder().setCustomId('claim_1').setLabel('Card 2').setStyle(ButtonStyle.Primary),
-    new ButtonBuilder().setCustomId('claim_2').setLabel('Card 3').setStyle(ButtonStyle.Primary)
+    new ButtonBuilder().setCustomId('claim_0').setLabel(getTranslation(lang, 'drop_claim_button', { num: 1 })).setStyle(ButtonStyle.Primary),
+    new ButtonBuilder().setCustomId('claim_1').setLabel(getTranslation(lang, 'drop_claim_button', { num: 2 })).setStyle(ButtonStyle.Primary),
+    new ButtonBuilder().setCustomId('claim_2').setLabel(getTranslation(lang, 'drop_claim_button', { num: 3 })).setStyle(ButtonStyle.Primary)
   );
 
   const msg = await interaction.editReply({ embeds: [embed], components: [row], files: attachment ? [attachment] : [] });
   const collector = msg.createMessageComponentCollector({ componentType: ComponentType.Button, time: 30000 });
 
   collector.on('collect', async i => {
-    if (i.user.id !== userId) return i.reply({ content: '🧚 These aren\'t your cards!', ephemeral: true });
+    if (i.user.id !== userId) return i.reply({ content: getTranslation(lang, 'wrong_user_cards'), ephemeral: true });
     
     await i.deferUpdate();
     const index = parseInt(i.customId.split('_')[1]);
@@ -89,8 +91,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     const resultEmbed = new EmbedBuilder()
       .setColor(getRarityColor(card.rarity))
-      .setTitle('✨ Card Claimed!')
-      .setDescription(`You chose ${getRarityEmoji(card.rarity)} **${card.name}** (${card.group})!\n\`${card.cardcode}\``);
+      .setTitle(getTranslation(lang, 'drop_claimed_title'))
+      .setDescription(getTranslation(lang, 'drop_claimed_desc', { emoji: getRarityEmoji(card.rarity), name: card.name, group: card.group, code: card.cardcode }));
     
     if (card.image_url) resultEmbed.setImage(card.image_url);
     
@@ -102,7 +104,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   collector.on('end', async (_, reason) => {
     if (reason === 'time') {
       const expiredEmbed = EmbedBuilder.from(embed)
-        .setDescription('⏰ **Time expired!** The magical mist has faded and the cards have vanished.')
+        .setDescription(getTranslation(lang, 'drop_expired'))
         .setColor(0x808080);
       await interaction.editReply({ embeds: [expiredEmbed], components: [], files: attachment ? [attachment] : [] });
     }

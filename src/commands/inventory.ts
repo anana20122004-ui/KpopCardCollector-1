@@ -2,10 +2,12 @@ import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, Attachm
 import { supabase } from '../database/supabase.js';
 import { mergeCardImages } from '../utils/imageUtils.js';
 import { getRarityEmoji } from '../utils/cards.js';
+import { getTranslation } from '../utils/language.js';
 
 export const data = new SlashCommandBuilder()
   .setName('inventory')
   .setDescription('View your K-pop card collection')
+// ... (rest of the options)
   .addUserOption(option =>
     option.setName('user')
       .setDescription('User to check inventory for (default: yourself)')
@@ -47,6 +49,7 @@ const CARDS_PER_PAGE = 3;
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();
+  const lang = (interaction as any).userLanguage || 'en';
   const targetUser = interaction.options.getUser('user');
   const userId = targetUser ? targetUser.id : interaction.user.id;
   const page = interaction.options.getInteger('page') || 1;
@@ -63,7 +66,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     .maybeSingle();
 
   if (userError || !user) {
-    await interaction.editReply({ content: '🧚 Please use `/start` first to create your account!' });
+    await interaction.editReply({ content: getTranslation(lang, 'start_prompt') });
     return;
   }
 
@@ -87,9 +90,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   if (!inventory || inventory.length === 0) {
     const embed = new EmbedBuilder()
       .setColor(0xff69b4)
-      .setTitle('📦 Inventory')
-      .setDescription('Your collection is empty! Use `/drop` to get cards.')
-      .addFields({ name: '🧚 Coins', value: `${user.coins}` });
+      .setTitle(getTranslation(lang, 'inventory_title'))
+      .setDescription(getTranslation(lang, 'inventory_empty'))
+      .addFields({ name: getTranslation(lang, 'coins_label'), value: `${user.coins}` });
 
     await interaction.editReply({ embeds: [embed] });
     return;
@@ -134,9 +137,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   if (filteredInventory.length === 0) {
     const embed = new EmbedBuilder()
       .setColor(0xff69b4)
-      .setTitle('📦 Inventory')
-      .setDescription('No cards match your filters!')
-      .addFields({ name: '🧚 Coins', value: `${user.coins}` });
+      .setTitle(getTranslation(lang, 'inventory_title'))
+      .setDescription(getTranslation(lang, 'inventory_no_match'))
+      .addFields({ name: getTranslation(lang, 'coins_label'), value: `${user.coins}` });
 
     await interaction.editReply({ embeds: [embed] });
     return;
@@ -165,7 +168,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       const card = item.cards;
       const eraText = card.era ? ` • ${card.era}` : '';
       const rarityEmoji = getRarityEmoji(card.rarity);
-      return `**Card ${index + 1}:** ${card.name} (${card.group}) ${rarityEmoji}${eraText} • \`${card.cardcode}\` • Qty: ${item.quantity}`;
+      return getTranslation(lang, 'inventory_card_label', {
+        num: index + 1,
+        name: card.name,
+        group: card.group,
+        emoji: rarityEmoji,
+        era: eraText,
+        code: card.cardcode,
+        qty: item.quantity
+      });
     })
     .join('\n');
 
@@ -181,13 +192,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   }
 
   const isOwnInventory = userId === interaction.user.id;
-  const title = isOwnInventory ? '🌲 Inventory' : `🌲 ${targetUser?.username}'s Inventory`;
+  const title = isOwnInventory 
+    ? getTranslation(lang, 'inventory_title') 
+    : (lang === 'es' ? `Inventario de ${targetUser?.username}` : `${targetUser?.username}'s Inventory`);
 
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
     .setTitle(title)
     .setDescription(cardList)
-    .setFooter({ text: `${filteredInventory.length} cards total` });
+    .setFooter({ text: getTranslation(lang, 'inventory_footer', { total: filteredInventory.length }) });
 
   if (attachment) {
     embed.setImage('attachment://inventory_cards.png');
@@ -197,7 +210,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     .addComponents(
       new ButtonBuilder()
         .setCustomId(`inv_prev_${userId}_${rarityFilter || 'all'}_${groupFilter || 'all'}_${eraFilter || 'all'}_${idolFilter || 'all'}_${searchFilter || 'all'}`)
-        .setLabel('← Previous')
+        .setLabel(getTranslation(lang, 'prev_button'))
         .setStyle(ButtonStyle.Secondary)
         .setDisabled(validPage === 1),
       new ButtonBuilder()
@@ -207,7 +220,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         .setDisabled(true),
       new ButtonBuilder()
         .setCustomId(`inv_next_${userId}_${rarityFilter || 'all'}_${groupFilter || 'all'}_${eraFilter || 'all'}_${idolFilter || 'all'}_${searchFilter || 'all'}`)
-        .setLabel('Next →')
+        .setLabel(getTranslation(lang, 'next_button'))
         .setStyle(ButtonStyle.Secondary)
         .setDisabled(validPage === totalPages)
     );
