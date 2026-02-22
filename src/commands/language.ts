@@ -28,14 +28,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   if (error) {
     console.error('Error setting language:', error);
-    // If it's a schema cache error, we should inform the user
-    if (error.code === 'PGRST204') {
-      return interaction.reply({ 
-        content: '🧚 The database is still updating its schema. Please try again in a few minutes after the administrator reloads the Supabase schema cache.', 
-        flags: [MessageFlags.Ephemeral] 
-      });
-    }
-    return interaction.reply({ content: 'Error saving language preference.', flags: [MessageFlags.Ephemeral] });
+    return interaction.reply({ content: 'Error saving language preference. Please ensure you have run `/start` and the database is initialized.', flags: [MessageFlags.Ephemeral] });
   }
 
   const message = getTranslation(lang, 'language_set');
