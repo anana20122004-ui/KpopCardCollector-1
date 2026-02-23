@@ -1,5 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
+import { getTranslation } from '../utils/language.js';
 
 export const data = new SlashCommandBuilder()
   .setName('pay')
@@ -16,6 +17,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();
+  const lang = (interaction as any).userLanguage || 'en';
 
   const senderUserId = interaction.user.id;
   const receiverUser = interaction.options.getUser('user', true);
@@ -23,25 +25,25 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const amount = interaction.options.getInteger('amount', true);
 
   if (senderUserId === receiverUserId) {
-    await interaction.editReply({ content: '🧚 You can\'t pay yourself!' });
+    await interaction.editReply({ content: getTranslation(lang, 'error_pay_self') });
     return;
   }
 
-  const { data: sender } = await supabase.from('users').select('*').eq('user_id', senderUserId).single();
-  const { data: receiver } = await supabase.from('users').select('*').eq('user_id', receiverUserId).single();
+  const { data: sender } = await supabase.from('users').select('*').eq('user_id', senderUserId).maybeSingle();
+  const { data: receiver } = await supabase.from('users').select('*').eq('user_id', receiverUserId).maybeSingle();
 
   if (!sender) {
-    await interaction.editReply({ content: '🧚 Use `/start` first!' });
+    await interaction.editReply({ content: getTranslation(lang, 'start_prompt') });
     return;
   }
 
   if (!receiver) {
-    await interaction.editReply({ content: `🧚 ${receiverUser.username} needs to use \`/start\` first!` });
+    await interaction.editReply({ content: lang === 'es' ? `🧚 ¡${receiverUser.username} necesita usar \`/start\` primero!` : `🧚 ${receiverUser.username} needs to use \`/start\` first!` });
     return;
   }
 
   if (sender.coins < amount) {
-    await interaction.editReply({ content: `🧚 You only have **${sender.coins}** coins!` });
+    await interaction.editReply({ content: getTranslation(lang, 'error_insufficient_coins', { coins: sender.coins }) });
     return;
   }
 
@@ -50,8 +52,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
-    .setTitle('💸 Coins Sent!')
-    .setDescription(`🌲 You sent **${amount} coins** to ${receiverUser.username}!\n\n💰 Your new balance: **${sender.coins - amount} coins**`);
+    .setTitle(getTranslation(lang, 'pay_title'))
+    .setDescription(getTranslation(lang, 'pay_desc', { amount, user: receiverUser.username, balance: sender.coins - amount }));
 
   await interaction.editReply({ embeds: [embed] });
 }

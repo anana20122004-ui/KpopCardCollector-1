@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { isAdminUser } from '../utils/constants.js';
+import { getTranslation } from '../utils/language.js';
 
 export const data = new SlashCommandBuilder()
   .setName('addcard')
@@ -36,8 +37,9 @@ export const data = new SlashCommandBuilder()
       .setDescription('Image URL'));
 
 export async function execute(interaction: ChatInputCommandInteraction) {
+  const lang = (interaction as any).userLanguage || 'en';
   if (!isAdminUser(interaction.member)) {
-    return interaction.reply({ content: '🧚 This command is for Staff only!', ephemeral: true });
+    return interaction.reply({ content: lang === 'es' ? '🧚 ¡Este comando es solo para Staff!' : '🧚 This command is for Staff only!', ephemeral: true });
   }
 
   await interaction.deferReply();
@@ -62,10 +64,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     const { error } = await supabase.from('cards').update(updates).eq('card_id', existing.card_id);
     if (error) return interaction.editReply(`Error: ${error.message}`);
-    return interaction.editReply(`Updated card **${cardcode}**!`);
+    return interaction.editReply(getTranslation(lang, 'update_success', { type: lang === 'es' ? 'carta' : 'card', code: cardcode }));
   }
 
-  if (!name || !group || !rarity) return interaction.editReply('Provide name, group, and rarity for new cards!');
+  if (!name || !group || !rarity) return interaction.editReply(getTranslation(lang, 'provide_details'));
 
   const { error } = await supabase.from('cards').insert([{
     name, group, cardcode, era, rarity, 
@@ -74,5 +76,5 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   }]);
 
   if (error) return interaction.editReply(`Error: ${error.message}`);
-  await interaction.editReply(`Added card **${name}** (**${cardcode}**)!`);
+  await interaction.editReply(getTranslation(lang, 'add_success', { type: lang === 'es' ? 'carta' : 'card', name, code: cardcode }));
 }

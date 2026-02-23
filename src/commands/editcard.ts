@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { isAdminUser } from '../utils/constants.js';
+import { getTranslation } from '../utils/language.js';
 
 export const data = new SlashCommandBuilder()
   .setName('editcard')
@@ -23,8 +24,9 @@ export const data = new SlashCommandBuilder()
       ));
 
 export async function execute(interaction: ChatInputCommandInteraction) {
+  const lang = (interaction as any).userLanguage || 'en';
   if (!isAdminUser(interaction.member)) {
-    return interaction.reply({ content: '🧚 This command is for Staff only!', ephemeral: true });
+    return interaction.reply({ content: lang === 'es' ? '🧚 ¡Este comando es solo para Staff!' : '🧚 This command is for Staff only!', ephemeral: true });
   }
 
   await interaction.deferReply();
@@ -34,17 +36,17 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const rarity = interaction.options.getInteger('rarity');
 
   const { data: card } = await supabase.from('cards').select('*').eq('cardcode', code).maybeSingle();
-  if (!card) return interaction.editReply('Card not found!');
+  if (!card) return interaction.editReply(getTranslation(lang, 'not_enough_cards'));
 
   const updates: any = {};
   if (name) updates.name = name;
   if (group) updates.group = group;
   if (rarity) updates.rarity = rarity;
 
-  if (Object.keys(updates).length === 0) return interaction.editReply('Nothing to update!');
+  if (Object.keys(updates).length === 0) return interaction.editReply(getTranslation(lang, 'nothing_to_update'));
 
   const { error } = await supabase.from('cards').update(updates).eq('card_id', card.card_id);
   if (error) return interaction.editReply(`Error: ${error.message}`);
 
-  await interaction.editReply(`Updated **${code}**!`);
+  await interaction.editReply(getTranslation(lang, 'update_success', { type: lang === 'es' ? 'carta' : 'card', code }));
 }

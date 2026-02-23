@@ -1,4 +1,5 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
+import { getTranslation } from '../utils/language.js';
 
 export const data = new SlashCommandBuilder()
   .setName('reload')
@@ -6,5 +7,6 @@ export const data = new SlashCommandBuilder()
   .setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
 
 export async function execute(interaction: ChatInputCommandInteraction) {
-  await interaction.reply({ content: '🏘️ Commands refreshed! Restart the bot to apply changes.', ephemeral: true });
+  const lang = (interaction as any).userLanguage || 'en';
+  await interaction.reply({ content: getTranslation(lang, 'reload_success'), ephemeral: true });
 }

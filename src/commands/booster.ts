@@ -3,6 +3,7 @@ import { supabase } from '../database/supabase.js';
 import { formatCooldown } from '../utils/cooldowns.js';
 import { mergeCardImages } from '../utils/imageUtils.js';
 import { BOOSTER_ROLE_ID, isAdminUser } from '../utils/constants.js';
+import { getTranslation } from '../utils/language.js';
 
 const BOOSTER_COOLDOWN_HOURS = 6;
 
@@ -12,20 +13,21 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();
+  const lang = (interaction as any).userLanguage || 'en';
   const userId = interaction.user.id;
 
   const member = interaction.member as any;
   if (!isAdminUser(userId) && !member?.roles?.cache?.has(BOOSTER_ROLE_ID)) {
-    return interaction.editReply({ content: '🧚 Boosters only!' });
+    return interaction.editReply({ content: lang === 'es' ? '🧚 ¡Solo para Boosters!' : '🧚 Boosters only!' });
   }
 
-  const { data: user } = await supabase.from('users').select('*').eq('user_id', userId).single();
-  if (!user) return interaction.editReply({ content: '🧚 Use `/start` first!' });
+  const { data: user } = await supabase.from('users').select('*').eq('user_id', userId).maybeSingle();
+  if (!user) return interaction.editReply({ content: getTranslation(lang, 'start_prompt') });
 
   const lastBooster = user.last_booster ? new Date(user.last_booster).getTime() : 0;
   if (!isAdminUser(userId) && Date.now() - lastBooster < BOOSTER_COOLDOWN_HOURS * 60 * 60 * 1000) {
     const remaining = (BOOSTER_COOLDOWN_HOURS * 60 * 60 * 1000) - (Date.now() - lastBooster);
-    return interaction.editReply({ embeds: [new EmbedBuilder().setColor(0xff69b4).setTitle('⏰ Cooldown').setDescription(`Back in **${formatCooldown(remaining)}**`)] });
+    return interaction.editReply({ embeds: [new EmbedBuilder().setColor(0xff69b4).setTitle(getTranslation(lang, 'cooldown_title', { type: 'Booster' })).setDescription(getTranslation(lang, 'cooldown_wait', { time: formatCooldown(remaining) }))] });
   }
 
   const rewardCoins = 10000;
@@ -33,7 +35,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   if (!allCards || allCards.length === 0) {
     await supabase.from('users').update({ coins: user.coins + rewardCoins, last_booster: new Date().toISOString() }).eq('user_id', userId);
-    return interaction.editReply({ content: `🧚 Received **${rewardCoins} coins**!` });
+    return interaction.editReply({ content: getTranslation(lang, 'daily_success', { reward: rewardCoins }) });
   }
 
   const pulled = [];
@@ -49,8 +51,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
-    .setTitle('🍃 Booster Reward Claimed!')
-    .setDescription(`Received **${rewardCoins} coins** and **15 cards**!`);
+    .setTitle(getTranslation(lang, 'booster_title'))
+    .setDescription(getTranslation(lang, 'booster_desc', { reward: rewardCoins }));
 
   await interaction.editReply({ embeds: [embed] });
 }

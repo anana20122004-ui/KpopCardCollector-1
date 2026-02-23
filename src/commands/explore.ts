@@ -3,6 +3,7 @@ import { supabase } from '../database/supabase.js';
 import { formatCooldown } from '../utils/cooldowns.js';
 import { isAdminUser } from '../utils/constants.js';
 import { scheduleReminder } from '../utils/reminders.js';
+import { getTranslation } from '../utils/language.js';
 
 const EXPLORE_COOLDOWN_HOURS = 1;
 
@@ -12,6 +13,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();
+  const lang = (interaction as any).userLanguage || 'en';
   const userId = interaction.user.id;
   const reward = Math.floor(Math.random() * 1500) + 1500;
   
@@ -27,22 +29,22 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   if (error) {
     console.error('Explore RPC Error:', error);
-    return interaction.editReply({ content: '🧚 Error exploring. Please try again later!' });
+    return interaction.editReply({ content: getTranslation(lang, 'error_generic') });
   }
 
   const result = data as any;
   if (!result || !result.success) {
     if (result?.error === 'user_not_found') {
-      return interaction.editReply({ content: '🧚 Please use `/start` first to create your account!' });
+      return interaction.editReply({ content: getTranslation(lang, 'start_prompt') });
     }
     if (result?.error === 'on_cooldown') {
       const embed = new EmbedBuilder()
         .setColor(0xff69b4)
-        .setTitle('⏰ Explore On Cooldown')
-        .setDescription(`Come back in **${formatCooldown(result.cooldown_remaining_ms)}**`);
+        .setTitle(getTranslation(lang, 'cooldown_title', { type: lang === 'es' ? 'Exploración' : 'Explore' }))
+        .setDescription(getTranslation(lang, 'cooldown_wait', { time: formatCooldown(result.cooldown_remaining_ms) }));
       return interaction.editReply({ embeds: [embed] });
     }
-    return interaction.editReply({ content: '🧚 Error exploring. Something went wrong.' });
+    return interaction.editReply({ content: getTranslation(lang, 'error_generic') });
   }
 
   const cooldownMs = result.cooldown_remaining_ms || (EXPLORE_COOLDOWN_HOURS * 60 * 60 * 1000);
@@ -50,18 +52,18 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
-    .setTitle('🧚 Exploring Complete!')
-    .setDescription(`You found **${result.reward || reward} coins** in the magical woods!`)
+    .setTitle(getTranslation(lang, 'explore_title'))
+    .setDescription(getTranslation(lang, 'explore_success', { reward: result.reward || reward }))
     .addFields(
-      { name: '💎 Reward', value: `${result.reward || reward} coins`, inline: true },
-      { name: '🧚 Balance', value: `${result.new_balance} coins`, inline: true }
+      { name: getTranslation(lang, 'explore_field_reward'), value: `${result.reward || reward} ${lang === 'es' ? 'monedas' : 'coins'}`, inline: true },
+      { name: getTranslation(lang, 'explore_field_balance'), value: `${result.new_balance} ${lang === 'es' ? 'monedas' : 'coins'}`, inline: true }
     );
 
   if (!isStaff) {
-    embed.addFields({ name: '⏰ Next', value: `<t:${Math.floor(nextAvailable.getTime() / 1000)}:R>`, inline: true });
+    embed.addFields({ name: getTranslation(lang, 'weekly_next'), value: `<t:${Math.floor(nextAvailable.getTime() / 1000)}:R>`, inline: true });
     scheduleReminder(interaction.client, userId, interaction.channelId, 'explore', EXPLORE_COOLDOWN_HOURS * 60 * 60 * 1000);
   } else {
-    embed.addFields({ name: '✨ Staff Perk', value: 'No cooldown active!', inline: true });
+    embed.addFields({ name: getTranslation(lang, 'staff_perk'), value: getTranslation(lang, 'no_cooldown'), inline: true });
   }
 
   await interaction.editReply({ embeds: [embed] });

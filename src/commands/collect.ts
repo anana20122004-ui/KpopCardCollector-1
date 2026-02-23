@@ -2,6 +2,7 @@ import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, Attachm
 import { supabase } from '../database/supabase.js';
 import { getRarityEmoji } from '../utils/cards.js';
 import { mergeCardImages } from '../utils/imageUtils.js';
+import { getTranslation } from '../utils/language.js';
 
 const CARDS_PER_PAGE = 3;
 
@@ -21,6 +22,7 @@ export async function execute(interaction: ChatInputCommandInteraction | ButtonI
     await (interaction as ChatInputCommandInteraction).deferReply();
   }
   
+  const lang = (interaction as any).userLanguage || 'en';
   const options = (interaction as ChatInputCommandInteraction).options;
   const targetUser = options?.getUser('user');
   const userId = targetUser?.id || interaction.user.id;
@@ -38,7 +40,7 @@ export async function execute(interaction: ChatInputCommandInteraction | ButtonI
 
   const { data: cards, count: totalCards } = await query;
   if (!cards || cards.length === 0) {
-    const msg = { content: 'No cards found!', components: [] };
+    const msg = { content: getTranslation(lang, 'inventory_no_match'), components: [] };
     return interaction.editReply(msg);
   }
 
@@ -53,7 +55,7 @@ export async function execute(interaction: ChatInputCommandInteraction | ButtonI
   let display = cards;
   if (missing) display = cards.filter(c => !ownedIds.has(c.card_id));
   if (display.length === 0) {
-    const msg = { content: `You own all cards in this category! (${ownedInFilter}/${totalInFilter})`, components: [] };
+    const msg = { content: getTranslation(lang, 'collect_all_owned', { owned: ownedInFilter, total: totalInFilter }), components: [] };
     return interaction.editReply(msg);
   }
 
@@ -79,16 +81,16 @@ export async function execute(interaction: ChatInputCommandInteraction | ButtonI
   } catch (e) { console.error(e); }
 
   const filterDesc = [];
-  if (idol) filterDesc.push(`Idol: ${idol}`);
-  if (group) filterDesc.push(`Group: ${group}`);
-  if (rarity) filterDesc.push(`Rarity: ${rarity}`);
+  if (idol) filterDesc.push(`${lang === 'es' ? 'Ídolo' : 'Idol'}: ${idol}`);
+  if (group) filterDesc.push(`${lang === 'es' ? 'Grupo' : 'Group'}: ${group}`);
+  if (rarity) filterDesc.push(`${lang === 'es' ? 'Rareza' : 'Rarity'}: ${rarity}`);
   const activeFilters = filterDesc.length > 0 ? ` [${filterDesc.join(', ')}]` : '';
 
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
-    .setTitle(`🌸 Collection Progress${activeFilters}`)
-    .setDescription(`**Progress:** ${ownedInFilter} / ${totalInFilter} cards collected\n\n${list}`)
-    .setFooter({ text: `Page ${validPage}/${totalPages}` });
+    .setTitle(`${getTranslation(lang, 'collect_title')}${activeFilters}`)
+    .setDescription(getTranslation(lang, 'collect_progress', { owned: ownedInFilter, total: totalInFilter }) + `\n\n${list}`)
+    .setFooter({ text: `${lang === 'es' ? 'Página' : 'Page'} ${validPage}/${totalPages}` });
 
   if (attachment) embed.setImage('attachment://collect.png');
 

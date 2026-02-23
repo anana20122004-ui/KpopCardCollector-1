@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { isAdminUser } from '../utils/constants.js';
+import { getTranslation } from '../utils/language.js';
 
 export const data = new SlashCommandBuilder()
   .setName('deletecard')
@@ -11,8 +12,9 @@ export const data = new SlashCommandBuilder()
       .setRequired(true));
 
 export async function execute(interaction: ChatInputCommandInteraction) {
+  const lang = (interaction as any).userLanguage || 'en';
   if (!isAdminUser(interaction.member)) {
-    return interaction.reply({ content: '🧚 This command is for Staff only!', ephemeral: true });
+    return interaction.reply({ content: lang === 'es' ? '🧚 ¡Este comando es solo para Staff!' : '🧚 This command is for Staff only!', ephemeral: true });
   }
 
   await interaction.deferReply();
@@ -25,7 +27,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     .maybeSingle();
 
   if (!card) {
-    await interaction.editReply({ content: '🧚 Card not found!' });
+    await interaction.editReply({ content: getTranslation(lang, 'not_enough_cards') });
     return;
   }
 
@@ -36,17 +38,17 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   if (error) {
     console.error('Delete error:', error);
-    await interaction.editReply({ content: '🧚 Error deleting card. It might be referenced in inventories or marketplace listings.' });
+    await interaction.editReply({ content: lang === 'es' ? '🧚 Error al eliminar la carta. Podría estar referenciada en inventarios o listados del mercado.' : '🧚 Error deleting card. It might be referenced in inventories or marketplace listings.' });
     return;
   }
 
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
-    .setTitle('🗑️ Card Deleted')
-    .setDescription(`Deleted **${card.name}** from ${card.group}`)
+    .setTitle(getTranslation(lang, 'delete_title'))
+    .setDescription(getTranslation(lang, 'delete_desc', { name: card.name, group: card.group }))
     .addFields(
-      { name: 'Card ID', value: `${cardId}` },
-      { name: 'Rarity', value: `${card.rarity}` }
+      { name: getTranslation(lang, 'field_card_id'), value: `${cardId}` },
+      { name: getTranslation(lang, 'field_rarity'), value: `${card.rarity}` }
     );
 
   await interaction.editReply({ embeds: [embed] });

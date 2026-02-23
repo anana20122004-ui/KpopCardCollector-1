@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { getRarityEmoji } from '../utils/cards.js';
+import { getTranslation } from '../utils/language.js';
 
 export const data = new SlashCommandBuilder()
   .setName('mp')
@@ -38,14 +39,15 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();
+  const lang = (interaction as any).userLanguage || 'en';
   const subcommand = interaction.options.getSubcommand();
 
   if (subcommand === 'list') {
-    await handleList(interaction);
+    await handleList(interaction, lang);
   } else if (subcommand === 'browse') {
-    await handleBrowse(interaction);
+    await handleBrowse(interaction, lang);
   } else if (subcommand === 'buy') {
-    await handleBuy(interaction);
+    await handleBuy(interaction, lang);
   }
 }
 
@@ -58,7 +60,7 @@ function generateListingCode(): string {
   return code;
 }
 
-async function handleList(interaction: ChatInputCommandInteraction) {
+async function handleList(interaction: ChatInputCommandInteraction, lang: string) {
   const userId = interaction.user.id;
   const cardcode = interaction.options.getString('cardcode', true).toUpperCase();
   const price = interaction.options.getInteger('price', true);
@@ -67,7 +69,7 @@ async function handleList(interaction: ChatInputCommandInteraction) {
   const { data: card } = await supabase.from('cards').select('*').eq('cardcode', cardcode).maybeSingle();
 
   if (!card) {
-    await interaction.editReply({ content: '🧚 Card not found! Check the card code.' });
+    await interaction.editReply({ content: getTranslation(lang, 'not_enough_cards') });
     return;
   }
 
@@ -92,7 +94,7 @@ async function handleList(interaction: ChatInputCommandInteraction) {
     const result = data as any;
     if (!result.success) {
       if (result.error === 'insufficient_cards') {
-        await interaction.editReply({ content: `🧚 You don't have enough of this card! You have ${result.available}.` });
+        await interaction.editReply({ content: getTranslation(lang, 'error_insufficient_cards', { qty: result.available }) });
         return;
       }
       hasError = true;
@@ -102,25 +104,25 @@ async function handleList(interaction: ChatInputCommandInteraction) {
   }
 
   if (hasError) {
-    await interaction.editReply({ content: '🧚 Error creating listing.' });
+    await interaction.editReply({ content: getTranslation(lang, 'error_generic') });
     return;
   }
 
   const codesDisplay = listingCodes.map(code => `\`${code}\``).join(', ');
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
-    .setTitle('🏘️ Card Listed!')
-    .setDescription(`Your card has been listed on the marketplace!`)
+    .setTitle(getTranslation(lang, 'marketplace_list_success'))
+    .setDescription(getTranslation(lang, 'marketplace_list_desc'))
     .addFields(
-      { name: 'Listing Codes', value: codesDisplay },
-      { name: 'Price Per Card', value: `${price} coins` },
-      { name: 'Total Quantity', value: `${quantity}` }
+      { name: getTranslation(lang, 'marketplace_list_codes'), value: codesDisplay },
+      { name: getTranslation(lang, 'marketplace_list_price'), value: `${price} ${lang === 'es' ? 'monedas' : 'coins'}` },
+      { name: getTranslation(lang, 'marketplace_list_qty'), value: `${quantity}` }
     );
 
   await interaction.editReply({ embeds: [embed] });
 }
 
-async function handleBrowse(interaction: ChatInputCommandInteraction) {
+async function handleBrowse(interaction: ChatInputCommandInteraction, lang: string) {
   const { data: listings } = await supabase.from('marketplace').select(`
     code,
     price,
@@ -137,7 +139,7 @@ async function handleBrowse(interaction: ChatInputCommandInteraction) {
   `).limit(10);
 
   if (!listings || listings.length === 0) {
-    await interaction.editReply({ content: '🛒 The marketplace is empty! No cards are currently for sale.' });
+    await interaction.editReply({ content: getTranslation(lang, 'marketplace_empty') });
     return;
   }
 
@@ -149,19 +151,20 @@ async function handleBrowse(interaction: ChatInputCommandInteraction) {
       const seller = await interaction.client.users.fetch(listing.seller_id);
       sellerName = seller.username;
     } catch (e) {}
-    return `**\`${listing.code}\`** | ${getRarityEmoji(card.rarity)} ${card.name} (${card.group}${eraText}) • \`${card.cardcode}\` | ${listing.price} coins | x${listing.quantity} | *from @${sellerName}*`;
+    const sellerHint = lang === 'es' ? `de @${sellerName}` : `from @${sellerName}`;
+    return `**\`${listing.code}\`** | ${getRarityEmoji(card.rarity)} ${card.name} (${card.group}${eraText}) • \`${card.cardcode}\` | ${listing.price} ${lang === 'es' ? 'monedas' : 'coins'} | x${listing.quantity} | *${sellerHint}*`;
   }))).join('\n');
 
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
-    .setTitle('🌲 Fairy Marketplace')
+    .setTitle(getTranslation(lang, 'marketplace_title'))
     .setDescription(listingText)
-    .setFooter({ text: 'Use /mp buy <code> to purchase' });
+    .setFooter({ text: lang === 'es' ? 'Usa /mp buy <code> para comprar' : 'Use /mp buy <code> to purchase' });
 
   await interaction.editReply({ embeds: [embed] });
 }
 
-async function handleBuy(interaction: ChatInputCommandInteraction) {
+async function handleBuy(interaction: ChatInputCommandInteraction, lang: string) {
   const userId = interaction.user.id;
   const code = interaction.options.getString('code', true).toUpperCase();
 
@@ -179,7 +182,7 @@ async function handleBuy(interaction: ChatInputCommandInteraction) {
   `).eq('code', code).maybeSingle();
 
   if (!listing) {
-    await interaction.editReply({ content: '🧚 Listing not found! Check the code.' });
+    await interaction.editReply({ content: getTranslation(lang, 'error_generic') });
     return;
   }
 
@@ -189,29 +192,29 @@ async function handleBuy(interaction: ChatInputCommandInteraction) {
   });
 
   if (error || !data) {
-    await interaction.editReply({ content: '🧚 Error purchasing card.' });
+    await interaction.editReply({ content: getTranslation(lang, 'error_generic') });
     return;
   }
 
   const result = data as any;
   if (!result.success) {
-    if (result.error === 'listing_not_found') return interaction.editReply({ content: '🧚 Listing not found or already sold!' });
-    if (result.error === 'cannot_buy_own_listing') return interaction.editReply({ content: '🧚 You cannot buy your own listing!' });
-    if (result.error === 'buyer_not_found') return interaction.editReply({ content: '🧚 Please use `/start` first!' });
-    if (result.error === 'insufficient_funds') return interaction.editReply({ content: `🧚 You need ${result.required} coins! You have ${result.available} coins.` });
-    return interaction.editReply({ content: '🧚 Error purchasing card.' });
+    if (result.error === 'listing_not_found') return interaction.editReply({ content: lang === 'es' ? '🧚 ¡Listado no encontrado o ya vendido!' : '🧚 Listing not found or already sold!' });
+    if (result.error === 'cannot_buy_own_listing') return interaction.editReply({ content: lang === 'es' ? '🧚 ¡No puedes comprar tu propio listado!' : '🧚 You cannot buy your own listing!' });
+    if (result.error === 'buyer_not_found') return interaction.editReply({ content: getTranslation(lang, 'start_prompt') });
+    if (result.error === 'insufficient_funds') return interaction.editReply({ content: lang === 'es' ? `🧚 ¡Necesitas ${result.required} monedas! Tienes ${result.available} monedas.` : `🧚 You need ${result.required} coins! You have ${result.available} coins.` });
+    return interaction.editReply({ content: getTranslation(lang, 'error_generic') });
   }
 
   const card = (listing as any).cards;
   const eraText = card.era ? ` - ${card.era}` : '';
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
-    .setTitle('🏘️ Purchase Complete!')
-    .setDescription(`You bought ${card.name}!`)
+    .setTitle(getTranslation(lang, 'marketplace_buy_title'))
+    .setDescription(getTranslation(lang, 'marketplace_buy_desc', { card: card.name }))
     .addFields(
-      { name: 'Card', value: `${getRarityEmoji(card.rarity)} ${card.name} (${card.group}${eraText})` },
-      { name: 'Price', value: `${result.price} coins` },
-      { name: 'Remaining Coins', value: `${result.new_balance}` }
+      { name: getTranslation(lang, 'marketplace_buy_field_card'), value: `${getRarityEmoji(card.rarity)} ${card.name} (${card.group}${eraText})` },
+      { name: getTranslation(lang, 'marketplace_buy_field_price'), value: `${result.price} ${lang === 'es' ? 'monedas' : 'coins'}` },
+      { name: getTranslation(lang, 'marketplace_buy_field_balance'), value: `${result.new_balance} ${lang === 'es' ? 'monedas' : 'coins'}` }
     );
 
   await interaction.editReply({ embeds: [embed] });
@@ -220,13 +223,13 @@ async function handleBuy(interaction: ChatInputCommandInteraction) {
     const seller = await interaction.client.users.fetch((listing as any).seller_id);
     const sellerEmbed = new EmbedBuilder()
       .setColor(0xff69b4)
-      .setTitle('🏘️ Card Sold!')
-      .setDescription(`Your card was purchased!`)
+      .setTitle(getTranslation(lang, 'marketplace_sold_title'))
+      .setDescription(getTranslation(lang, 'marketplace_sold_desc'))
       .addFields(
-        { name: 'Card', value: `${getRarityEmoji(card.rarity)} ${card.name} (${card.group}${eraText})` },
-        { name: 'Quantity', value: `x${result.quantity}` },
-        { name: 'Buyer', value: `@${interaction.user.username}` },
-        { name: 'Price', value: `${result.price} coins` }
+        { name: getTranslation(lang, 'marketplace_buy_field_card'), value: `${getRarityEmoji(card.rarity)} ${card.name} (${card.group}${eraText})` },
+        { name: getTranslation(lang, 'marketplace_sold_field_qty'), value: `x${result.quantity}` },
+        { name: getTranslation(lang, 'marketplace_sold_field_buyer'), value: `@${interaction.user.username}` },
+        { name: getTranslation(lang, 'marketplace_buy_field_price'), value: `${result.price} ${lang === 'es' ? 'monedas' : 'coins'}` }
       );
     await seller.send({ embeds: [sellerEmbed] });
   } catch (e) {}

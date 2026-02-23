@@ -1,5 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
+import { getTranslation } from '../utils/language.js';
 
 export const data = new SlashCommandBuilder()
   .setName('leaderboard')
@@ -15,6 +16,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();
+  const lang = (interaction as any).userLanguage || 'en';
   const subcommand = interaction.options.getSubcommand();
 
   if (subcommand === 'coins') {
@@ -30,13 +32,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const user = await interaction.client.users.fetch(u.user_id);
         username = user.username;
       } catch (e) {}
-      return `${i + 1}. **${username}** • ${u.coins} coins`;
+      return getTranslation(lang, 'leaderboard_row_coins', { pos: i + 1, user: username, amount: u.coins });
     }))).join('\n');
 
     const embed = new EmbedBuilder()
       .setColor(0xff69b4)
-      .setTitle('💰 Coin Leaderboard')
-      .setDescription(description || 'No users yet!');
+      .setTitle(getTranslation(lang, 'leaderboard_coins'))
+      .setDescription(description || getTranslation(lang, 'leaderboard_empty_coins'));
 
     await interaction.editReply({ embeds: [embed] });
   } else if (subcommand === 'collection') {
@@ -49,13 +51,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const user = await interaction.client.users.fetch(u.user_id);
         username = user.username;
       } catch (e) {}
-      return `${i + 1}. **${username}** • ${u.unique_cards} cards`;
+      return getTranslation(lang, 'leaderboard_row_collection', { pos: i + 1, user: username, amount: u.unique_cards });
     }))).join('\n');
 
     const embed = new EmbedBuilder()
       .setColor(0xff69b4)
-      .setTitle('🏆 Collection Leaderboard')
-      .setDescription(description || 'No collectors yet!');
+      .setTitle(getTranslation(lang, 'leaderboard_collection'))
+      .setDescription(description || getTranslation(lang, 'leaderboard_empty_collection'));
 
     await interaction.editReply({ embeds: [embed] });
   }
