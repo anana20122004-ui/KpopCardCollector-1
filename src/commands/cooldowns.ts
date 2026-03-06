@@ -1,6 +1,5 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
-import { getCooldownRemaining, formatCooldown } from '../utils/cooldowns.js';
 import { getTranslation } from '../utils/language.js';
 
 export const data = new SlashCommandBuilder()
@@ -23,21 +22,41 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     return;
   }
 
-  const dailyCooldown = getCooldownRemaining(user.last_daily, 24);
-  const weeklyCooldown = getCooldownRemaining(user.last_weekly, 168);
-  const exploreCooldown = getCooldownRemaining(user.last_surf, 1);
-  const dropCooldown = getCooldownRemaining(user.last_drop, 0.0333);
+  const now = Date.now();
+  const cdEmoji = '<:cd:1479606121042808843>';
+
+  const getCDStatus = (lastTime: string | null, cooldownHours: number) => {
+    if (!lastTime) return lang === 'es' ? '✅ ¡Listo!' : '✅ Ready!';
+    const cooldownMs = cooldownHours * 60 * 60 * 1000;
+    const elapsed = now - new Date(lastTime).getTime();
+    if (elapsed >= cooldownMs) return lang === 'es' ? '✅ ¡Listo!' : '✅ Ready!';
+    return `<t:${Math.floor((new Date(lastTime).getTime() + cooldownMs) / 1000)}:R>`;
+  };
+
+  // Cooldowns in hours
+  const dailyStatus = getCDStatus(user.last_daily, 24);
+  const weeklyStatus = getCDStatus(user.last_weekly, 168);
+  const exploreStatus = getCDStatus(user.last_explore, 1);
+  const dropStatus = getCDStatus(user.last_drop, 2 / 60); // 2 minutes
+
+  const description = [
+    `${cdEmoji} **${lang === 'es' ? 'Recompensa Diaria' : 'Daily Rewards'}**`,
+    dailyStatus,
+    '',
+    `${cdEmoji} **${lang === 'es' ? 'Recompensa Semanal' : 'Weekly Rewards'}**`,
+    weeklyStatus,
+    '',
+    `${cdEmoji} **${lang === 'es' ? 'Exploración' : 'Explore'}**`,
+    exploreStatus,
+    '',
+    `${cdEmoji} **Drop**`,
+    dropStatus
+  ].join('\n');
 
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
     .setTitle(getTranslation(lang, 'cooldowns_title'))
-    .addFields(
-      { name: lang === 'es' ? '📅 Recompensa Diaria' : '📅 Daily Reward', value: formatCooldown(dailyCooldown) },
-      { name: lang === 'es' ? '📆 Recompensa Semanal' : '📆 Weekly Reward', value: formatCooldown(weeklyCooldown) },
-      { name: lang === 'es' ? '🧚 Explorar' : '🧚 Explore', value: formatCooldown(exploreCooldown) },
-      { name: lang === 'es' ? '🦋 Drop' : '🦋 Drop', value: formatCooldown(dropCooldown) }
-    )
-    .setFooter({ text: getTranslation(lang, 'cooldowns_footer') });
+    .setDescription(description);
 
   await interaction.editReply({ embeds: [embed] });
 }
