@@ -78,8 +78,28 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   if (error) return interaction.editReply(`Error: ${error.message}`);
   
-  const successMsg = getTranslation(lang, 'add_success', { type: lang === 'es' ? 'carta' : 'card', name, code: cardcode });
-  await interaction.editReply(successMsg);
+  const successMsg = getTranslation(lang, 'add_success', { type: lang === 'es' ? 'carta' : 'card', name: name || existing?.name || 'Unknown', code: cardcode });
+  
+  const adminEmbed = new EmbedBuilder()
+    .setColor(0xff69b4)
+    .setTitle(successMsg)
+    .setDescription(getTranslation(lang, 'viewcard_desc', { 
+      name: name || existing?.name || 'Unknown', 
+      group: group || existing?.group || 'Unknown', 
+      emoji: getRarityEmoji(rarity || existing?.rarity || 1), 
+      era: (era || existing?.era) || 'N/A', 
+      code: cardcode, 
+      qty: '' 
+    }))
+    .setFooter({ text: getTranslation(lang, 'viewcard_footer', { 
+      rarity: rarity || existing?.rarity || 1, 
+      droppable: (droppable ?? existing?.droppable ?? true) ? (lang === 'es' ? 'Sí' : 'Yes') : (lang === 'es' ? 'No' : 'No') 
+    }) });
+
+  const finalImageUrl = imageUrl || existing?.image_url;
+  if (finalImageUrl) adminEmbed.setImage(finalImageUrl);
+
+  await interaction.editReply({ embeds: [adminEmbed] });
 
   // Showcase the new card in the specified channel
   const showcaseChannelId = '1479108638055334105';
@@ -90,16 +110,19 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         .setColor(0xff69b4)
         .setTitle(lang === 'es' ? '✨ ¡Nueva Carta Añadida!' : '✨ New Card Added!')
         .setDescription(getTranslation(lang, 'viewcard_desc', { 
-          name, 
-          group, 
-          emoji: getRarityEmoji(rarity), 
-          era: era || 'N/A', 
+          name: name || existing?.name || 'Unknown', 
+          group: group || existing?.group || 'Unknown', 
+          emoji: getRarityEmoji(rarity || existing?.rarity || 1), 
+          era: (era || existing?.era) || 'N/A', 
           code: cardcode, 
           qty: '' 
         }))
-        .setFooter({ text: getTranslation(lang, 'viewcard_footer', { rarity, droppable: (droppable ?? true) ? (lang === 'es' ? 'Sí' : 'Yes') : (lang === 'es' ? 'No' : 'No') }) });
+        .setFooter({ text: getTranslation(lang, 'viewcard_footer', { 
+          rarity: rarity || existing?.rarity || 1, 
+          droppable: (droppable ?? existing?.droppable ?? true) ? (lang === 'es' ? 'Sí' : 'Yes') : (lang === 'es' ? 'No' : 'No') 
+        }) });
 
-      if (imageUrl) showcaseEmbed.setImage(imageUrl);
+      if (finalImageUrl) showcaseEmbed.setImage(finalImageUrl);
       
       // Use any to bypass TS compilation error since we've checked isTextBased()
       await (showcaseChannel as any).send({ embeds: [showcaseEmbed] });
