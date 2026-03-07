@@ -61,6 +61,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
+    .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
     .setDescription(cardList);
 
   if (attachment) embed.setImage('attachment://drop.png');
