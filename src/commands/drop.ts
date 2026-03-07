@@ -6,7 +6,7 @@ import { scheduleReminder } from '../utils/reminders.js';
 import { mergeCardImages } from '../utils/imageUtils.js';
 import { getTranslation } from '../utils/language.js';
 
-const COOLDOWN_MINUTES = 2;
+const COOLDOWN_MINUTES = 5;
 
 export const data = new SlashCommandBuilder()
   .setName('drop')
@@ -61,9 +61,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
-    .setTitle(getTranslation(lang, 'drop_title'))
-    .setDescription(getTranslation(lang, 'drop_desc', { list: cardList }))
-    .setFooter({ text: getTranslation(lang, 'drop_footer') });
+    .setDescription(cardList);
 
   if (attachment) embed.setImage('attachment://drop.png');
 
@@ -103,10 +101,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   collector.on('end', async (_, reason) => {
     if (reason === 'time') {
-      const expiredEmbed = EmbedBuilder.from(embed)
-        .setDescription(getTranslation(lang, 'drop_expired'))
-        .setColor(0x808080);
+      const expiredEmbed = new EmbedBuilder()
+        .setColor(0xff69b4)
+        .setDescription(cardList)
+        .setTitle(lang === 'es' ? '⏰ ¡Tiempo Expirado!' : '⏰ Expired!');
+      if (attachment) expiredEmbed.setImage('attachment://drop.png');
       await interaction.editReply({ embeds: [expiredEmbed], components: [], files: attachment ? [attachment] : [] });
     }
   });
 }
+

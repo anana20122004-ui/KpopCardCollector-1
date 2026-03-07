@@ -37,7 +37,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const dailyStatus = getCDStatus(user.last_daily, 24);
   const weeklyStatus = getCDStatus(user.last_weekly, 168);
   const exploreStatus = getCDStatus(user.last_explore, 1);
-  const dropStatus = getCDStatus(user.last_drop, 2 / 60); // 2 minutes
+  const dropStatus = getCDStatus(user.last_drop, 5 / 60); // 5 minutes
+  const claimStatus = getCDStatus(user.last_claim, 2 / 60); // 2 minutes
 
   const description = [
     `${cdEmoji} **${lang === 'es' ? 'Recompensa Diaria' : 'Daily Rewards'}**`,
@@ -50,7 +51,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     exploreStatus,
     '',
     `${cdEmoji} **Drop**`,
-    dropStatus
+    dropStatus,
+    '',
+    `${cdEmoji} **Claim**`,
+    claimStatus
   ].join('\n');
 
   const embed = new EmbedBuilder()
