@@ -30,7 +30,7 @@ export function getRarityName(rarity: number): string {
 }
 
 export function getRarityEmoji(rarity: number): string {
-  const emoji = '☁️';
+  const emoji = '<:emoji_11:1480042903568122018>';
   return emoji.repeat(Math.max(1, rarity));
 }
 

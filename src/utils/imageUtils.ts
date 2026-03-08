@@ -1,5 +1,43 @@
 import sharp from 'sharp';
 
+export async function blurImageBottom(imageUrl: string, blurHeight: number = 80): Promise<Buffer> {
+  try {
+    const response = await fetch(imageUrl);
+    if (!response.ok) throw new Error('Failed to fetch image');
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    
+    const image = sharp(buffer);
+    const metadata = await image.metadata();
+    const width = metadata.width || 300;
+    const height = metadata.height || 400;
+    
+    // Create a blurred overlay for the bottom portion
+    const blurOverlay = await sharp({
+      create: {
+        width,
+        height: blurHeight,
+        channels: 3,
+        background: { r: 0, g: 0, b: 0 }
+      }
+    }).blur(20).toBuffer();
+    
+    return await image
+      .composite([
+        {
+          input: blurOverlay,
+          left: 0,
+          top: height - blurHeight,
+          blend: 'multiply'
+        }
+      ])
+      .toBuffer();
+  } catch (error) {
+    console.error('Error blurring image:', error);
+    throw error;
+  }
+}
+
 export async function mergeCardImages(imageUrls: string[], columns?: number): Promise<Buffer> {
   try {
     const imageBuffers = await Promise.all(

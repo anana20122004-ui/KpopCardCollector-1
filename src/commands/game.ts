@@ -1,5 +1,6 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, TextChannel } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, TextChannel, AttachmentBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
+import { blurImageBottom } from '../utils/imageUtils.js';
 
 export const data = new SlashCommandBuilder()
   .setName('game')
@@ -36,13 +37,26 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 }
 
 async function startGame(interaction: ChatInputCommandInteraction, imageUrl: string, targetName: string, reward: number, isIdolMode: boolean) {
+  let attachment = null;
+  try {
+    const blurredBuffer = await blurImageBottom(imageUrl, 100);
+    attachment = new AttachmentBuilder(blurredBuffer, { name: 'game.png' });
+  } catch (e) {
+    console.error('Error blurring image:', e);
+  }
+
   const embed = new EmbedBuilder()
     .setTitle(`Guess the ${isIdolMode ? 'Idol' : 'Group'}!`)
     .setDescription(`Type the name of the ${isIdolMode ? 'idol' : 'group'} below. You have 30 seconds!`)
-    .setImage(imageUrl)
     .setColor(0xff69b4);
-    
-  await interaction.editReply({ embeds: [embed] });
+
+  if (attachment) {
+    embed.setImage('attachment://game.png');
+    await interaction.editReply({ embeds: [embed], files: [attachment] });
+  } else {
+    embed.setImage(imageUrl);
+    await interaction.editReply({ embeds: [embed] });
+  }
   
   const filter = (m: any) => !m.author.bot;
   const channel = interaction.channel;
@@ -54,7 +68,7 @@ async function startGame(interaction: ChatInputCommandInteraction, imageUrl: str
     const guess = m.content.trim().toLowerCase();
     const answer = targetName.trim().toLowerCase();
     
-    if (guess === answer || answer.includes(guess)) {
+    if (guess === answer) {
       collector.stop('correct');
       const { data: user } = await supabase.from('users').select('coins').eq('user_id', m.author.id).single();
       if (user) await supabase.from('users').update({ coins: (user.coins || 0) + reward }).eq('user_id', m.author.id);
