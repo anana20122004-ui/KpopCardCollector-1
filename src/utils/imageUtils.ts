@@ -1,6 +1,6 @@
 import sharp from 'sharp';
 
-export async function blurImageBottom(imageUrl: string, blurHeight: number = 100): Promise<Buffer> {
+export async function blurImageBottom(imageUrl: string): Promise<Buffer> {
   try {
     const response = await fetch(imageUrl);
     if (!response.ok) throw new Error('Failed to fetch image');
@@ -9,10 +9,16 @@ export async function blurImageBottom(imageUrl: string, blurHeight: number = 100
     
     const image = sharp(buffer);
     const metadata = await image.metadata();
-    const width = metadata.width || 300;
-    const height = metadata.height || 400;
     
-    // Create a black overlay for the bottom
+    if (!metadata.width || !metadata.height) {
+      throw new Error('Could not determine image dimensions');
+    }
+    
+    const width = metadata.width;
+    const height = metadata.height;
+    const blurHeight = Math.floor(height / 2);
+    
+    // Create a black overlay for the bottom half
     const blackOverlay = await sharp({
       create: {
         width,
@@ -20,7 +26,7 @@ export async function blurImageBottom(imageUrl: string, blurHeight: number = 100
         channels: 3,
         background: { r: 0, g: 0, b: 0 }
       }
-    }).toBuffer();
+    }).png().toBuffer();
     
     return await image
       .composite([
@@ -30,6 +36,7 @@ export async function blurImageBottom(imageUrl: string, blurHeight: number = 100
           top: height - blurHeight
         }
       ])
+      .png()
       .toBuffer();
   } catch (error) {
     console.error('Error blurring image:', error);

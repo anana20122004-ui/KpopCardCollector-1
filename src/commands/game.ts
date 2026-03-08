@@ -39,7 +39,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 async function startGame(interaction: ChatInputCommandInteraction, imageUrl: string, targetName: string, reward: number, isIdolMode: boolean) {
   let attachment = null;
   try {
-    const blurredBuffer = await blurImageBottom(imageUrl, 100);
+    const blurredBuffer = await blurImageBottom(imageUrl);
     attachment = new AttachmentBuilder(blurredBuffer, { name: 'game.png' });
   } catch (e) {
     console.error('Error blurring image:', e);
@@ -58,32 +58,33 @@ async function startGame(interaction: ChatInputCommandInteraction, imageUrl: str
     await interaction.editReply({ embeds: [embed] });
   }
   
-  const filter = (m: any) => !m.author.bot;
+  const userId = interaction.user.id;
   const channel = interaction.channel;
-  if (!channel || !('createMessageCollector' in channel)) {
-    console.log('Channel type does not support message collection');
-    return;
-  }
+  if (!channel || !('send' in channel)) return;
 
-  const collector = (channel as any).createMessageCollector({ filter, time: 30000 });
-  console.log(`Game started. Waiting for answer: "${targetName.toLowerCase()}"`);
+  const answer = targetName.trim().toLowerCase();
+  const guild = interaction.guild;
   
-  collector.on('collect', async (m: any) => {
-    const guess = m.content.trim().toLowerCase();
-    const answer = targetName.trim().toLowerCase();
-    console.log(`Message collected: "${guess}" (answer: "${answer}")`);
+  // Use message event listener instead of collector
+  const handleMessage = async (m: any) => {
+    if (m.author.bot || m.author.id === userId) return;
     
-    if (guess === answer) {
+    const guess = (m.content || '').trim().toLowerCase();
+    console.log(`Message: "${m.content}" -> guess: "${guess}" (answer: "${answer}")`);
+    
+    if (guess && guess === answer) {
       console.log('Correct answer detected!');
-      collector.stop('correct');
+      interaction.client.off('messageCreate', handleMessage);
       const { data: user } = await supabase.from('users').select('coins').eq('user_id', m.author.id).single();
       if (user) await supabase.from('users').update({ coins: (user.coins || 0) + reward }).eq('user_id', m.author.id);
       await m.reply(`✅ Correct! It's **${targetName}**! You earned 🧚 **${reward}** coins!`);
     }
-  });
+  };
   
-  collector.on('end', (_collected: any, reason: string) => {
-    console.log(`Game ended. Reason: ${reason}`);
-    if (reason !== 'correct') interaction.followUp(`⏰ Time's up! The answer was **${targetName}**.`);
-  });
+  interaction.client.on('messageCreate', handleMessage);
+  
+  setTimeout(() => {
+    interaction.client.off('messageCreate', handleMessage);
+    interaction.followUp(`⏰ Time's up! The answer was **${targetName}**.`);
+  }, 30000);
 }
