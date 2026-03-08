@@ -7,29 +7,36 @@ export async function blurImageBottom(imageUrl: string, blurHeight: number = 80)
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     
-    const image = sharp(buffer);
-    const metadata = await image.metadata();
+    const imageInstance = sharp(buffer);
+    const metadata = await imageInstance.metadata();
     const width = metadata.width || 300;
     const height = metadata.height || 400;
     
-    // Create a blurred overlay for the bottom portion
-    const blurOverlay = await sharp({
+    const topHeight = Math.max(0, height - blurHeight);
+    
+    // Extract top portion (unblurred)
+    const topPortion = await sharp(buffer)
+      .extract({ left: 0, top: 0, width, height: topHeight })
+      .toBuffer();
+    
+    // Extract bottom portion and blur it
+    const bottomPortion = await sharp(buffer)
+      .extract({ left: 0, top: topHeight, width, height: blurHeight })
+      .blur(25)
+      .toBuffer();
+    
+    // Composite back together
+    return await sharp({
       create: {
         width,
-        height: blurHeight,
+        height,
         channels: 3,
         background: { r: 0, g: 0, b: 0 }
       }
-    }).blur(20).toBuffer();
-    
-    return await image
+    })
       .composite([
-        {
-          input: blurOverlay,
-          left: 0,
-          top: height - blurHeight,
-          blend: 'multiply'
-        }
+        { input: topPortion, left: 0, top: 0 },
+        { input: bottomPortion, left: 0, top: topHeight }
       ])
       .toBuffer();
   } catch (error) {
