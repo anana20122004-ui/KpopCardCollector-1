@@ -60,15 +60,21 @@ async function startGame(interaction: ChatInputCommandInteraction, imageUrl: str
   
   const filter = (m: any) => !m.author.bot;
   const channel = interaction.channel;
-  if (!channel || !('createMessageCollector' in channel)) return;
+  if (!channel || !('createMessageCollector' in channel)) {
+    console.log('Channel type does not support message collection');
+    return;
+  }
 
   const collector = (channel as any).createMessageCollector({ filter, time: 30000 });
+  console.log(`Game started. Waiting for answer: "${targetName.toLowerCase()}"`);
   
   collector.on('collect', async (m: any) => {
     const guess = m.content.trim().toLowerCase();
     const answer = targetName.trim().toLowerCase();
+    console.log(`Message collected: "${guess}" (answer: "${answer}")`);
     
     if (guess === answer) {
+      console.log('Correct answer detected!');
       collector.stop('correct');
       const { data: user } = await supabase.from('users').select('coins').eq('user_id', m.author.id).single();
       if (user) await supabase.from('users').update({ coins: (user.coins || 0) + reward }).eq('user_id', m.author.id);
@@ -77,6 +83,7 @@ async function startGame(interaction: ChatInputCommandInteraction, imageUrl: str
   });
   
   collector.on('end', (_collected: any, reason: string) => {
+    console.log(`Game ended. Reason: ${reason}`);
     if (reason !== 'correct') interaction.followUp(`⏰ Time's up! The answer was **${targetName}**.`);
   });
 }

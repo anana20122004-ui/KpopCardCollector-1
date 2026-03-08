@@ -1,42 +1,34 @@
 import sharp from 'sharp';
 
-export async function blurImageBottom(imageUrl: string, blurHeight: number = 80): Promise<Buffer> {
+export async function blurImageBottom(imageUrl: string, blurHeight: number = 100): Promise<Buffer> {
   try {
     const response = await fetch(imageUrl);
     if (!response.ok) throw new Error('Failed to fetch image');
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     
-    const imageInstance = sharp(buffer);
-    const metadata = await imageInstance.metadata();
+    const image = sharp(buffer);
+    const metadata = await image.metadata();
     const width = metadata.width || 300;
     const height = metadata.height || 400;
     
-    const topHeight = Math.max(0, height - blurHeight);
-    
-    // Extract top portion (unblurred)
-    const topPortion = await sharp(buffer)
-      .extract({ left: 0, top: 0, width, height: topHeight })
-      .toBuffer();
-    
-    // Extract bottom portion and blur it
-    const bottomPortion = await sharp(buffer)
-      .extract({ left: 0, top: topHeight, width, height: blurHeight })
-      .blur(25)
-      .toBuffer();
-    
-    // Composite back together
-    return await sharp({
+    // Create a black overlay for the bottom
+    const blackOverlay = await sharp({
       create: {
         width,
-        height,
+        height: blurHeight,
         channels: 3,
         background: { r: 0, g: 0, b: 0 }
       }
-    })
+    }).toBuffer();
+    
+    return await image
       .composite([
-        { input: topPortion, left: 0, top: 0 },
-        { input: bottomPortion, left: 0, top: topHeight }
+        {
+          input: blackOverlay,
+          left: 0,
+          top: height - blurHeight
+        }
       ])
       .toBuffer();
   } catch (error) {
