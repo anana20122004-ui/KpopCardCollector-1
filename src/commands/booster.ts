@@ -4,6 +4,7 @@ import { formatCooldown } from '../utils/cooldowns.js';
 import { mergeCardImages } from '../utils/imageUtils.js';
 import { BOOSTER_ROLE_ID, isAdminUser } from '../utils/constants.js';
 import { getTranslation } from '../utils/language.js';
+import { filterBlockedCards } from '../utils/blockFilter.js';
 
 const BOOSTER_COOLDOWN_HOURS = 6;
 
@@ -38,9 +39,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     return interaction.editReply({ content: getTranslation(lang, 'daily_success', { reward: rewardCoins }) });
   }
 
+  const availableCards = await filterBlockedCards(allCards);
+  if (availableCards.length === 0) {
+    await supabase.from('users').update({ coins: user.coins + rewardCoins, last_booster: new Date().toISOString() }).eq('user_id', userId);
+    return interaction.editReply({ content: getTranslation(lang, 'daily_success', { reward: rewardCoins }) });
+  }
+
   const pulled = [];
   for (let i = 0; i < 15; i++) {
-    const card = allCards[Math.floor(Math.random() * allCards.length)];
+    const card = availableCards[Math.floor(Math.random() * availableCards.length)];
     pulled.push(card);
     const { data: ex } = await supabase.from('inventory').select('*').eq('user_id', userId).eq('card_id', card.card_id).maybeSingle();
     if (ex) await supabase.from('inventory').update({ quantity: (ex as any).quantity + 1 }).eq('id', (ex as any).id);

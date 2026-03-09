@@ -2,6 +2,7 @@ import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, Attachm
 import { supabase } from '../database/supabase.js';
 import { getRandomRarity } from '../utils/cards.js';
 import { getTranslation } from '../utils/language.js';
+import { filterBlockedCards } from '../utils/blockFilter.js';
 
 const PACKS = [
   { id: '1', name: 'Magic Seeds', cost: 500, cards: 1 },
@@ -34,11 +35,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const { data: cards } = await supabase.from('cards').select('*').eq('droppable', true);
   if (!cards || cards.length === 0) return interaction.editReply(getTranslation(lang, 'shop_no_cards'));
 
+  const availableCards = await filterBlockedCards(cards);
+  if (availableCards.length === 0) return interaction.editReply(getTranslation(lang, 'shop_no_cards'));
+
   const pulled = [];
   for (let i = 0; i < (pack as any).cards; i++) {
     const rarity = getRandomRarity();
-    let pool = cards.filter(c => c.rarity === rarity);
-    if (pool.length === 0) pool = cards;
+    let pool = availableCards.filter(c => c.rarity === rarity);
+    if (pool.length === 0) pool = availableCards;
     pulled.push(pool[Math.floor(Math.random() * pool.length)]);
   }
 

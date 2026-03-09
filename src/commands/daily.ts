@@ -5,6 +5,7 @@ import { getRarityEmoji } from '../utils/cards.js';
 import { isAdminUser } from '../utils/constants.js';
 import { scheduleReminder } from '../utils/reminders.js';
 import { getTranslation } from '../utils/language.js';
+import { filterBlockedCards } from '../utils/blockFilter.js';
 
 const MIN_COINS = 50;
 const MAX_COINS = 100;
@@ -63,13 +64,16 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     .setDescription(getTranslation(lang, 'daily_success', { reward: dailyReward }));
 
   if (legendaryCards && legendaryCards.length > 0) {
-    const selectedCard = legendaryCards[Math.floor(Math.random() * legendaryCards.length)];
-    const { data: ex } = await supabase.from('inventory').select('*').eq('user_id', userId).eq('card_id', selectedCard.card_id).maybeSingle();
-    if (ex) await supabase.from('inventory').update({ quantity: (ex as any).quantity + 1 }).eq('id', (ex as any).id);
-    else await supabase.from('inventory').insert({ user_id: userId, card_id: selectedCard.card_id, quantity: 1 });
+    const availableCards = await filterBlockedCards(legendaryCards);
+    if (availableCards.length > 0) {
+      const selectedCard = availableCards[Math.floor(Math.random() * availableCards.length)];
+      const { data: ex } = await supabase.from('inventory').select('*').eq('user_id', userId).eq('card_id', selectedCard.card_id).maybeSingle();
+      if (ex) await supabase.from('inventory').update({ quantity: (ex as any).quantity + 1 }).eq('id', (ex as any).id);
+      else await supabase.from('inventory').insert({ user_id: userId, card_id: selectedCard.card_id, quantity: 1 });
 
-    embed.addFields({ name: getTranslation(lang, 'legendary_card_received'), value: `${getRarityEmoji(5)} **${selectedCard.name}** (${selectedCard.group}) • \`${selectedCard.cardcode}\`` });
-    if (selectedCard.image_url) embed.setImage(selectedCard.image_url);
+      embed.addFields({ name: getTranslation(lang, 'legendary_card_received'), value: `${getRarityEmoji(5)} **${selectedCard.name}** (${selectedCard.group}) • \`${selectedCard.cardcode}\`` });
+      if (selectedCard.image_url) embed.setImage(selectedCard.image_url);
+    }
   }
 
   scheduleReminder(interaction.client, userId, interaction.channelId, 'daily', 24 * 60 * 60 * 1000);
