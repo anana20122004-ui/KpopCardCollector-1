@@ -5,6 +5,7 @@ import { isAdminUser } from '../utils/constants.js';
 import { scheduleReminder } from '../utils/reminders.js';
 import { mergeCardImages } from '../utils/imageUtils.js';
 import { getTranslation } from '../utils/language.js';
+import { filterBlockedCards } from '../utils/blockFilter.js';
 
 const COOLDOWN_MINUTES = 5;
 
@@ -36,11 +37,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const { data: allCards } = await supabase.from('cards').select('*').eq('droppable', true);
   if (!allCards || allCards.length < 3) return interaction.editReply(getTranslation(lang, 'not_enough_cards'));
 
+  const availableCards = await filterBlockedCards(allCards);
+  if (availableCards.length < 3) return interaction.editReply(getTranslation(lang, 'not_enough_cards'));
+
   const selectedCards: any[] = [];
   for (let i = 0; i < 3; i++) {
     const rarity = getRandomRarity();
-    let pool = allCards.filter(c => c.rarity === rarity);
-    if (pool.length === 0) pool = allCards;
+    let pool = availableCards.filter(c => c.rarity === rarity);
+    if (pool.length === 0) pool = availableCards;
     selectedCards.push(pool[Math.floor(Math.random() * pool.length)]);
   }
 

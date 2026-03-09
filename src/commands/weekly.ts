@@ -6,6 +6,7 @@ import { getRarityEmoji } from '../utils/cards.js';
 import { isAdminUser } from '../utils/constants.js';
 import { scheduleReminder } from '../utils/reminders.js';
 import { getTranslation } from '../utils/language.js';
+import { filterBlockedCards } from '../utils/blockFilter.js';
 
 const WEEKLY_REWARD = 1500;
 const WEEKLY_COOLDOWN_HOURS = 168;
@@ -48,9 +49,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     return interaction.editReply({ content: getTranslation(lang, 'weekly_desc', { reward: result.reward, list: '(No cards found)' }) });
   }
 
+  const availableCards = await filterBlockedCards(allCards);
+  if (availableCards.length === 0) {
+    return interaction.editReply({ content: getTranslation(lang, 'weekly_desc', { reward: result.reward, list: '(No cards found)' }) });
+  }
+
   const selectedCards = [];
   for (let i = 0; i < 4; i++) {
-    const card = allCards[Math.floor(Math.random() * allCards.length)];
+    const card = availableCards[Math.floor(Math.random() * availableCards.length)];
     selectedCards.push(card);
     const { data: ex } = await supabase.from('inventory').select('*').eq('user_id', userId).eq('card_id', card.card_id).maybeSingle();
     if (ex) await supabase.from('inventory').update({ quantity: (ex as any).quantity + 1 }).eq('id', (ex as any).id);

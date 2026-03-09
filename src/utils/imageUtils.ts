@@ -16,7 +16,7 @@ export async function blurImageBottom(imageUrl: string): Promise<Buffer> {
     
     const width = metadata.width;
     const height = metadata.height;
-    const blurHeight = Math.floor(height / 2);
+    const blurHeight = Math.floor(height * 0.3);
     
     // Create a black overlay for the bottom half
     const blackOverlay = await sharp({

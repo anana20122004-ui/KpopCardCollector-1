@@ -3,6 +3,7 @@ import { supabase } from '../database/supabase.js';
 import { getRarityEmoji, getRarityColor } from '../utils/cards.js';
 import { getTranslation } from '../utils/language.js';
 import { scheduleReminder } from '../utils/reminders.js';
+import { filterBlockedCards } from '../utils/blockFilter.js';
 
 const COOLDOWN_MINUTES = 2;
 
@@ -27,7 +28,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const { data: allCards } = await supabase.from('cards').select('*');
   if (!allCards || allCards.length === 0) return interaction.editReply(getTranslation(lang, 'not_enough_cards'));
 
-  const card = allCards[Math.floor(Math.random() * allCards.length)];
+  const availableCards = await filterBlockedCards(allCards);
+  if (availableCards.length === 0) return interaction.editReply(getTranslation(lang, 'not_enough_cards'));
+
+  const card = availableCards[Math.floor(Math.random() * availableCards.length)];
 
   const { data: ex } = await supabase.from('inventory').select('*').eq('user_id', userId).eq('card_id', card.card_id).maybeSingle();
   if (ex) await supabase.from('inventory').update({ quantity: (ex as any).quantity + 1 }).eq('id', (ex as any).id);

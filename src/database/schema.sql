@@ -48,7 +48,26 @@ CREATE TABLE IF NOT EXISTS marketplace (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
+-- Blocked groups/artists table
+CREATE TABLE IF NOT EXISTS blocked_groups (
+  id SERIAL PRIMARY KEY,
+  type TEXT NOT NULL,
+  name TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Quiz questions table
+CREATE TABLE IF NOT EXISTS quiz_questions (
+  id SERIAL PRIMARY KEY,
+  type TEXT NOT NULL,
+  image_url TEXT NOT NULL,
+  answer TEXT NOT NULL,
+  reward_coins INTEGER DEFAULT 50,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
 -- Indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_inventory_user ON inventory(user_id);
 CREATE INDEX IF NOT EXISTS idx_marketplace_card ON marketplace(card_id);
 CREATE INDEX IF NOT EXISTS idx_marketplace_seller ON marketplace(seller_id);
+CREATE INDEX IF NOT EXISTS idx_blocked_groups_name ON blocked_groups(name);
