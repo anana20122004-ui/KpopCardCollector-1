@@ -6,8 +6,8 @@ export const ADMIN_USERS = [
 ];
 
 // Role IDs
-export const STAFF_ROLE_ID = '1441490367777079306';
-export const BOOSTER_ROLE_ID = '1442680565479510077';
+export const STAFF_ROLE_ID = '1468244160527204362';
+export const BOOSTER_ROLE_ID = '1479309772569313290';
 
 // Users who can use bot during lockdown
 export const LOCKDOWN_WHITELIST = ADMIN_USERS;
