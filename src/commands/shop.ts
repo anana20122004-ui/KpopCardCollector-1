@@ -7,8 +7,8 @@ import { filterBlockedCards } from '../utils/blockFilter.js';
 const PACKS = [
   { id: '1', name: 'Stella Pack', cost: 2000, cards: 5, type: 'random' },
   { id: '2', name: 'Carmen Pack', cost: 4000, cards: 10, type: 'random' },
-  { id: '3', name: 'Yuha Pack', cost: 2500, cards: 5, type: 'choice' },
-  { id: '4', name: 'Juun Pack', cost: 4500, cards: 10, type: 'choice' },
+  { id: '3', name: 'Yuha Pack', cost: 4500, cards: 5, type: 'choice' },
+  { id: '4', name: 'Juun Pack', cost: 6500, cards: 10, type: 'choice' },
   { id: '5', name: 'Ye-on Pack', cost: 25000, cards: 5, type: 'legendary' }
 ];
 
@@ -20,10 +20,10 @@ export const data = new SlashCommandBuilder()
     .setDescription('Buy a pack')
     .addStringOption(o => o.setName('pack').setDescription('Pack to buy').setRequired(true).addChoices(
       { name: 'Stella Pack - 5 random (2000)', value: '1' },
-      { name: 'Carmen Pack - 10 random (3500)', value: '2' },
-      { name: 'Yuha Pack - 5 choice (2500)', value: '3' },
-      { name: 'Juun Pack - 10 choice (4500)', value: '4' },
-      { name: 'Ye-on Pack - 5 legendary (8000)', value: '5' }
+      { name: 'Carmen Pack - 10 random (4000)', value: '2' },
+      { name: 'Yuha Pack - 5 choice (4500)', value: '3' },
+      { name: 'Juun Pack - 10 choice (6500)', value: '4' },
+      { name: 'Ye-on Pack - 5 legendary (25000)', value: '5' }
     ))
     .addStringOption(o => o.setName('filter').setDescription('Filter by group or idol (for choice packs)').setRequired(false))
   );
@@ -34,10 +34,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   
   if (sub === 'browse') {
     const desc = `**Stella Pack** - 5 random cards • 💫 2000\n` +
-      `**Carmen Pack** - 10 random cards • 💫 3500\n` +
-      `**Yuha Pack** - 5 cards (choose group/idol) • 💫 2500\n` +
-      `**Juun Pack** - 10 cards (choose group/idol) • 💫 4500\n` +
-      `**Ye-on Pack** - 5 legendary cards • 💫 8000`;
+      `**Carmen Pack** - 10 random cards • 💫 4000\n` +
+      `**Yuha Pack** - 5 cards (choose group/idol) • 💫 4500\n` +
+      `**Juun Pack** - 10 cards (choose group/idol) • 💫 6500\n` +
+      `**Ye-on Pack** - 5 legendary cards • 💫 25000`;
     const embed = new EmbedBuilder()
       .setTitle(getTranslation(lang, 'shop_title'))
       .setDescription(desc)
