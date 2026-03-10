@@ -35,7 +35,10 @@ export const data = new SlashCommandBuilder()
       .setDescription('Can it be dropped?'))
   .addStringOption(option =>
     option.setName('image_url')
-      .setDescription('Image URL'));
+      .setDescription('Image URL'))
+  .addStringOption(option =>
+    option.setName('new_cardcode')
+      .setDescription('Change card code (for existing cards only)'));
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   const lang = (interaction as any).userLanguage || 'en';
@@ -51,6 +54,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const era = interaction.options.getString('era');
   const droppable = interaction.options.getBoolean('droppable');
   const imageUrl = interaction.options.getString('image_url');
+  const newCardcode = interaction.options.getString('new_cardcode')?.toUpperCase();
 
   const { data: existing } = await supabase.from('cards').select('*').eq('cardcode', cardcode).maybeSingle();
 
@@ -62,10 +66,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (era) updates.era = era;
     if (droppable !== null) updates.droppable = droppable;
     if (imageUrl) updates.image_url = imageUrl;
+    if (newCardcode) updates.cardcode = newCardcode;
 
     const { error } = await supabase.from('cards').update(updates).eq('card_id', existing.card_id);
     if (error) return interaction.editReply(`Error: ${error.message}`);
-    return interaction.editReply(getTranslation(lang, 'update_success', { type: lang === 'es' ? 'carta' : 'card', code: cardcode }));
+    const displayCode = newCardcode || cardcode;
+    return interaction.editReply(getTranslation(lang, 'update_success', { type: lang === 'es' ? 'carta' : 'card', code: displayCode }));
   }
 
   if (!name || !group || !rarity) return interaction.editReply(getTranslation(lang, 'provide_details'));
