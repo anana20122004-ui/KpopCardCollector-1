@@ -77,13 +77,22 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       return interaction.editReply('❌ Please provide a group or idol name with `/filter`');
     }
     
-    const filterLower = filter.toLowerCase();
-    let filtered = availableCards.filter(c => 
-      c.group.toLowerCase().includes(filterLower) || c.name.toLowerCase().includes(filterLower)
-    );
+    const filterLower = filter.toLowerCase().trim();
+    let filtered = availableCards.filter(c => {
+      const groupLower = (c.group || '').toLowerCase().trim();
+      const nameLower = (c.name || '').toLowerCase().trim();
+      
+      // Try exact match first
+      if (groupLower === filterLower || nameLower === filterLower) return true;
+      // Try partial match
+      if (groupLower.includes(filterLower) || nameLower.includes(filterLower)) return true;
+      // Try reverse - filter in group/name
+      if (filterLower.includes(groupLower) || filterLower.includes(nameLower)) return true;
+      return false;
+    });
     
     if (filtered.length === 0) {
-      return interaction.editReply(`❌ No cards found for "${filter}"`);
+      return interaction.editReply(`❌ No cards found for "${filter}". Try the exact group or idol name.`);
     }
     
     for (let i = 0; i < (pack as any).cards; i++) {
