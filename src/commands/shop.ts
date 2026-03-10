@@ -67,11 +67,26 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   let pulled = [];
   
   if ((pack as any).type === 'random') {
+    const pulledIds = new Set<string>();
+    
     for (let i = 0; i < (pack as any).cards; i++) {
       const rarity = getRandomRarity();
-      let pool = availableCards.filter(c => c.rarity === rarity);
-      if (pool.length === 0) pool = availableCards;
-      pulled.push(pool[Math.floor(Math.random() * pool.length)]);
+      let pool = availableCards.filter(c => c.rarity === rarity && !pulledIds.has(c.card_id));
+      
+      // If no unique cards available with this rarity, try any rarity
+      if (pool.length === 0) {
+        pool = availableCards.filter(c => !pulledIds.has(c.card_id));
+      }
+      
+      // If still no unique cards, allow duplicates for this slot
+      if (pool.length === 0) {
+        pool = availableCards.filter(c => c.rarity === rarity);
+        if (pool.length === 0) pool = availableCards;
+      }
+      
+      const selectedCard = pool[Math.floor(Math.random() * pool.length)];
+      pulled.push(selectedCard);
+      pulledIds.add(selectedCard.card_id);
     }
   } else if ((pack as any).type === 'choice') {
     if (!filter) {
