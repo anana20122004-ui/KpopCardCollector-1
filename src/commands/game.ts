@@ -22,13 +22,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const { data: questions } = await supabase.from('quiz_questions').select('*').eq('type', type);
 
   if (!questions || questions.length === 0) {
-    const { data: cards } = await supabase.from('cards').select('*').limit(50);
-    if (!cards || cards.length === 0) return interaction.editReply('No cards or quiz questions found!');
-    
-    const randomCard = cards[Math.floor(Math.random() * cards.length)];
-    const targetName = isIdolMode ? randomCard.name : randomCard.group;
-    await startGame(interaction, randomCard.image_url, targetName, 50, isIdolMode);
-    return;
+    return interaction.editReply(`❌ No quiz questions found for ${isIdolMode ? 'idol' : 'group'} guessing! Add some using /addquestion first.`);
   }
   
   const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
