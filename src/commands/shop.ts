@@ -1,49 +1,100 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { getRandomRarity } from '../utils/cards.js';
 import { getTranslation } from '../utils/language.js';
 import { filterBlockedCards } from '../utils/blockFilter.js';
 
 const PACKS = [
-  { id: '1', name: 'Single Pack', cost: 500, cards: 1 },
-  { id: '2', name: 'Double Pack', cost: 1000, cards: 2 }
+  { id: '1', name: 'Stella Pack', cost: 1500, cards: 5, type: 'random' },
+  { id: '2', name: 'Carmen Pack', cost: 2500, cards: 10, type: 'random' },
+  { id: '3', name: 'Yuha Pack', cost: 2000, cards: 5, type: 'choice' },
+  { id: '4', name: 'Juun Pack', cost: 3500, cards: 10, type: 'choice' },
+  { id: '5', name: 'Ye-on Pack', cost: 4000, cards: 5, type: 'legendary' }
 ];
 
 export const data = new SlashCommandBuilder()
   .setName('shop')
-  .setDescription('Buy packs')
-  .addSubcommand(s => s.setName('browse').setDescription('View packs'))
-  .addSubcommand(s => s.setName('buy').setDescription('Buy pack').addStringOption(o => o.setName('pack').setDescription('Pack').setRequired(true).addChoices(
-    { name: 'Magic Seeds (500)', value: '1' }, { name: 'Glow Spores (1000)', value: '2' }
-  )));
+  .setDescription('Buy card packs')
+  .addSubcommand(s => s.setName('browse').setDescription('View available packs'))
+  .addSubcommand(s => s.setName('buy')
+    .setDescription('Buy a pack')
+    .addStringOption(o => o.setName('pack').setDescription('Pack to buy').setRequired(true).addChoices(
+      { name: 'Stella Pack - 5 random (1500)', value: '1' },
+      { name: 'Carmen Pack - 10 random (2500)', value: '2' },
+      { name: 'Yuha Pack - 5 choice (2000)', value: '3' },
+      { name: 'Juun Pack - 10 choice (3500)', value: '4' },
+      { name: 'Ye-on Pack - 5 legendary (4000)', value: '5' }
+    ))
+    .addStringOption(o => o.setName('filter').setDescription('Filter by group or idol (for choice packs)').setRequired(false))
+  );
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   const lang = (interaction as any).userLanguage || 'en';
   const sub = interaction.options.getSubcommand();
+  
   if (sub === 'browse') {
-    const embed = new EmbedBuilder().setTitle(getTranslation(lang, 'shop_title')).setDescription(PACKS.map(p => `**${p.name}** - ${p.cost} ${lang === 'es' ? 'monedas' : 'coins'}`).join('\n'));
+    const desc = PACKS.map(p => `**${p.name}** - ${p.cards} cards • 🧚 ${p.cost}`).join('\n');
+    const embed = new EmbedBuilder()
+      .setTitle(getTranslation(lang, 'shop_title'))
+      .setDescription(desc)
+      .setColor(0xff69b4);
     return interaction.reply({ embeds: [embed] });
   }
   
   await interaction.deferReply();
   const packId = interaction.options.getString('pack', true);
+  const filter = interaction.options.getString('filter');
   const pack = PACKS.find(p => p.id === packId);
+  
+  if (!pack) return interaction.editReply('❌ Pack not found');
+  
   const { data: user } = await supabase.from('users').select('*').eq('user_id', interaction.user.id).single();
+  if (!user || (user as any).coins < (pack as any).cost) {
+    return interaction.editReply(getTranslation(lang, 'shop_not_enough'));
+  }
   
-  if (!user || (user as any).coins < (pack as any).cost) return interaction.editReply(getTranslation(lang, 'shop_not_enough'));
-  
-  const { data: cards } = await supabase.from('cards').select('*').eq('droppable', true);
-  if (!cards || cards.length === 0) return interaction.editReply(getTranslation(lang, 'shop_no_cards'));
+  const { data: allCards } = await supabase.from('cards').select('*').eq('droppable', true);
+  if (!allCards || allCards.length === 0) return interaction.editReply(getTranslation(lang, 'shop_no_cards'));
 
-  const availableCards = await filterBlockedCards(cards, interaction.user.id);
+  const availableCards = await filterBlockedCards(allCards, interaction.user.id);
   if (availableCards.length === 0) return interaction.editReply(getTranslation(lang, 'shop_no_cards'));
 
-  const pulled = [];
-  for (let i = 0; i < (pack as any).cards; i++) {
-    const rarity = getRandomRarity();
-    let pool = availableCards.filter(c => c.rarity === rarity);
-    if (pool.length === 0) pool = availableCards;
-    pulled.push(pool[Math.floor(Math.random() * pool.length)]);
+  let pulled = [];
+  
+  if ((pack as any).type === 'random') {
+    for (let i = 0; i < (pack as any).cards; i++) {
+      const rarity = getRandomRarity();
+      let pool = availableCards.filter(c => c.rarity === rarity);
+      if (pool.length === 0) pool = availableCards;
+      pulled.push(pool[Math.floor(Math.random() * pool.length)]);
+    }
+  } else if ((pack as any).type === 'choice') {
+    if (!filter) {
+      return interaction.editReply('❌ Please provide a group or idol name with `/filter`');
+    }
+    
+    const filterLower = filter.toLowerCase();
+    let filtered = availableCards.filter(c => 
+      c.group.toLowerCase().includes(filterLower) || c.name.toLowerCase().includes(filterLower)
+    );
+    
+    if (filtered.length === 0) {
+      return interaction.editReply(`❌ No cards found for "${filter}"`);
+    }
+    
+    for (let i = 0; i < (pack as any).cards; i++) {
+      pulled.push(filtered[Math.floor(Math.random() * filtered.length)]);
+    }
+  } else if ((pack as any).type === 'legendary') {
+    const legendaryCards = availableCards.filter(c => c.rarity === 5);
+    
+    if (legendaryCards.length === 0) {
+      return interaction.editReply('❌ No legendary cards available');
+    }
+    
+    for (let i = 0; i < (pack as any).cards; i++) {
+      pulled.push(legendaryCards[Math.floor(Math.random() * legendaryCards.length)]);
+    }
   }
 
   for (const c of pulled) {
@@ -53,5 +104,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   }
 
   await supabase.from('users').update({ coins: (user as any).coins - (pack as any).cost }).eq('user_id', interaction.user.id);
-  await interaction.editReply(getTranslation(lang, 'shop_bought', { pack: (pack as any).name, list: pulled.map(c => c.name).join(', ') }));
+  
+  const cardList = pulled.map(c => `${c.name} (${c.group})`).join('\n');
+  const embed = new EmbedBuilder()
+    .setColor(0xff69b4)
+    .setTitle(`✅ ${(pack as any).name} Purchased!`)
+    .setDescription(`You got ${pulled.length} cards:\n\n${cardList}`)
+    .setFooter({ text: `💰 -${(pack as any).cost} coins` });
+  
+  await interaction.editReply({ embeds: [embed] });
 }
