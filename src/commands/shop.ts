@@ -5,11 +5,11 @@ import { getTranslation } from '../utils/language.js';
 import { filterBlockedCards } from '../utils/blockFilter.js';
 
 const PACKS = [
-  { id: '1', name: 'Stella Pack', cost: 1500, cards: 5, type: 'random' },
-  { id: '2', name: 'Carmen Pack', cost: 2500, cards: 10, type: 'random' },
-  { id: '3', name: 'Yuha Pack', cost: 2000, cards: 5, type: 'choice' },
-  { id: '4', name: 'Juun Pack', cost: 3500, cards: 10, type: 'choice' },
-  { id: '5', name: 'Ye-on Pack', cost: 4000, cards: 5, type: 'legendary' }
+  { id: '1', name: 'Stella Pack', cost: 2000, cards: 5, type: 'random' },
+  { id: '2', name: 'Carmen Pack', cost: 3500, cards: 10, type: 'random' },
+  { id: '3', name: 'Yuha Pack', cost: 2500, cards: 5, type: 'choice' },
+  { id: '4', name: 'Juun Pack', cost: 4500, cards: 10, type: 'choice' },
+  { id: '5', name: 'Ye-on Pack', cost: 8000, cards: 5, type: 'legendary' }
 ];
 
 export const data = new SlashCommandBuilder()
@@ -19,11 +19,11 @@ export const data = new SlashCommandBuilder()
   .addSubcommand(s => s.setName('buy')
     .setDescription('Buy a pack')
     .addStringOption(o => o.setName('pack').setDescription('Pack to buy').setRequired(true).addChoices(
-      { name: 'Stella Pack - 5 random (1500)', value: '1' },
-      { name: 'Carmen Pack - 10 random (2500)', value: '2' },
-      { name: 'Yuha Pack - 5 choice (2000)', value: '3' },
-      { name: 'Juun Pack - 10 choice (3500)', value: '4' },
-      { name: 'Ye-on Pack - 5 legendary (4000)', value: '5' }
+      { name: 'Stella Pack - 5 random (2000)', value: '1' },
+      { name: 'Carmen Pack - 10 random (3500)', value: '2' },
+      { name: 'Yuha Pack - 5 choice (2500)', value: '3' },
+      { name: 'Juun Pack - 10 choice (4500)', value: '4' },
+      { name: 'Ye-on Pack - 5 legendary (8000)', value: '5' }
     ))
     .addStringOption(o => o.setName('filter').setDescription('Filter by group or idol (for choice packs)').setRequired(false))
   );
