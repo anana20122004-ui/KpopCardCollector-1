@@ -11,7 +11,7 @@ const COOLDOWN_MINUTES = 5;
 
 export const data = new SlashCommandBuilder()
   .setName('drop')
-  .setDescription('Reveal 3 magical cards and choose one to claim!');
+  .setDescription('Reveal 3 cards and choose one to claim!');
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();

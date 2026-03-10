@@ -6,10 +6,10 @@ import { filterBlockedCards } from '../utils/blockFilter.js';
 
 const PACKS = [
   { id: '1', name: 'Stella Pack', cost: 2000, cards: 5, type: 'random' },
-  { id: '2', name: 'Carmen Pack', cost: 3500, cards: 10, type: 'random' },
+  { id: '2', name: 'Carmen Pack', cost: 4000, cards: 10, type: 'random' },
   { id: '3', name: 'Yuha Pack', cost: 2500, cards: 5, type: 'choice' },
   { id: '4', name: 'Juun Pack', cost: 4500, cards: 10, type: 'choice' },
-  { id: '5', name: 'Ye-on Pack', cost: 8000, cards: 5, type: 'legendary' }
+  { id: '5', name: 'Ye-on Pack', cost: 25000, cards: 5, type: 'legendary' }
 ];
 
 export const data = new SlashCommandBuilder()
@@ -33,12 +33,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const sub = interaction.options.getSubcommand();
   
   if (sub === 'browse') {
-    const desc = PACKS.map(p => `**${p.name}** - ${p.cards} cards • 🧚 ${p.cost}`).join('\n');
+    const desc = PACKS.map(p => `**${p.name}** - ${p.cards} cards • 💫 ${p.cost}`).join('\n');
     const embed = new EmbedBuilder()
       .setTitle(getTranslation(lang, 'shop_title'))
       .setDescription(desc)
-      .setColor(0xff69b4);
-    return interaction.reply({ embeds: [embed] });
+      .setColor(0x8b4f9f);
+    return await interaction.reply({ embeds: [embed] });
   }
   
   await interaction.deferReply();

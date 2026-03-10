@@ -4,7 +4,7 @@ import { getTranslation } from '../utils/language.js';
 
 export const data = new SlashCommandBuilder()
   .setName('start')
-  .setDescription('Start your magical journey!');
+  .setDescription('Start collecting cards!');
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();
