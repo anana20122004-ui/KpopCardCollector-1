@@ -1,5 +1,36 @@
 import sharp from 'sharp';
 
+async function createPlaceholderCard(text: string): Promise<Buffer> {
+  try {
+    return await sharp({
+      create: {
+        width: 300,
+        height: 400,
+        channels: 3,
+        background: { r: 80, g: 40, b: 120 }
+      }
+    })
+      .composite([
+        {
+          input: Buffer.from(`<svg width="300" height="400"><text x="150" y="200" font-size="24" fill="white" text-anchor="middle" font-family="Arial">${text}</text></svg>`),
+          left: 0,
+          top: 0
+        }
+      ])
+      .png()
+      .toBuffer();
+  } catch {
+    return await sharp({
+      create: {
+        width: 300,
+        height: 400,
+        channels: 3,
+        background: { r: 80, g: 40, b: 120 }
+      }
+    }).png().toBuffer();
+  }
+}
+
 export async function blurImageBottom(imageUrl: string): Promise<Buffer> {
   try {
     const response = await fetch(imageUrl);
@@ -47,18 +78,19 @@ export async function blurImageBottom(imageUrl: string): Promise<Buffer> {
 export async function mergeCardImages(imageUrls: string[], columns?: number): Promise<Buffer> {
   try {
     const imageBuffers = await Promise.all(
-      imageUrls.map(async (url) => {
+      imageUrls.map(async (url, idx) => {
         try {
+          if (!url) return null;
           const response = await fetch(url);
           if (!response.ok) {
-            console.warn(`Failed to fetch image: ${url}`);
-            return null;
+            console.warn(`Failed to fetch image ${idx}: ${url} (${response.status})`);
+            return await createPlaceholderCard('No Image');
           }
           const arrayBuffer = await response.arrayBuffer();
           return Buffer.from(arrayBuffer);
         } catch (error) {
-          console.warn(`Error fetching image ${url}:`, error);
-          return null;
+          console.warn(`Error fetching image ${idx} (${url}):`, error);
+          return await createPlaceholderCard('Failed');
         }
       })
     );
@@ -66,7 +98,7 @@ export async function mergeCardImages(imageUrls: string[], columns?: number): Pr
     const validBuffers = imageBuffers.filter(buffer => buffer !== null) as Buffer[];
 
     if (validBuffers.length === 0) {
-      throw new Error('No valid images to merge');
+      return await createPlaceholderCard('No Cards');
     }
 
     const CARD_WIDTH = 300;

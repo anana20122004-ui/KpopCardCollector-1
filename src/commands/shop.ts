@@ -139,16 +139,20 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   // Generate merged image
   try {
     const imageUrls = pulled.map(c => c.image_url).filter(url => url);
+    console.log(`Attempting to merge ${imageUrls.length} card images for shop purchase`);
+    
     if (imageUrls.length > 0) {
       const mergedImage = await mergeCardImages(imageUrls, 5);
       const attachment = new AttachmentBuilder(mergedImage, { name: 'cards.png' });
       embed.setImage('attachment://cards.png');
       await interaction.editReply({ embeds: [embed], files: [attachment] });
+      console.log('Successfully merged and sent shop images');
     } else {
+      console.warn('No valid image URLs found for pulled cards');
       await interaction.editReply({ embeds: [embed] });
     }
   } catch (error) {
-    console.error('Error merging images:', error);
+    console.error('Error merging shop images:', error);
     await interaction.editReply({ embeds: [embed] });
   }
 }

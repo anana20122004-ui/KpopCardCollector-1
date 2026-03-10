@@ -51,11 +51,17 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   let attachment = null;
   try {
     const images = selectedCards.map(c => c.image_url).filter(Boolean);
+    console.log(`Attempting to merge ${images.length} card images for drop`);
     if (images.length > 0) {
-      const buffer = await mergeCardImages(images);
+      const buffer = await mergeCardImages(images, 3);
       attachment = new AttachmentBuilder(buffer, { name: 'drop.png' });
+      console.log('Successfully merged drop images');
+    } else {
+      console.warn('No valid image URLs found for drop cards');
     }
-  } catch (e) { console.error(e); }
+  } catch (e) { 
+    console.error('Error merging drop images:', e);
+  }
 
   const cardList = selectedCards.map((c, i) => {
     const eraText = c.era ? ` (${c.era})` : '';

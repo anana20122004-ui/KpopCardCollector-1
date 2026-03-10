@@ -70,11 +70,17 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   let attachment = null;
   try {
     const images = selectedCards.map(c => c.image_url).filter(Boolean);
+    console.log(`Attempting to merge ${images.length} card images for weekly`);
     if (images.length > 0) {
-      const buffer = await mergeCardImages(images);
+      const buffer = await mergeCardImages(images, 4);
       attachment = new AttachmentBuilder(buffer, { name: 'weekly.png' });
+      console.log('Successfully merged weekly images');
+    } else {
+      console.warn('No valid image URLs found for weekly cards');
     }
-  } catch (e) { console.error(e); }
+  } catch (e) { 
+    console.error('Error merging weekly images:', e);
+  }
 
   const cardList = selectedCards.map((c, i) => {
     const imageLink = c.image_url || 'https://via.placeholder.com/150';
