@@ -33,7 +33,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const sub = interaction.options.getSubcommand();
   
   if (sub === 'browse') {
-    const desc = PACKS.map(p => `**${p.name}** - ${p.cards} cards • 💫 ${p.cost}`).join('\n');
+    const desc = `**Stella Pack** - 5 random cards • 💫 2000\n` +
+      `**Carmen Pack** - 10 random cards • 💫 3500\n` +
+      `**Yuha Pack** - 5 cards (choose group/idol) • 💫 2500\n` +
+      `**Juun Pack** - 10 cards (choose group/idol) • 💫 4500\n` +
+      `**Ye-on Pack** - 5 legendary cards • 💫 8000`;
     const embed = new EmbedBuilder()
       .setTitle(getTranslation(lang, 'shop_title'))
       .setDescription(desc)
