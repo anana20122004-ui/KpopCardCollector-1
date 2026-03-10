@@ -7,6 +7,7 @@ import { isAdminUser } from '../utils/constants.js';
 import { scheduleReminder } from '../utils/reminders.js';
 import { getTranslation } from '../utils/language.js';
 import { filterBlockedCards } from '../utils/blockFilter.js';
+import { getRandomRarity } from '../utils/cards.js';
 
 const WEEKLY_REWARD = 1500;
 const WEEKLY_COOLDOWN_HOURS = 168;
@@ -49,27 +50,46 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     return interaction.editReply({ content: getTranslation(lang, 'weekly_desc', { reward: result.reward, list: '(No cards found)' }) });
   }
 
-  const availableCards = await filterBlockedCards(allCards);
+  const availableCards = await filterBlockedCards(allCards, userId);
   if (availableCards.length === 0) {
     return interaction.editReply({ content: getTranslation(lang, 'weekly_desc', { reward: result.reward, list: '(No cards found)' }) });
   }
 
   const selectedCards = [];
   for (let i = 0; i < 4; i++) {
-    const card = availableCards[Math.floor(Math.random() * availableCards.length)];
+    const rarity = getRandomRarity();
+    let pool = availableCards.filter(c => c.rarity === rarity);
+    if (pool.length === 0) pool = availableCards;
+    const card = pool[Math.floor(Math.random() * pool.length)];
     selectedCards.push(card);
     const { data: ex } = await supabase.from('inventory').select('*').eq('user_id', userId).eq('card_id', card.card_id).maybeSingle();
     if (ex) await supabase.from('inventory').update({ quantity: (ex as any).quantity + 1 }).eq('id', (ex as any).id);
     else await supabase.from('inventory').insert({ user_id: userId, card_id: card.card_id, quantity: 1 });
   }
 
-  const list = selectedCards.map((c, i) => `**${i + 1}.** ${c.name} (${c.group}) ${getRarityEmoji(c.rarity)} • \`${c.cardcode}\``).join('\n');
+  let attachment = null;
+  try {
+    const images = selectedCards.map(c => c.image_url).filter(Boolean);
+    if (images.length > 0) {
+      const buffer = await mergeCardImages(images);
+      attachment = new AttachmentBuilder(buffer, { name: 'weekly.png' });
+    }
+  } catch (e) { console.error(e); }
+
+  const cardList = selectedCards.map((c, i) => {
+    const imageLink = c.image_url || 'https://via.placeholder.com/150';
+    return `**${i + 1}.** [${c.name}](${imageLink}) - __${c.group}__ ${getRarityEmoji(c.rarity)} • \`${c.cardcode}\``;
+  }).join('\n');
+
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
+    .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
     .setTitle(getTranslation(lang, 'weekly_title'))
-    .setDescription(getTranslation(lang, 'weekly_desc', { reward: result.reward, list: list }))
+    .setDescription(cardList)
     .addFields({ name: getTranslation(lang, 'weekly_next'), value: `<t:${Math.floor(nextAvailable.getTime() / 1000)}:R>` });
 
+  if (attachment) embed.setImage('attachment://weekly.png');
+
   scheduleReminder(interaction.client, userId, interaction.channelId, 'weekly', WEEKLY_COOLDOWN_HOURS * 60 * 60 * 1000);
-  await interaction.editReply({ embeds: [embed] });
+  await interaction.editReply({ embeds: [embed], files: attachment ? [attachment] : [] });
 }

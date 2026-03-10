@@ -1,38 +1,31 @@
 import { supabase } from '../database/supabase.js';
 
-let blockedCache: { type: string; name: string }[] = [];
-let lastCacheTime = 0;
+const userBlockCache = new Map<string, { artists: Set<string>; time: number }>();
 const CACHE_DURATION = 60000; // 1 minute
 
-export async function getBlockedGroups() {
+export async function getUserBlockedArtists(userId: string): Promise<Set<string>> {
   const now = Date.now();
-  if (lastCacheTime && now - lastCacheTime < CACHE_DURATION) {
-    return blockedCache;
+  const cached = userBlockCache.get(userId);
+  
+  if (cached && now - cached.time < CACHE_DURATION) {
+    return cached.artists;
   }
 
   try {
-    const { data } = await supabase.from('blocked_groups').select('*');
-    if (data) {
-      blockedCache = data.map(b => ({ type: b.type, name: (b.name || '').toLowerCase() }));
-      lastCacheTime = now;
-    }
+    const { data } = await supabase.from('user_blocked_artists').select('artist_name').eq('user_id', userId);
+    const artists = new Set((data || []).map((item: any) => (item.artist_name || '').toLowerCase()));
+    userBlockCache.set(userId, { artists, time: now });
+    return artists;
   } catch (e) {
-    console.error('Error fetching blocked groups:', e);
+    console.error('Error fetching blocked artists:', e);
+    return new Set();
   }
-
-  return blockedCache;
 }
 
-export async function filterBlockedCards(cards: any[]) {
-  const blocked = await getBlockedGroups();
+export async function filterBlockedCards(cards: any[], userId: string) {
+  const blockedArtists = await getUserBlockedArtists(userId);
   return cards.filter(card => {
-    const cardGroup = (card.group || '').toLowerCase();
     const cardName = (card.name || '').toLowerCase();
-    
-    return !blocked.some(b => {
-      if (b.type === 'group') return cardGroup === b.name;
-      if (b.type === 'artist') return cardName === b.name;
-      return false;
-    });
+    return !blockedArtists.has(cardName);
   });
 }

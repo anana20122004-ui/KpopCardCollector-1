@@ -56,22 +56,22 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     return;
   }
 
-  const { data: legendaryCards } = await supabase.from('cards').select('*').eq('rarity', 5).eq('droppable', true);
+  const { data: allCards } = await supabase.from('cards').select('*').eq('droppable', true);
 
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
     .setTitle(getTranslation(lang, 'daily_title'))
     .setDescription(getTranslation(lang, 'daily_success', { reward: dailyReward }));
 
-  if (legendaryCards && legendaryCards.length > 0) {
-    const availableCards = await filterBlockedCards(legendaryCards);
+  if (allCards && allCards.length > 0) {
+    const availableCards = await filterBlockedCards(allCards, userId);
     if (availableCards.length > 0) {
       const selectedCard = availableCards[Math.floor(Math.random() * availableCards.length)];
       const { data: ex } = await supabase.from('inventory').select('*').eq('user_id', userId).eq('card_id', selectedCard.card_id).maybeSingle();
       if (ex) await supabase.from('inventory').update({ quantity: (ex as any).quantity + 1 }).eq('id', (ex as any).id);
       else await supabase.from('inventory').insert({ user_id: userId, card_id: selectedCard.card_id, quantity: 1 });
 
-      embed.addFields({ name: getTranslation(lang, 'legendary_card_received'), value: `${getRarityEmoji(5)} **${selectedCard.name}** (${selectedCard.group}) • \`${selectedCard.cardcode}\`` });
+      embed.addFields({ name: getTranslation(lang, 'drop_claimed_title'), value: `${getRarityEmoji(selectedCard.rarity)} **${selectedCard.name}** (${selectedCard.group}) • \`${selectedCard.cardcode}\`` });
       if (selectedCard.image_url) embed.setImage(selectedCard.image_url);
     }
   }

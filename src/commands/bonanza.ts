@@ -40,7 +40,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     return interaction.editReply({ content: getTranslation(lang, 'daily_success', { reward: rewardCoins }) });
   }
 
-  const availableCards = await filterBlockedCards(legendaryCards);
+  const availableCards = await filterBlockedCards(legendaryCards, userId);
   if (availableCards.length === 0) {
     await supabase.from('users').update({ coins: user.coins + rewardCoins, last_bonanza: new Date().toISOString() }).eq('user_id', userId);
     return interaction.editReply({ content: getTranslation(lang, 'daily_success', { reward: rewardCoins }) });

@@ -28,7 +28,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const { data: allCards } = await supabase.from('cards').select('*');
   if (!allCards || allCards.length === 0) return interaction.editReply(getTranslation(lang, 'not_enough_cards'));
 
-  const availableCards = await filterBlockedCards(allCards);
+  const availableCards = await filterBlockedCards(allCards, userId);
   if (availableCards.length === 0) return interaction.editReply(getTranslation(lang, 'not_enough_cards'));
 
   const card = availableCards[Math.floor(Math.random() * availableCards.length)];

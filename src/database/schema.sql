@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
   last_weekly TIMESTAMP,
   last_surf TIMESTAMP,
   last_drop TIMESTAMP,
+  last_claim TIMESTAMP,
   last_booster TIMESTAMP,
   last_bonanza TIMESTAMP,
   bio TEXT DEFAULT '',
@@ -48,12 +49,13 @@ CREATE TABLE IF NOT EXISTS marketplace (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
--- Blocked groups/artists table
-CREATE TABLE IF NOT EXISTS blocked_groups (
+-- User blocked artists table
+CREATE TABLE IF NOT EXISTS user_blocked_artists (
   id SERIAL PRIMARY KEY,
-  type TEXT NOT NULL,
-  name TEXT NOT NULL UNIQUE,
-  created_at TIMESTAMP DEFAULT NOW()
+  user_id TEXT REFERENCES users(user_id) ON DELETE CASCADE,
+  artist_name TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  UNIQUE(user_id, artist_name)
 );
 
 -- Quiz questions table
@@ -70,4 +72,4 @@ CREATE TABLE IF NOT EXISTS quiz_questions (
 CREATE INDEX IF NOT EXISTS idx_inventory_user ON inventory(user_id);
 CREATE INDEX IF NOT EXISTS idx_marketplace_card ON marketplace(card_id);
 CREATE INDEX IF NOT EXISTS idx_marketplace_seller ON marketplace(seller_id);
-CREATE INDEX IF NOT EXISTS idx_blocked_groups_name ON blocked_groups(name);
+CREATE INDEX IF NOT EXISTS idx_user_blocked_artists ON user_blocked_artists(user_id);

@@ -5,8 +5,8 @@ import { getTranslation } from '../utils/language.js';
 import { filterBlockedCards } from '../utils/blockFilter.js';
 
 const PACKS = [
-  { id: '1', name: 'Magic Seeds', cost: 500, cards: 1 },
-  { id: '2', name: 'Glow Spores', cost: 1000, cards: 2 }
+  { id: '1', name: 'Single Pack', cost: 500, cards: 1 },
+  { id: '2', name: 'Double Pack', cost: 1000, cards: 2 }
 ];
 
 export const data = new SlashCommandBuilder()
@@ -35,7 +35,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const { data: cards } = await supabase.from('cards').select('*').eq('droppable', true);
   if (!cards || cards.length === 0) return interaction.editReply(getTranslation(lang, 'shop_no_cards'));
 
-  const availableCards = await filterBlockedCards(cards);
+  const availableCards = await filterBlockedCards(cards, interaction.user.id);
   if (availableCards.length === 0) return interaction.editReply(getTranslation(lang, 'shop_no_cards'));
 
   const pulled = [];
