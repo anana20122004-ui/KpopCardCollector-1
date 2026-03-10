@@ -1,6 +1,7 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { getRarityEmoji } from '../utils/cards.js';
+import { mergeCardImages } from '../utils/imageUtils.js';
 
 export const data = new SlashCommandBuilder()
   .setName('search')
@@ -55,7 +56,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const pages = Math.ceil(cards.length / pageSize);
   let currentPage = 0;
 
-  const generateEmbed = (page: number) => {
+  const generateEmbed = async (page: number) => {
     const start = page * pageSize;
     const end = start + pageSize;
     const pageCards = cards.slice(start, end);
@@ -66,11 +67,26 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       return `**${c.name}** (${c.group})${era}\n\`${c.cardcode}\` ${emoji}`;
     }).join('\n\n');
 
-    return new EmbedBuilder()
+    const embed = new EmbedBuilder()
       .setColor(0x8b4f9f)
       .setTitle(`🔍 Card Search Results (${cards.length} found)`)
       .setDescription(description)
       .setFooter({ text: `Page ${page + 1} of ${pages}` });
+
+    // Generate merged image for this page
+    let attachment = null;
+    try {
+      const imageUrls = pageCards.map((c: any) => c.image_url).filter(Boolean);
+      if (imageUrls.length > 0) {
+        const mergedImage = await mergeCardImages(imageUrls, 5);
+        attachment = new AttachmentBuilder(mergedImage, { name: 'search.png' });
+        embed.setImage('attachment://search.png');
+      }
+    } catch (e) {
+      console.error('Error merging search images:', e);
+    }
+
+    return { embed, attachment };
   };
 
   const buttons = new ActionRowBuilder<ButtonBuilder>()
@@ -87,8 +103,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         .setDisabled(currentPage === pages - 1)
     );
 
+  const firstPage = await generateEmbed(currentPage);
   const response = await interaction.editReply({
-    embeds: [generateEmbed(currentPage)],
+    embeds: [firstPage.embed],
+    files: firstPage.attachment ? [firstPage.attachment] : [],
     components: pages > 1 ? [buttons] : []
   });
 
@@ -120,8 +138,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
           .setDisabled(currentPage === pages - 1)
       );
 
+    const pageData = await generateEmbed(currentPage);
     await i.update({
-      embeds: [generateEmbed(currentPage)],
+      embeds: [pageData.embed],
+      files: pageData.attachment ? [pageData.attachment] : [],
       components: [newButtons]
     });
   });
