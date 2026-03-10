@@ -127,7 +127,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const cardList = pulled.map((c, i) => {
     const count = inventoryMap.get(c.card_id) || 1;
     const era = c.era ? ` - ${c.era}` : '';
-    return `${i + 1}. **${c.name}** (${c.group})${era}\n   💫 You have ${count} ${count === 1 ? 'copy' : 'copies'}`;
+    return `${i + 1}. **${c.name}** (${c.group})${era}\n-# You have ${count} ${count === 1 ? 'copy' : 'copies'}`;
   }).join('\n');
 
   const embed = new EmbedBuilder()
@@ -140,7 +140,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   try {
     const imageUrls = pulled.map(c => c.image_url).filter(url => url);
     if (imageUrls.length > 0) {
-      const mergedImage = await mergeCardImages(imageUrls, Math.min(3, imageUrls.length));
+      const mergedImage = await mergeCardImages(imageUrls, 5);
       const attachment = new AttachmentBuilder(mergedImage, { name: 'cards.png' });
       embed.setImage('attachment://cards.png');
       await interaction.editReply({ embeds: [embed], files: [attachment] });
