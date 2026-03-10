@@ -1,8 +1,9 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { getRandomRarity } from '../utils/cards.js';
 import { getTranslation } from '../utils/language.js';
 import { filterBlockedCards } from '../utils/blockFilter.js';
+import { mergeCardImages } from '../utils/imageUtils.js';
 
 const PACKS = [
   { id: '1', name: 'Stella Pack', cost: 2000, cards: 5, type: 'random' },
@@ -118,12 +119,36 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   await supabase.from('users').update({ coins: (user as any).coins - (pack as any).cost }).eq('user_id', interaction.user.id);
   
-  const cardList = pulled.map(c => `${c.name} (${c.group})`).join('\n');
-  const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
-    .setTitle(`✅ ${(pack as any).name} Purchased!`)
-    .setDescription(`You got ${pulled.length} cards:\n\n${cardList}`)
-    .setFooter({ text: `💰 -${(pack as any).cost} coins` });
+  // Get inventory counts for pulled cards
+  const { data: inventory } = await supabase.from('inventory').select('*').eq('user_id', interaction.user.id).in('card_id', pulled.map(c => c.card_id));
+  const inventoryMap = new Map((inventory || []).map(i => [(i as any).card_id, (i as any).quantity]));
   
-  await interaction.editReply({ embeds: [embed] });
+  // Build detailed card list
+  const cardList = pulled.map((c, i) => {
+    const count = inventoryMap.get(c.card_id) || 1;
+    const era = c.era ? ` - ${c.era}` : '';
+    return `${i + 1}. **${c.name}** (${c.group})${era}\n   💫 You have ${count} ${count === 1 ? 'copy' : 'copies'}`;
+  }).join('\n');
+
+  const embed = new EmbedBuilder()
+    .setColor(0x8b4f9f)
+    .setTitle(`✨ ${(pack as any).name} Purchased!`)
+    .setDescription(cardList)
+    .setFooter({ text: `💰 -${(pack as any).cost} coins • ${pulled.length} cards acquired` });
+  
+  // Generate merged image
+  try {
+    const imageUrls = pulled.map(c => c.image_url).filter(url => url);
+    if (imageUrls.length > 0) {
+      const mergedImage = await mergeCardImages(imageUrls, Math.min(3, imageUrls.length));
+      const attachment = new AttachmentBuilder(mergedImage, { name: 'cards.png' });
+      embed.setImage('attachment://cards.png');
+      await interaction.editReply({ embeds: [embed], files: [attachment] });
+    } else {
+      await interaction.editReply({ embeds: [embed] });
+    }
+  } catch (error) {
+    console.error('Error merging images:', error);
+    await interaction.editReply({ embeds: [embed] });
+  }
 }
