@@ -126,24 +126,44 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
   }
 
-  const inventoryMap = new Map<string, number>();
-  
-  for (const c of pulled) {
-    const { data: ex } = await supabase.from('inventory').select('*').eq('user_id', interaction.user.id).eq('card_id', c.card_id).maybeSingle();
-    const newQuantity = (ex ? (ex as any).quantity : 0) + 1;
-    inventoryMap.set(c.card_id, newQuantity);
+  // Track position of each card in this pull
+  const cardPositions = new Map<string, number>();
+  const cardDisplayInfo = pulled.map((c) => {
+    const position = (cardPositions.get(c.card_id) || 0) + 1;
+    cardPositions.set(c.card_id, position);
+    return { card: c, position };
+  });
+
+  // Get existing inventory counts for all unique cards
+  const uniqueCardIds = [...new Set(pulled.map(c => c.card_id))];
+  const { data: existingInventory } = await supabase.from('inventory').select('*').eq('user_id', interaction.user.id).in('card_id', uniqueCardIds);
+  const existingCounts = new Map((existingInventory || []).map(i => [(i as any).card_id, i]));
+
+  // Update inventory with totals
+  const cardTotalAdds = new Map<string, number>();
+  for (const cardId of cardPositions.keys()) {
+    cardTotalAdds.set(cardId, cardPositions.get(cardId) || 0);
+  }
+
+  for (const [cardId, totalAdds] of cardTotalAdds.entries()) {
+    const existing = existingCounts.get(cardId);
+    const finalQuantity = (existing ? (existing as any).quantity : 0) + totalAdds;
     
-    if (ex) await supabase.from('inventory').update({ quantity: newQuantity }).eq('id', (ex as any).id);
-    else await supabase.from('inventory').insert({ user_id: interaction.user.id, card_id: c.card_id, quantity: 1 });
+    if (existing) {
+      await supabase.from('inventory').update({ quantity: finalQuantity }).eq('id', (existing as any).id);
+    } else {
+      await supabase.from('inventory').insert({ user_id: interaction.user.id, card_id: cardId, quantity: totalAdds });
+    }
   }
 
   await supabase.from('users').update({ coins: (user as any).coins - (pack as any).cost }).eq('user_id', interaction.user.id);
   
   // Build detailed card list with progressive counts
-  const cardList = pulled.map((c, i) => {
-    const count = inventoryMap.get(c.card_id) || 1;
-    const era = c.era ? ` - ${c.era}` : '';
-    return `${i + 1}. **${c.name}** (${c.group})${era}\n-# You have ${count} ${count === 1 ? 'copy' : 'copies'}`;
+  const cardList = cardDisplayInfo.map((info, i) => {
+    const startCount = existingCounts.get(info.card.card_id) ? (existingCounts.get(info.card.card_id) as any).quantity : 0;
+    const displayCount = startCount + info.position;
+    const era = info.card.era ? ` - ${info.card.era}` : '';
+    return `${i + 1}. **${info.card.name}** (${info.card.group})${era}\n-# You have ${displayCount} ${displayCount === 1 ? 'copy' : 'copies'}`;
   }).join('\n');
 
   const embed = new EmbedBuilder()
