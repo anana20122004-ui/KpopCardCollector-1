@@ -126,19 +126,20 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
   }
 
+  const inventoryMap = new Map<string, number>();
+  
   for (const c of pulled) {
     const { data: ex } = await supabase.from('inventory').select('*').eq('user_id', interaction.user.id).eq('card_id', c.card_id).maybeSingle();
-    if (ex) await supabase.from('inventory').update({ quantity: (ex as any).quantity + 1 }).eq('id', (ex as any).id);
+    const newQuantity = (ex ? (ex as any).quantity : 0) + 1;
+    inventoryMap.set(c.card_id, newQuantity);
+    
+    if (ex) await supabase.from('inventory').update({ quantity: newQuantity }).eq('id', (ex as any).id);
     else await supabase.from('inventory').insert({ user_id: interaction.user.id, card_id: c.card_id, quantity: 1 });
   }
 
   await supabase.from('users').update({ coins: (user as any).coins - (pack as any).cost }).eq('user_id', interaction.user.id);
   
-  // Get inventory counts for pulled cards
-  const { data: inventory } = await supabase.from('inventory').select('*').eq('user_id', interaction.user.id).in('card_id', pulled.map(c => c.card_id));
-  const inventoryMap = new Map((inventory || []).map(i => [(i as any).card_id, (i as any).quantity]));
-  
-  // Build detailed card list
+  // Build detailed card list with progressive counts
   const cardList = pulled.map((c, i) => {
     const count = inventoryMap.get(c.card_id) || 1;
     const era = c.era ? ` - ${c.era}` : '';
