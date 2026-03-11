@@ -20,24 +20,47 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const { data: user } = await supabase.from('users').select('*').eq('user_id', target.id).single();
     if (!user) return interaction.editReply(getTranslation(lang, 'not_started'));
     
+    const startDate = user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A';
+    
+    // Get favorite card info if set
+    let favoriteCardInfo = '';
+    let favoriteCard = null;
+    if ((user as any).favorite_card_id) {
+      const { data: card } = await supabase.from('cards').select('*').eq('card_id', (user as any).favorite_card_id).single();
+      if (card) {
+        favoriteCard = card;
+        favoriteCardInfo = `\`${card.cardcode}\` - **${card.name}** (${card.group})`;
+      }
+    }
+    
     const embed = new EmbedBuilder()
       .setColor(parseInt((user as any).profile_color?.replace('#', '') || 'ff69b4', 16))
-      .setTitle(getTranslation(lang, 'profile_view_title', { user: target.username }))
-      .setDescription((user as any).bio || getTranslation(lang, 'profile_no_bio'))
-      .addFields({ name: getTranslation(lang, 'coins_label'), value: `${(user as any).coins}` });
+      .setTitle(`${target.username}'s Profile`)
+      .setDescription((user as any).bio || 'No bio set yet')
+      .addFields(
+        { name: '**Username:**', value: target.username, inline: false },
+        { name: '**Start date:**', value: startDate, inline: false },
+        { name: '**Balance:**', value: `💫 ${(user as any).coins}`, inline: false }
+      );
+    
+    if (favoriteCardInfo && favoriteCard) {
+      embed.addFields({ name: '**Favorite Card:**', value: favoriteCardInfo, inline: false });
+      embed.setImage((favoriteCard as any).image_url);
+    }
+    
     return interaction.editReply({ embeds: [embed] });
   }
 
   if (sub === 'bio') {
     const text = interaction.options.getString('text', true);
     await supabase.from('users').update({ bio: text }).eq('user_id', userId);
-    return interaction.editReply(getTranslation(lang, 'profile_bio_updated'));
+    return interaction.editReply(`✅ Bio updated to: "${text}"`);
   }
 
   if (sub === 'color') {
     const hex = interaction.options.getString('hex', true);
-    if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) return interaction.editReply(getTranslation(lang, 'profile_invalid_hex'));
+    if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) return interaction.editReply('❌ Invalid hex color! Use format: #RRGGBB');
     await supabase.from('users').update({ profile_color: hex }).eq('user_id', userId);
-    return interaction.editReply(getTranslation(lang, 'profile_color_updated'));
+    return interaction.editReply(`✅ Profile color updated to ${hex}`);
   }
 }
