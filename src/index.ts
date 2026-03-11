@@ -102,6 +102,39 @@ client.on(Events.InteractionCreate, async (interaction) => {
       return;
     }
 
+    if (customId.startsWith('cardid_')) {
+      const parts = customId.split('_');
+      const action = parts[1];
+      if (action === 'page') return;
+
+      const userId = parts[2];
+      const command = commands.get('cardid');
+      if (command) {
+        await interaction.deferUpdate();
+        const row = interaction.message.components[0] as any;
+        const pageLabel = row.components[1].label;
+        const [currentPage, totalPages] = pageLabel.split(' / ').map(Number);
+        
+        let newPage = currentPage;
+        if (action === 'prev') newPage = Math.max(1, currentPage - 1);
+        if (action === 'next') newPage = Math.min(totalPages, currentPage + 1);
+
+        const mockInteraction = {
+          ...interaction,
+          isButton: () => true,
+          deferReply: () => Promise.resolve(),
+          editReply: (options: any) => interaction.editReply(options),
+          options: {
+            getInteger: (name: string) => (name === 'page' ? newPage : null),
+            getString: () => null,
+            getBoolean: () => null
+          }
+        };
+        await command.execute(mockInteraction as any);
+      }
+      return;
+    }
+
     if (customId.startsWith('collect_')) {
       const parts = customId.split('_');
       const action = parts[1];

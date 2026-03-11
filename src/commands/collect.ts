@@ -4,7 +4,7 @@ import { getRarityEmoji } from '../utils/cards.js';
 import { mergeCardImages } from '../utils/imageUtils.js';
 import { getTranslation } from '../utils/language.js';
 
-const CARDS_PER_PAGE = 3;
+const CARDS_PER_PAGE = 5;
 
 export const data = new SlashCommandBuilder()
   .setName('collect')
@@ -75,7 +75,7 @@ export async function execute(interaction: ChatInputCommandInteraction | ButtonI
   try {
     const images = paged.map(c => c.image_url).filter(Boolean);
     if (images.length > 0) {
-      const buffer = await mergeCardImages(images);
+      const buffer = await mergeCardImages(images, 5);
       attachment = new AttachmentBuilder(buffer, { name: 'collect.png' });
     }
   } catch (e) { console.error(e); }
