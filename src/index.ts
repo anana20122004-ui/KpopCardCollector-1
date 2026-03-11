@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, Collection, Events, REST, Routes } from 'discord.js';
+import { Client, GatewayIntentBits, Collection, Events, REST, Routes, ActivityType } from 'discord.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readdir } from 'fs/promises';
@@ -46,6 +46,11 @@ async function registerCommands() {
     console.log('<:cottage:1457128646274973766> Successfully registered slash commands!');
   } catch (error) { console.error('Error registering commands:', error); }
 }
+
+client.once(Events.ClientReady, async () => {
+  console.log(`✨ Bot is online as ${client.user?.username}`);
+  client.user?.setActivity('K-pop cards 💫', { type: ActivityType.Streaming, url: 'https://twitch.tv/dreamcore' });
+});
 
 client.on(Events.InteractionCreate, async (interaction) => {
   if (interaction.isButton()) {
