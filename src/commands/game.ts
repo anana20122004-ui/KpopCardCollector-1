@@ -26,7 +26,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   }
   
   const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-  const wrongAnswers = [];
+  const wrongAnswers: string[] = [];
   
   // Get 3 different wrong answers
   for (let i = 0; i < 3; i++) {
