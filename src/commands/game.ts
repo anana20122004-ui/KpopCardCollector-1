@@ -38,33 +38,47 @@ async function startGame(interaction: ChatInputCommandInteraction, imageUrl: str
 
   await interaction.editReply({ embeds: [embed] });
   
-  const userId = interaction.user.id;
   const channel = interaction.channel;
   if (!channel || !('send' in channel)) return;
 
   const answer = targetName.trim().toLowerCase();
-  const guild = interaction.guild;
+  let answered = false;
   
-  // Use message event listener instead of collector
   const handleMessage = async (m: any) => {
-    if (m.author.bot) return;
+    // Skip bots and messages in wrong channel
+    if (m.author.bot || m.channelId !== channel.id) return;
+    if (answered) return;
     
     const guess = (m.content || '').trim().toLowerCase();
-    console.log(`Message: "${m.content}" -> guess: "${guess}" (answer: "${answer}")`);
+    console.log(`[GAME] Message: "${m.content}" | Guess: "${guess}" | Answer: "${answer}"`);
     
-    if (guess && guess === answer) {
-      console.log('Correct answer detected!');
+    if (guess === answer) {
+      console.log('[GAME] ✅ Correct answer!');
+      answered = true;
       interaction.client.off('messageCreate', handleMessage);
-      const { data: user } = await supabase.from('users').select('coins').eq('user_id', m.author.id).single();
-      if (user) await supabase.from('users').update({ coins: (user.coins || 0) + reward }).eq('user_id', m.author.id);
-      await m.reply(`✅ Correct! It's **${targetName}**! You earned 🧚 **${reward}** coins!`);
+      
+      try {
+        const { data: user } = await supabase.from('users').select('coins').eq('user_id', m.author.id).single();
+        if (user) {
+          await supabase.from('users').update({ coins: (user.coins || 0) + reward }).eq('user_id', m.author.id);
+        }
+        await m.reply(`✅ Correct! It's **${targetName}**! You earned 🧚 **${reward}** coins!`);
+      } catch (e) {
+        console.error('[GAME] Error processing correct answer:', e);
+      }
     }
   };
   
   interaction.client.on('messageCreate', handleMessage);
   
-  setTimeout(() => {
-    interaction.client.off('messageCreate', handleMessage);
-    interaction.followUp(`⏰ Time's up! The answer was **${targetName}**.`);
+  const timeoutId = setTimeout(async () => {
+    if (!answered) {
+      interaction.client.off('messageCreate', handleMessage);
+      try {
+        await interaction.followUp(`⏰ Time's up! The answer was **${targetName}**.`);
+      } catch (e) {
+        console.error('[GAME] Error sending timeout message:', e);
+      }
+    }
   }, 30000);
 }
