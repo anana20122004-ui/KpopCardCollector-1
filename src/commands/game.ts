@@ -47,7 +47,7 @@ async function startGame(interaction: ChatInputCommandInteraction, imageUrl: str
   
   // Use message event listener instead of collector
   const handleMessage = async (m: any) => {
-    if (m.author.bot || m.author.id === userId) return;
+    if (m.author.bot) return;
     
     const guess = (m.content || '').trim().toLowerCase();
     console.log(`Message: "${m.content}" -> guess: "${guess}" (answer: "${answer}")`);
