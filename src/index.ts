@@ -135,6 +135,12 @@ client.on(Events.InteractionCreate, async (interaction) => {
       return;
     }
 
+    if (customId.startsWith('search_')) {
+      // Search buttons are handled within the search command itself
+      // This is a fallback just in case
+      return;
+    }
+
     if (customId.startsWith('collect_')) {
       const parts = customId.split('_');
       const action = parts[1];

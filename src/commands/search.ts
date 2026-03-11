@@ -47,17 +47,28 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     query = query.eq('designer_id', designerFilter.id);
   }
 
-  const { data: cards, error } = await query.order('group', { ascending: true });
+  try {
+    const { data: cards, error } = await query.order('group', { ascending: true });
 
-  if (error) {
-    return interaction.editReply(`❌ Search error: ${error.message}`);
+    if (error) {
+      console.error('Search query error:', error);
+      return interaction.editReply(`❌ Search error: ${error.message}`);
+    }
+
+    if (!cards || cards.length === 0) {
+      return interaction.editReply('❌ No cards found matching your filters.');
+    }
+
+    await handleSearchResults(interaction, cards);
+  } catch (e) {
+    console.error('Search command error:', e);
+    return interaction.editReply(`❌ Error: ${String(e)}`);
   }
+}
 
-  if (!cards || cards.length === 0) {
-    return interaction.editReply('❌ No cards found matching your filters.');
-  }
+async function handleSearchResults(interaction: ChatInputCommandInteraction, cards: any[]) {
 
-  const pageSize = 5;
+const pageSize = 5;
   const pages = Math.ceil(cards.length / pageSize);
   let currentPage = 0;
 
