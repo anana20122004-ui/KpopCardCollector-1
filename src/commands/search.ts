@@ -16,7 +16,8 @@ export const data = new SlashCommandBuilder()
       { name: 'Rare (3)', value: 3 },
       { name: 'Epic (4)', value: 4 },
       { name: 'Legendary (5)', value: 5 }
-    ));
+    ))
+  .addUserOption(o => o.setName('designer').setDescription('Filter by designer').setRequired(false));
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();
@@ -26,6 +27,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const groupFilter = interaction.options.getString('group');
   const eraFilter = interaction.options.getString('era');
   const rarityFilter = interaction.options.getInteger('rarity');
+  const designerFilter = interaction.options.getUser('designer');
 
   let query = supabase.from('cards').select('*');
 
@@ -40,6 +42,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   }
   if (rarityFilter) {
     query = query.eq('rarity', rarityFilter);
+  }
+  if (designerFilter) {
+    query = query.eq('designer_id', designerFilter.id);
   }
 
   const { data: cards, error } = await query.order('group', { ascending: true });
@@ -64,7 +69,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const description = pageCards.map((c: any) => {
       const emoji = getRarityEmoji(c.rarity);
       const era = c.era ? ` • ${c.era}` : '';
-      return `**${c.name}** (${c.group})${era}\n\`${c.cardcode}\` ${emoji}`;
+      const designer = c.designer_id ? ` • Designer: <@${c.designer_id}>` : '';
+      return `**${c.name}** (${c.group})${era}${designer}\n\`${c.cardcode}\` ${emoji}`;
     }).join('\n\n');
 
     const embed = new EmbedBuilder()
