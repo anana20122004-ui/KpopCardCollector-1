@@ -23,6 +23,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const qtyText = inv ? (lang === 'es' ? `• copias: **${inv.quantity}**` : `• copies: **${inv.quantity}**`) : '';
   const droppableText = card.droppable ? (lang === 'es' ? 'Sí' : 'Yes') : (lang === 'es' ? 'No' : 'No');
+  const designerText = card.designer_id ? `<@${card.designer_id}>` : 'N/A';
 
   const embed = new EmbedBuilder()
     .setColor(0xff69b4)
@@ -35,6 +36,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       code: card.cardcode, 
       qty: qtyText 
     }))
+    .addFields({ name: '**Designer:**', value: designerText, inline: false })
     .setFooter({ text: getTranslation(lang, 'viewcard_footer', { rarity: card.rarity, droppable: droppableText }) });
 
   if (card.image_url) embed.setImage(card.image_url);

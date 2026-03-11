@@ -38,7 +38,10 @@ export const data = new SlashCommandBuilder()
       .setDescription('Image URL'))
   .addStringOption(option =>
     option.setName('new_cardcode')
-      .setDescription('Change card code (for existing cards only)'));
+      .setDescription('Change card code (for existing cards only)'))
+  .addUserOption(option =>
+    option.setName('designer')
+      .setDescription('Designer user'));
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   const lang = (interaction as any).userLanguage || 'en';
@@ -55,6 +58,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const droppable = interaction.options.getBoolean('droppable');
   const imageUrl = interaction.options.getString('image_url');
   const newCardcode = interaction.options.getString('new_cardcode')?.toUpperCase();
+  const designer = interaction.options.getUser('designer');
 
   const { data: existing } = await supabase.from('cards').select('*').eq('cardcode', cardcode).maybeSingle();
 
@@ -90,6 +94,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       updates.cardcode = newCardcode;
       changes.push({ field: 'Card Code', before: existing.cardcode, after: newCardcode });
     }
+    if (designer && designer.id !== existing.designer_id) {
+      updates.designer_id = designer.id;
+      changes.push({ field: 'Designer', before: existing.designer_id || 'None', after: `<@${designer.id}>` });
+    }
 
     // If no updates, notify user
     if (Object.keys(updates).length === 0) {
@@ -116,7 +124,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const { error } = await supabase.from('cards').insert([{
     name, group, cardcode, era, rarity, 
     droppable: droppable ?? true,
-    image_url: imageUrl
+    image_url: imageUrl,
+    designer_id: designer?.id || null
   }]);
 
   if (error) return interaction.editReply(`Error: ${error.message}`);

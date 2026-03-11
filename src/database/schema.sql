@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS cards (
   rarity INTEGER CHECK (rarity IN (1, 2, 3, 4, 5)) NOT NULL,
   droppable BOOLEAN DEFAULT true,
   image_url TEXT,
+  designer_id TEXT,
   created_at TIMESTAMP DEFAULT NOW()
 );
 
