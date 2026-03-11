@@ -84,19 +84,24 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const msg = await interaction.editReply({ embeds: [embed], components: [row], files: attachment ? [attachment] : [] });
   const collector = msg.createMessageComponentCollector({ componentType: ComponentType.Button, time: 30000 });
+  const claimedUsers = new Set<string>();
 
   collector.on('collect', async i => {
-    if (i.user.id !== userId) return i.reply({ content: getTranslation(lang, 'wrong_user_cards'), ephemeral: true });
+    if (claimedUsers.has(i.user.id)) {
+      return i.reply({ content: getTranslation(lang, 'already_claimed'), ephemeral: true });
+    }
     
     await i.deferUpdate();
     const index = parseInt(i.customId.split('_')[1]);
     const card = selectedCards[index];
+    const claimUserId = i.user.id;
 
-    const { data: ex } = await supabase.from('inventory').select('*').eq('user_id', userId).eq('card_id', card.card_id).maybeSingle();
+    const { data: ex } = await supabase.from('inventory').select('*').eq('user_id', claimUserId).eq('card_id', card.card_id).maybeSingle();
     if (ex) await supabase.from('inventory').update({ quantity: (ex as any).quantity + 1 }).eq('id', (ex as any).id);
-    else await supabase.from('inventory').insert({ user_id: userId, card_id: card.card_id, quantity: 1 });
+    else await supabase.from('inventory').insert({ user_id: claimUserId, card_id: card.card_id, quantity: 1 });
 
-    await supabase.from('users').update({ last_drop: new Date().toISOString() }).eq('user_id', userId);
+    await supabase.from('users').update({ last_drop: new Date().toISOString() }).eq('user_id', claimUserId);
+    claimedUsers.add(claimUserId);
 
     const resultEmbed = new EmbedBuilder()
       .setColor(getRarityColor(card.rarity))
@@ -106,8 +111,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (card.image_url) resultEmbed.setImage(card.image_url);
     
     await i.editReply({ embeds: [resultEmbed], components: [], files: [] });
-    scheduleReminder(interaction.client, userId, interaction.channelId, 'drop', COOLDOWN_MINUTES * 60 * 1000);
-    collector.stop();
+    scheduleReminder(interaction.client, claimUserId, interaction.channelId, 'drop', COOLDOWN_MINUTES * 60 * 1000);
   });
 
   collector.on('end', async (_, reason) => {
