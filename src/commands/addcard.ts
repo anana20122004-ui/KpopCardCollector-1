@@ -94,9 +94,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       updates.cardcode = newCardcode;
       changes.push({ field: 'Card Code', before: existing.cardcode, after: newCardcode });
     }
-    if (designer && designer.id !== existing.designer_id) {
-      updates.designer_id = designer.id;
-      changes.push({ field: 'Designer', before: existing.designer_id || 'None', after: `<@${designer.id}>` });
+    if (designer) {
+      const newDesignerId = designer.id;
+      const oldDesignerId = existing.designer_id;
+      if (newDesignerId !== oldDesignerId) {
+        updates.designer_id = newDesignerId;
+        changes.push({ field: 'Designer', before: oldDesignerId || 'None', after: `<@${newDesignerId}>` });
+      }
     }
 
     // If no updates, notify user
