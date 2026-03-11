@@ -60,18 +60,55 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   if (existing) {
     const updates: any = {};
-    if (name) updates.name = name;
-    if (group) updates.group = group;
-    if (rarity) updates.rarity = rarity;
-    if (era) updates.era = era;
-    if (droppable !== null) updates.droppable = droppable;
-    if (imageUrl) updates.image_url = imageUrl;
-    if (newCardcode) updates.cardcode = newCardcode;
+    const changes: Array<{ field: string; before: string; after: string }> = [];
+
+    if (name && name !== existing.name) {
+      updates.name = name;
+      changes.push({ field: 'Name', before: existing.name, after: name });
+    }
+    if (group && group !== existing.group) {
+      updates.group = group;
+      changes.push({ field: 'Group', before: existing.group, after: group });
+    }
+    if (rarity && rarity !== existing.rarity) {
+      updates.rarity = rarity;
+      changes.push({ field: 'Rarity', before: String(existing.rarity), after: String(rarity) });
+    }
+    if (era && era !== existing.era) {
+      updates.era = era;
+      changes.push({ field: 'Era', before: existing.era || 'N/A', after: era });
+    }
+    if (droppable !== null && droppable !== existing.droppable) {
+      updates.droppable = droppable;
+      changes.push({ field: 'Droppable', before: String(existing.droppable), after: String(droppable) });
+    }
+    if (imageUrl && imageUrl !== existing.image_url) {
+      updates.image_url = imageUrl;
+      changes.push({ field: 'Image URL', before: existing.image_url || 'None', after: imageUrl });
+    }
+    if (newCardcode && newCardcode !== existing.cardcode) {
+      updates.cardcode = newCardcode;
+      changes.push({ field: 'Card Code', before: existing.cardcode, after: newCardcode });
+    }
+
+    // If no updates, notify user
+    if (Object.keys(updates).length === 0) {
+      return interaction.editReply(`ℹ️ No changes detected. All values are the same as the existing card.`);
+    }
 
     const { error } = await supabase.from('cards').update(updates).eq('card_id', existing.card_id);
     if (error) return interaction.editReply(`Error: ${error.message}`);
+
     const displayCode = newCardcode || cardcode;
-    return interaction.editReply(getTranslation(lang, 'update_success', { type: lang === 'es' ? 'carta' : 'card', code: displayCode }));
+    const changesList = changes.map(c => `**${c.field}:** \`${c.before}\` → \`${c.after}\``).join('\n');
+
+    const embed = new EmbedBuilder()
+      .setColor(0x8b4f9f)
+      .setTitle(`✨ Card Updated: ${displayCode}`)
+      .setDescription(changesList)
+      .setFooter({ text: `${changes.length} field(s) updated` });
+
+    return interaction.editReply({ embeds: [embed] });
   }
 
   if (!name || !group || !rarity) return interaction.editReply(getTranslation(lang, 'provide_details'));
