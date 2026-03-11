@@ -84,15 +84,16 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const msg = await interaction.editReply({ embeds: [embed], components: [row], files: attachment ? [attachment] : [] });
   const collector = msg.createMessageComponentCollector({ componentType: ComponentType.Button, time: 30000 });
-  const claimedUsers = new Set<string>();
+  const claimedCards = new Set<number>();
 
   collector.on('collect', async i => {
-    if (claimedUsers.has(i.user.id)) {
-      return i.reply({ content: getTranslation(lang, 'already_claimed'), ephemeral: true });
-    }
-    
     await i.deferUpdate();
     const index = parseInt(i.customId.split('_')[1]);
+    
+    if (claimedCards.has(index)) {
+      return i.reply({ content: getTranslation(lang, 'card_already_claimed'), ephemeral: true });
+    }
+    
     const card = selectedCards[index];
     const claimUserId = i.user.id;
 
@@ -101,7 +102,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     else await supabase.from('inventory').insert({ user_id: claimUserId, card_id: card.card_id, quantity: 1 });
 
     await supabase.from('users').update({ last_drop: new Date().toISOString() }).eq('user_id', claimUserId);
-    claimedUsers.add(claimUserId);
+    claimedCards.add(index);
 
     const resultEmbed = new EmbedBuilder()
       .setColor(getRarityColor(card.rarity))
@@ -112,10 +113,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     
     await i.editReply({ embeds: [resultEmbed], components: [], files: [] });
     scheduleReminder(interaction.client, claimUserId, interaction.channelId, 'drop', COOLDOWN_MINUTES * 60 * 1000);
+    
+    // Stop if all 3 cards are claimed
+    if (claimedCards.size === 3) {
+      collector.stop();
+    }
   });
 
   collector.on('end', async (_, reason) => {
-    if (reason === 'time') {
+    if (reason === 'time' || reason === 'user') {
       const expiredEmbed = new EmbedBuilder()
         .setColor(0xff69b4)
         .setDescription(cardList)
