@@ -100,10 +100,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       
       // Try exact match first
       if (groupLower === filterLower || nameLower === filterLower) return true;
-      // Try partial match
-      if (groupLower.includes(filterLower) || nameLower.includes(filterLower)) return true;
-      // Try reverse - filter in group/name
-      if (filterLower.includes(groupLower) || filterLower.includes(nameLower)) return true;
+      // Try partial match only if filter is 3+ chars (prevents single letter issues)
+      if (filterLower.length >= 3) {
+        if (groupLower.includes(filterLower) || nameLower.includes(filterLower)) return true;
+      }
       return false;
     });
     
