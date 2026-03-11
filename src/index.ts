@@ -49,7 +49,7 @@ async function registerCommands() {
 
 client.once(Events.ClientReady, async () => {
   console.log(`✨ Bot is online as ${client.user?.username}`);
-  client.user?.setActivity('K-pop cards 💫', { type: ActivityType.Streaming, url: 'https://twitch.tv/dreamcore' });
+  client.user?.setActivity('RUDE!', { type: ActivityType.Streaming, url: 'https://www.youtube.com/watch?v=Q4AE3ub4nBM' });
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
