@@ -192,9 +192,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   try { await command.execute(interaction); } catch (error) { console.error(error); }
 });
 
-const PORT = process.env.PORT || 3000;
-
-const PORT = process.env.PORT || 3000;
+const PORT = parseInt(process.env.PORT || '3000', 10);
 
 const server = createServer((req, res) => {
   res.writeHead(200);
