@@ -32,7 +32,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const cardList = pageCards.map((card: any) => `**ID: ${card.card_id}** • ${card.name} (${card.group}) • \`${card.cardcode}\` • Rarity: ${card.rarity}`).join('\n');
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle('🎴 All Card IDs')
     .setDescription(cardList)
     .setFooter({ text: `Page ${validPage} / ${totalPages}` });

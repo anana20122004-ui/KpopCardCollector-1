@@ -35,7 +35,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (result.error === 'user_not_found') return interaction.editReply({ content: getTranslation(lang, 'start_prompt') });
     if (result.error === 'on_cooldown') {
       const embed = new EmbedBuilder()
-        .setColor(0xff69b4)
+        .setColor(0xFFB6E1)
         .setTitle(getTranslation(lang, 'cooldown_title', { type: 'Weekly' }))
         .setDescription(getTranslation(lang, 'cooldown_wait', { time: formatCooldown(result.cooldown_remaining_ms) }));
       return interaction.editReply({ embeds: [embed] });

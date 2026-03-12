@@ -67,7 +67,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 
     const embed = new EmbedBuilder()
-      .setColor(0xff4444)
+      .setColor(0xFF9999)
       .setTitle('✅ Staff Member Blocked')
       .addFields(
         { name: 'User', value: `${user.username} (${user.id})` },
@@ -91,7 +91,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 
     const embed = new EmbedBuilder()
-      .setColor(0x44ff44)
+      .setColor(0x99FF99)
       .setTitle('✅ Staff Member Unblocked')
       .addFields(
         { name: 'User', value: `${user.username} (${user.id})` }
@@ -121,7 +121,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       .join('\n');
 
     const embed = new EmbedBuilder()
-      .setColor(0x8b4f9f)
+      .setColor(0xD8A8E8)
       .setTitle(`🚫 Blocked Staff (${blocked.length})`)
       .setDescription(description)
       .setTimestamp();
@@ -143,7 +143,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 
     const embed = new EmbedBuilder()
-      .setColor(0xff4444)
+      .setColor(0xFF9999)
       .setTitle('🔒 Global Staff Block ENABLED')
       .setDescription('All staff members are now blocked from using /addcard')
       .setTimestamp();
@@ -162,7 +162,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 
     const embed = new EmbedBuilder()
-      .setColor(0x44ff44)
+      .setColor(0x99FF99)
       .setTitle('🔓 Global Staff Block DISABLED')
       .setDescription('All staff members can now use /addcard again')
       .setTimestamp();

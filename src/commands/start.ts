@@ -25,7 +25,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   if (existing) {
     const embed = new EmbedBuilder()
-      .setColor(0xff69b4)
+      .setColor(0xFFB6E1)
       .setTitle(getTranslation(lang, 'start_title_welcome'))
       .setDescription(getTranslation(lang, 'start_desc_welcome', { coins: existing.coins }))
       .addFields(

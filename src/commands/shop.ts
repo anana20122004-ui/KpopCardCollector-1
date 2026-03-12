@@ -42,7 +42,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const embed = new EmbedBuilder()
       .setTitle(getTranslation(lang, 'shop_title'))
       .setDescription(desc)
-      .setColor(0x8b4f9f);
+      .setColor(0xD8A8E8);
     return await interaction.reply({ embeds: [embed] });
   }
   
@@ -167,7 +167,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   }).join('\n');
 
   const embed = new EmbedBuilder()
-    .setColor(0x8b4f9f)
+    .setColor(0xD8A8E8)
     .setTitle(`✨ ${(pack as any).name} Purchased!`)
     .setDescription(cardList)
     .setFooter({ text: `💰 -${(pack as any).cost} coins • ${pulled.length} cards acquired` });

@@ -44,7 +44,7 @@ export async function scheduleReminder(
       if (!channel) return;
 
       const embed = new EmbedBuilder()
-        .setColor(0x00ff00)
+        .setColor(0x90EE90)
         .setTitle('⏰ Cooldown Ready!')
         .setDescription(`Your **/${commandName}** command is ready to use again!`)
         .setTimestamp();

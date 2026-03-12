@@ -71,7 +71,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       { name: 'Code', value: cardcode },
       { name: 'Rarity', value: `${rarity}` }
     )
-    .setColor(0xff69b4);
+    .setColor(0xFFB6E1);
 
   await interaction.editReply({ embeds: [embed] });
 }

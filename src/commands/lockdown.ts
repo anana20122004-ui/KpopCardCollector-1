@@ -12,7 +12,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   state.lockdownMode = !state.lockdownMode;
 
   const embed = new EmbedBuilder()
-    .setColor(state.lockdownMode ? 0xff0000 : 0x00ff00)
+    .setColor(state.lockdownMode ? 0xFF6B6B : 0x90EE90)
     .setTitle(state.lockdownMode ? '🔒 LOCKDOWN ENABLED' : '🔓 Lockdown Disabled')
     .setDescription(state.lockdownMode ? 'Commands are now **LOCKED**.' : 'Commands are now **UNLOCKED**.');
 

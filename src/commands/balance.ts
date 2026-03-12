@@ -31,7 +31,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   }
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle(user.language === 'es' ? `Saldo de ${targetUser.username}` : `${targetUser.username}'s Balance`)
     .setDescription(`🧚 **${user.coins}** ${user.language === 'es' ? 'monedas' : 'coins'}`)
     .setThumbnail(targetUser.displayAvatarURL());

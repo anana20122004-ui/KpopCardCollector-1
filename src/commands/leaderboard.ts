@@ -36,7 +36,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }))).join('\n');
 
     const embed = new EmbedBuilder()
-      .setColor(0xff69b4)
+      .setColor(0xFFB6E1)
       .setTitle(getTranslation(lang, 'leaderboard_coins'))
       .setDescription(description || getTranslation(lang, 'leaderboard_empty_coins'));
 
@@ -55,7 +55,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }))).join('\n');
 
     const embed = new EmbedBuilder()
-      .setColor(0xff69b4)
+      .setColor(0xFFB6E1)
       .setTitle(getTranslation(lang, 'leaderboard_collection'))
       .setDescription(description || getTranslation(lang, 'leaderboard_empty_collection'));
 

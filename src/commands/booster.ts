@@ -28,7 +28,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const lastBooster = user.last_booster ? new Date(user.last_booster).getTime() : 0;
   if (!isAdminUser(userId) && Date.now() - lastBooster < BOOSTER_COOLDOWN_HOURS * 60 * 60 * 1000) {
     const remaining = (BOOSTER_COOLDOWN_HOURS * 60 * 60 * 1000) - (Date.now() - lastBooster);
-    return interaction.editReply({ embeds: [new EmbedBuilder().setColor(0xff69b4).setTitle(getTranslation(lang, 'cooldown_title', { type: 'Booster' })).setDescription(getTranslation(lang, 'cooldown_wait', { time: formatCooldown(remaining) }))] });
+    return interaction.editReply({ embeds: [new EmbedBuilder().setColor(0xFFB6E1).setTitle(getTranslation(lang, 'cooldown_title', { type: 'Booster' })).setDescription(getTranslation(lang, 'cooldown_wait', { time: formatCooldown(remaining) }))] });
   }
 
   const rewardCoins = 10000;
@@ -57,7 +57,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   await supabase.from('users').update({ coins: user.coins + rewardCoins, last_booster: new Date().toISOString() }).eq('user_id', userId);
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle(getTranslation(lang, 'booster_title'))
     .setDescription(getTranslation(lang, 'booster_desc', { reward: rewardCoins }));
 

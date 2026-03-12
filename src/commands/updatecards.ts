@@ -68,7 +68,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const cardsWithImages = finalCards?.filter((c: any) => c.image_url).length || 0;
 
     const embed = new EmbedBuilder()
-      .setColor(errors.length === 0 ? 0x00ff00 : 0xffaa00)
+      .setColor(errors.length === 0 ? 0x90EE90 : 0xFFD699)
       .setTitle('✨ Card Update Complete')
       .addFields(
         { name: 'Total Cards', value: `${cards.length}`, inline: true },

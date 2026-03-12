@@ -72,7 +72,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   if (!description) return interaction.editReply({ content: getTranslation(lang, 'sell_no_cards') });
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle(getTranslation(lang, 'sell_title'))
     .setDescription(description)
     .addFields({ name: getTranslation(lang, 'sell_field_balance'), value: `${user.coins + totalCoins} ${lang === 'es' ? 'monedas' : 'coins'}` });

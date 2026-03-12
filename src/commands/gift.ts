@@ -45,7 +45,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const rarityEmoji = getRarityEmoji(card.rarity);
   const confirmEmbed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle(getTranslation(lang, 'gift_confirm_title'))
     .setDescription(getTranslation(lang, 'gift_confirm_desc', { amount: amount1, name: card.name, group: card.group, emoji: rarityEmoji, user: receiverUser.username }));
 

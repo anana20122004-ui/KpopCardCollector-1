@@ -87,7 +87,7 @@ export async function execute(interaction: ChatInputCommandInteraction | ButtonI
   const activeFilters = filterDesc.length > 0 ? ` [${filterDesc.join(', ')}]` : '';
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle(`${getTranslation(lang, 'collect_title')}${activeFilters}`)
     .setDescription(getTranslation(lang, 'collect_progress', { owned: ownedInFilter, total: totalInFilter }) + `\n\n${list}`)
     .setFooter({ text: `${lang === 'es' ? 'Página' : 'Page'} ${validPage}/${totalPages}` });

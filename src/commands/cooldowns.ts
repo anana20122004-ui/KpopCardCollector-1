@@ -58,7 +58,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   ].join('\n');
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle(getTranslation(lang, 'cooldowns_title'))
     .setDescription(description);
 

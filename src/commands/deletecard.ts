@@ -43,7 +43,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   }
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle(getTranslation(lang, 'delete_title'))
     .setDescription(getTranslation(lang, 'delete_desc', { name: card.name, group: card.group }))
     .addFields(

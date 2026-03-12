@@ -70,7 +70,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   }).join('\n');
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
     .setDescription(cardList);
 
@@ -113,7 +113,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   collector.on('end', async (_, reason) => {
     if (reason === 'time') {
       const expiredEmbed = new EmbedBuilder()
-        .setColor(0xff69b4)
+        .setColor(0xFFB6E1)
         .setDescription(cardList)
         .setTitle(lang === 'es' ? '⏰ ¡Tiempo Expirado!' : '⏰ Expired!');
       if (attachment) expiredEmbed.setImage('attachment://drop.png');

@@ -89,7 +89,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   if (!inventory || inventory.length === 0) {
     const embed = new EmbedBuilder()
-      .setColor(0xff69b4)
+      .setColor(0xFFB6E1)
       .setTitle(getTranslation(lang, 'inventory_title'))
       .setDescription(getTranslation(lang, 'inventory_empty'))
       .addFields({ name: getTranslation(lang, 'coins_label'), value: `${user.coins}` });
@@ -136,7 +136,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   if (filteredInventory.length === 0) {
     const embed = new EmbedBuilder()
-      .setColor(0xff69b4)
+      .setColor(0xFFB6E1)
       .setTitle(getTranslation(lang, 'inventory_title'))
       .setDescription(getTranslation(lang, 'inventory_no_match'))
       .addFields({ name: getTranslation(lang, 'coins_label'), value: `${user.coins}` });

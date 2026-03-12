@@ -26,7 +26,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const designerText = card.designer_id ? `<@${card.designer_id}>` : 'N/A';
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle(getTranslation(lang, 'viewcard_title'))
     .setDescription(getTranslation(lang, 'viewcard_desc', { 
       name: card.name, 

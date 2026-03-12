@@ -32,7 +32,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       { name: getTranslation(lang, 'trade_field_giving'), value: `**${(ownCard.cards as any).name}**\n\`${giveCode}\`` },
       { name: getTranslation(lang, 'trade_field_receiving'), value: `**${(targetCard.cards as any).name}**\n\`${receiveCode}\`` }
     )
-    .setColor(0xff69b4);
+    .setColor(0xFFB6E1);
 
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder().setCustomId('accept_trade').setLabel(lang === 'es' ? 'Aceptar' : 'Accept').setStyle(ButtonStyle.Success),

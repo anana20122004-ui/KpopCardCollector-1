@@ -85,7 +85,7 @@ const pageSize = 5;
     }).join('\n\n');
 
     const embed = new EmbedBuilder()
-      .setColor(0x8b4f9f)
+      .setColor(0xD8A8E8)
       .setTitle(`🔍 Card Search Results (${cards.length} found)`)
       .setDescription(description)
       .setFooter({ text: `Page ${page + 1} of ${pages}` });

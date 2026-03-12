@@ -46,7 +46,7 @@ async function startGame(interaction: ChatInputCommandInteraction, imageUrl: str
   
   const embed = new EmbedBuilder()
     .setTitle(`Guess the ${isIdolMode ? 'Idol' : 'Group'}!`)
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setImage(imageUrl);
 
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(

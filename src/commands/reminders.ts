@@ -27,7 +27,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     return new EmbedBuilder()
       .setTitle('⏰ Reminder Settings')
       .setDescription('Click the buttons below to toggle reminders:\n\n' + description)
-      .setColor(0xff69b4);
+      .setColor(0xFFB6E1);
   };
 
   const getButtons = (currentSettings: any) => {

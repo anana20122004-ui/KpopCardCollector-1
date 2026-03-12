@@ -39,7 +39,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   if (!card) return interaction.editReply({ content: '🧚 Card not found!' });
 
   const confirmEmbed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle('🌲 Confirm Staff Gift')
     .setDescription(`Send ${amount1}x **${card.name}** (${card.group}) to ${receiverUser.username}?`);
 

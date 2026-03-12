@@ -51,7 +51,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   await supabase.from('users').update({ coins: (receiver.coins || 0) + amount }).eq('user_id', receiverUserId);
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle(getTranslation(lang, 'pay_title'))
     .setDescription(getTranslation(lang, 'pay_desc', { amount, user: receiverUser.username, balance: sender.coins - amount }));
 

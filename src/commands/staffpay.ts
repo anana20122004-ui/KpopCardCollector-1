@@ -29,7 +29,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   await supabase.from('users').update({ coins: receiver.coins + amount }).eq('user_id', receiverUser.id);
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle('💸 Staff Payment Sent!')
     .setDescription(`🌲 You sent **${amount} coins** to ${receiverUser.username}!\n\n💰 Their new balance: **${receiver.coins + amount} coins**`);
 

@@ -29,7 +29,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const lastBonanza = user.last_bonanza ? new Date(user.last_bonanza).getTime() : 0;
   if (!isAdminUser(userId) && Date.now() - lastBonanza < BONANZA_COOLDOWN_HOURS * 60 * 60 * 1000) {
     const remaining = (BONANZA_COOLDOWN_HOURS * 60 * 60 * 1000) - (Date.now() - lastBonanza);
-    return interaction.editReply({ embeds: [new EmbedBuilder().setColor(0xff69b4).setTitle(getTranslation(lang, 'cooldown_title', { type: 'Bonanza' })).setDescription(getTranslation(lang, 'cooldown_wait', { time: formatCooldown(remaining) }))] });
+    return interaction.editReply({ embeds: [new EmbedBuilder().setColor(0xFFB6E1).setTitle(getTranslation(lang, 'cooldown_title', { type: 'Bonanza' })).setDescription(getTranslation(lang, 'cooldown_wait', { time: formatCooldown(remaining) }))] });
   }
 
   const rewardCoins = 25000;
@@ -58,7 +58,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   await supabase.from('users').update({ coins: user.coins + rewardCoins, last_bonanza: new Date().toISOString() }).eq('user_id', userId);
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle(getTranslation(lang, 'bonanza_title'))
     .setDescription(getTranslation(lang, 'bonanza_desc', { reward: rewardCoins }));
 

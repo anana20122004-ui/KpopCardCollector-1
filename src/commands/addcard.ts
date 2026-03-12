@@ -135,7 +135,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const changesList = changes.map(c => `**${c.field}:** \`${c.before}\` → \`${c.after}\``).join('\n');
 
     const embed = new EmbedBuilder()
-      .setColor(0x8b4f9f)
+      .setColor(0xD8A8E8)
       .setTitle(`✨ Card Updated: ${displayCode}`)
       .setDescription(changesList)
       .setFooter({ text: `${changes.length} field(s) updated` });
@@ -157,7 +157,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const successMsg = getTranslation(lang, 'add_success', { type: lang === 'es' ? 'carta' : 'card', name: name || existing?.name || 'Unknown', code: cardcode });
   
   const adminEmbed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle(successMsg)
     .setDescription(getTranslation(lang, 'viewcard_desc', { 
       name: name || existing?.name || 'Unknown', 
@@ -183,7 +183,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const showcaseChannel = await interaction.client.channels.fetch(showcaseChannelId);
     if (showcaseChannel && showcaseChannel.isTextBased()) {
       const showcaseEmbed = new EmbedBuilder()
-        .setColor(0xff69b4)
+        .setColor(0xFFB6E1)
         .setTitle(lang === 'es' ? '✨ ¡Nueva Carta Añadida!' : '✨ New Card Added!')
         .setDescription(getTranslation(lang, 'viewcard_desc', { 
           name: name || existing?.name || 'Unknown', 

@@ -110,7 +110,7 @@ async function handleList(interaction: ChatInputCommandInteraction, lang: string
 
   const codesDisplay = listingCodes.map(code => `\`${code}\``).join(', ');
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle(getTranslation(lang, 'marketplace_list_success'))
     .setDescription(getTranslation(lang, 'marketplace_list_desc'))
     .addFields(
@@ -156,7 +156,7 @@ async function handleBrowse(interaction: ChatInputCommandInteraction, lang: stri
   }))).join('\n');
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle(getTranslation(lang, 'marketplace_title'))
     .setDescription(listingText)
     .setFooter({ text: lang === 'es' ? 'Usa /mp buy <code> para comprar' : 'Use /mp buy <code> to purchase' });
@@ -208,7 +208,7 @@ async function handleBuy(interaction: ChatInputCommandInteraction, lang: string)
   const card = (listing as any).cards;
   const eraText = card.era ? ` - ${card.era}` : '';
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xFFB6E1)
     .setTitle(getTranslation(lang, 'marketplace_buy_title'))
     .setDescription(getTranslation(lang, 'marketplace_buy_desc', { card: card.name }))
     .addFields(
@@ -222,7 +222,7 @@ async function handleBuy(interaction: ChatInputCommandInteraction, lang: string)
   try {
     const seller = await interaction.client.users.fetch((listing as any).seller_id);
     const sellerEmbed = new EmbedBuilder()
-      .setColor(0xff69b4)
+      .setColor(0xFFB6E1)
       .setTitle(getTranslation(lang, 'marketplace_sold_title'))
       .setDescription(getTranslation(lang, 'marketplace_sold_desc'))
       .addFields(
