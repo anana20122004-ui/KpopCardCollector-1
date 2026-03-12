@@ -194,19 +194,21 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
 const PORT = process.env.PORT || 3000;
 
+const PORT = process.env.PORT || 3000;
+
 const server = createServer((req, res) => {
   res.writeHead(200);
   res.end('Bot is running');
 });
 
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`🌐 Web server running on port ${PORT}`);
+});
+
 async function start() {
   await loadCommands();
   await registerCommands();
-  client.login(process.env.DISCORD_TOKEN);
-
-  server.listen(PORT, () => {
-    console.log(`🌐 Server running on port ${PORT}`);
-  });
+  await client.login(process.env.DISCORD_TOKEN);
 }
 
 start();
