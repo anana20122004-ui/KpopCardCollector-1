@@ -26,7 +26,13 @@ export const data = new SlashCommandBuilder()
           .setRequired(true)))
   .addSubcommand(sub =>
     sub.setName('list')
-      .setDescription('View all blocked staff'));
+      .setDescription('View all blocked staff'))
+  .addSubcommand(sub =>
+    sub.setName('global_enable')
+      .setDescription('Temporarily block ALL staff from using /addcard'))
+  .addSubcommand(sub =>
+    sub.setName('global_disable')
+      .setDescription('Re-enable /addcard for all staff'));
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   // Owner check
@@ -99,6 +105,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const { data: blocked, error } = await supabase
       .from('blocked_staff')
       .select('*')
+      .neq('staff_id', 'GLOBAL')
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -117,6 +124,47 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       .setColor(0x8b4f9f)
       .setTitle(`🚫 Blocked Staff (${blocked.length})`)
       .setDescription(description)
+      .setTimestamp();
+
+    return interaction.editReply({ embeds: [embed] });
+  }
+
+  if (subcommand === 'global_enable') {
+    const { error } = await supabase
+      .from('blocked_staff')
+      .upsert({
+        staff_id: 'GLOBAL',
+        blocked_by: interaction.user.id,
+        reason: 'Global staff block'
+      }, { onConflict: 'staff_id' });
+
+    if (error) {
+      return interaction.editReply(`❌ Error: ${error.message}`);
+    }
+
+    const embed = new EmbedBuilder()
+      .setColor(0xff4444)
+      .setTitle('🔒 Global Staff Block ENABLED')
+      .setDescription('All staff members are now blocked from using /addcard')
+      .setTimestamp();
+
+    return interaction.editReply({ embeds: [embed] });
+  }
+
+  if (subcommand === 'global_disable') {
+    const { error } = await supabase
+      .from('blocked_staff')
+      .delete()
+      .eq('staff_id', 'GLOBAL');
+
+    if (error) {
+      return interaction.editReply(`❌ Error: ${error.message}`);
+    }
+
+    const embed = new EmbedBuilder()
+      .setColor(0x44ff44)
+      .setTitle('🔓 Global Staff Block DISABLED')
+      .setDescription('All staff members can now use /addcard again')
       .setTimestamp();
 
     return interaction.editReply({ embeds: [embed] });

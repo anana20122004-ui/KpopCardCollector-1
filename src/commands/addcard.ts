@@ -53,10 +53,16 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const { data: blocked } = await supabase
     .from('blocked_staff')
     .select('*')
-    .eq('staff_id', interaction.user.id)
+    .in('staff_id', [interaction.user.id, 'GLOBAL'])
     .maybeSingle();
 
   if (blocked) {
+    if (blocked.staff_id === 'GLOBAL') {
+      return interaction.reply({
+        content: `❌ All staff members are temporarily blocked from using this command.`,
+        ephemeral: true
+      });
+    }
     return interaction.reply({
       content: `❌ You are blocked from using this command. Reason: ${blocked.reason || 'No reason provided'}`,
       ephemeral: true
