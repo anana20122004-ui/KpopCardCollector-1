@@ -69,8 +69,18 @@ CREATE TABLE IF NOT EXISTS quiz_questions (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
+-- Blocked staff table (admin blocking staff from addcard)
+CREATE TABLE IF NOT EXISTS blocked_staff (
+  id SERIAL PRIMARY KEY,
+  staff_id TEXT NOT NULL UNIQUE,
+  blocked_by TEXT NOT NULL,
+  reason TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
 -- Indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_inventory_user ON inventory(user_id);
 CREATE INDEX IF NOT EXISTS idx_marketplace_card ON marketplace(card_id);
 CREATE INDEX IF NOT EXISTS idx_marketplace_seller ON marketplace(seller_id);
 CREATE INDEX IF NOT EXISTS idx_user_blocked_artists ON user_blocked_artists(user_id);
+CREATE INDEX IF NOT EXISTS idx_blocked_staff ON blocked_staff(staff_id);

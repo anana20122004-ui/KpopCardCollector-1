@@ -49,6 +49,20 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     return interaction.reply({ content: lang === 'es' ? '🧚 ¡Este comando es solo para Staff!' : '🧚 This command is for Staff only!', ephemeral: true });
   }
 
+  // Check if user is blocked from using addcard
+  const { data: blocked } = await supabase
+    .from('blocked_staff')
+    .select('*')
+    .eq('staff_id', interaction.user.id)
+    .maybeSingle();
+
+  if (blocked) {
+    return interaction.reply({
+      content: `❌ You are blocked from using this command. Reason: ${blocked.reason || 'No reason provided'}`,
+      ephemeral: true
+    });
+  }
+
   await interaction.deferReply();
   const cardcode = interaction.options.getString('cardcode', true).toUpperCase();
   const name = interaction.options.getString('name');
