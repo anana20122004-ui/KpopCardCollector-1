@@ -309,10 +309,24 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
 async function start() {
 
-  await loadCommands();
-  await registerCommands();
-
-  await client.login(process.env.DISCORD_TOKEN);
+  try {
+    console.log('🚀 Starting bot...');
+    
+    console.log('📦 Loading commands...');
+    await loadCommands();
+    console.log('✅ Commands loaded!');
+    
+    console.log('📝 Registering slash commands...');
+    await registerCommands();
+    console.log('✅ Slash commands registered!');
+    
+    console.log('🔐 Logging into Discord...');
+    await client.login(process.env.DISCORD_TOKEN);
+    console.log('✅ Logged in!');
+  } catch (error) {
+    console.error('❌ Startup error:', error);
+    process.exit(1);
+  }
 
 }
 
