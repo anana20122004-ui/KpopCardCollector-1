@@ -4,6 +4,7 @@ import { dirname, join } from 'path';
 import { readdir } from 'fs/promises';
 import { createServer } from 'http';
 import { supabase } from './database/supabase.js';
+import { renderSearchPage } from './commands/search.js';
 
 /* =========================
    START WEB SERVER FIRST
@@ -226,8 +227,41 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
     /* ===== SEARCH BUTTONS ===== */
 
-    if (customId.startsWith('search_')) {
+    if (customId.startsWith('search_NAV_')) {
 
+      const parts = customId.split('_');
+      // format: search_NAV_page_idol_group_era_rarity_designer_action
+      const currentPage = parseInt(parts[2]);
+      const idol    = parts[3];
+      const group   = parts[4];
+      const era     = parts[5];
+      const rarity  = parts[6];
+      const designer = parts[7];
+      const action  = parts[8];
+
+      if (action === 'page') return;
+
+      await interaction.deferUpdate();
+
+      const newPage = action === 'next' ? currentPage + 1 : currentPage - 1;
+
+      // Re-fetch cards using the stored filters
+      let query = supabase.from('cards').select('*');
+      if (idol !== 'all')     query = query.ilike('name', `%${idol}%`);
+      if (group !== 'all')    query = query.ilike('group', `%${group}%`);
+      if (era !== 'all')      query = query.ilike('era', `%${era}%`);
+      if (rarity !== 'all')   query = query.eq('rarity', parseInt(rarity));
+      if (designer !== 'all') query = query.eq('designer_id', designer);
+
+      const { data: cards } = await query.order('group', { ascending: true });
+      if (!cards || cards.length === 0) return;
+
+      const mockInteraction = {
+        ...interaction,
+        editReply: (options: any) => interaction.editReply(options)
+      };
+
+      await renderSearchPage(mockInteraction, cards, newPage, idol, group, era, rarity, designer);
       return;
 
     }
