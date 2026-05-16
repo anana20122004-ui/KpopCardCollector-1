@@ -73,7 +73,9 @@ export async function renderSearchPage(
   const description = pageCards.map((c: any) => {
     const emoji = getRarityEmoji(c.rarity);
     const eraText = c.era ? ` • ${c.era}` : '';
-    const designerText = c.designer_id ? ` • Designer: <@${c.designer_id}>` : '';
+    const designerText = c.designer_id
+        ? ` • Designer: ${c.designer_id.split(',').map((id: string) => `<@${id}>`).join(', ')}`
+        : '';
     return `**${c.name}** (${c.group})${eraText}${designerText}\n\`${c.cardcode}\` ${emoji}`;
   }).join('\n\n');
 

@@ -41,7 +41,13 @@ export const data = new SlashCommandBuilder()
       .setDescription('Change card code (for existing cards only)'))
   .addUserOption(option =>
     option.setName('designer')
-      .setDescription('Designer user'));
+      .setDescription('Designer #1'))
+  .addUserOption(option =>
+    option.setName('designer2')
+      .setDescription('Designer #2'))
+  .addUserOption(option =>
+    option.setName('designer3')
+      .setDescription('Designer #3'));
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   const lang = (interaction as any).userLanguage || 'en';
@@ -78,7 +84,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const droppable = interaction.options.getBoolean('droppable');
   const imageUrl = interaction.options.getString('image_url');
   const newCardcode = interaction.options.getString('new_cardcode')?.toUpperCase();
-  const designer = interaction.options.getUser('designer');
+  const designer  = interaction.options.getUser('designer');
+  const designer2 = interaction.options.getUser('designer2');
+  const designer3 = interaction.options.getUser('designer3');
+
+  // Collect all provided designers into a comma-separated string
+  const newDesignerIds = [designer, designer2, designer3]
+    .filter(Boolean)
+    .map(u => u!.id)
+    .join(',') || null;
 
   const { data: existing } = await supabase.from('cards').select('*').eq('cardcode', cardcode).maybeSingle();
 
@@ -114,12 +128,16 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       updates.cardcode = newCardcode;
       changes.push({ field: 'Card Code', before: existing.cardcode, after: newCardcode });
     }
-    if (designer) {
-      const newDesignerId = designer.id;
-      const oldDesignerId = existing.designer_id;
-      if (newDesignerId !== oldDesignerId) {
-        updates.designer_id = newDesignerId;
-        changes.push({ field: 'Designer', before: oldDesignerId || 'None', after: `<@${newDesignerId}>` });
+    if (newDesignerIds !== null) {
+      const oldDesignerIds = existing.designer_id || '';
+      if (newDesignerIds !== oldDesignerIds) {
+        updates.designer_id = newDesignerIds;
+        const oldDisplay = oldDesignerIds
+          ? oldDesignerIds.split(',').map((id: string) => `<@${id}>`).join(', ')
+          : 'None';
+        const newDisplay = newDesignerIds
+          .split(',').map(id => `<@${id}>`).join(', ');
+        changes.push({ field: 'Designer(s)', before: oldDisplay, after: newDisplay });
       }
     }
 
@@ -146,10 +164,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   if (!name || !group || !rarity) return interaction.editReply(getTranslation(lang, 'provide_details'));
 
   const { error } = await supabase.from('cards').insert([{
-    name, group, cardcode, era, rarity, 
+    name, group, cardcode, era, rarity,
     droppable: droppable ?? true,
     image_url: imageUrl,
-    designer_id: designer?.id || null
+    designer_id: newDesignerIds
   }]);
 
   if (error) return interaction.editReply(`Error: ${error.message}`);

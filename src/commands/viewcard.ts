@@ -23,7 +23,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const qtyText = inv ? (lang === 'es' ? `• copias: **${inv.quantity}**` : `• copies: **${inv.quantity}**`) : '';
   const droppableText = card.droppable ? (lang === 'es' ? 'Sí' : 'Yes') : (lang === 'es' ? 'No' : 'No');
-  const designerText = card.designer_id ? `<@${card.designer_id}>` : 'N/A';
+  const designerText = card.designer_id
+    ? card.designer_id.split(',').map((id: string) => `<@${id}>`).join(', ')
+    : 'N/A';
 
   const embed = new EmbedBuilder()
     .setColor(0xFFB6E1)
