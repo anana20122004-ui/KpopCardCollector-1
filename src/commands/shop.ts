@@ -111,17 +111,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       return interaction.editReply(`❌ No cards found for "${filter}". Try the exact group or idol name.`);
     }
 
-    // If all filtered cards are rarity 5, require at least 3 non-rarity-5 cards to exist
-    const allLegendary = filtered.every(c => c.rarity === 5);
-    if (allLegendary) {
-      const { data: allGroupCards } = await supabase
-        .from('cards')
-        .select('rarity')
-        .or(filtered.map(c => `group.ilike.%${(c.group || '').replace(/'/g, "''")}%`).slice(0, 1).join(','));
-      const nonLegCount = (allGroupCards || []).filter(c => c.rarity !== 5).length;
-      if (nonLegCount < 3) {
-        return interaction.editReply(`❌ **${filter}** only has Legendary cards available in the shop. They need at least 3 cards of other rarities before you can choose them.`);
-      }
+    // Block if fewer than 3 non-rarity-5 cards exist for this idol/group
+    const nonLegendaryCount = filtered.filter(c => c.rarity !== 5).length;
+    if (nonLegendaryCount < 3) {
+      return interaction.editReply(`❌ **${filter}** doesn't have enough non-Legendary cards yet. They need at least 3 cards of other rarities before you can buy them from a choice pack.`);
     }
     
     for (let i = 0; i < (pack as any).cards; i++) {
