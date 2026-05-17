@@ -4,7 +4,7 @@ import { formatCooldown } from '../utils/cooldowns.js';
 import { isAdminUser } from '../utils/constants.js';
 import { scheduleReminder } from '../utils/reminders.js';
 
-const DREAM_COOLDOWN_HOURS = 1;
+const DREAM_COOLDOWN_MS = 60 * 60 * 1000; // 1 hour
 
 const DREAM_SCENARIOS = [
   'You dreamed you were a backup dancer for BLACKPINK on their world tour… the crowd went wild! 🌙',
@@ -34,60 +34,64 @@ export const data = new SlashCommandBuilder()
   .setDescription('Dream about idols and earn coins! ✨');
 
 export async function execute(interaction: ChatInputCommandInteraction) {
-  await interaction.deferReply();
   const lang = (interaction as any).userLanguage || 'en';
   const userId = interaction.user.id;
-  const reward = Math.floor(Math.random() * 3501) + 1000; // 1000–4500
-
   const isStaff = isAdminUser(interaction.member);
-  const cooldownHours = isStaff ? 0 : DREAM_COOLDOWN_HOURS;
 
-  const { data, error } = await supabase.rpc('claim_explore_reward', {
-    p_user_id: userId,
-    p_reward: reward,
-    p_cooldown_hours: cooldownHours
-  });
+  // Fetch user
+  const { data: user, error: userError } = await supabase
+    .from('users')
+    .select('coins, last_explore')
+    .eq('user_id', userId)
+    .maybeSingle();
 
-  if (error) {
-    console.error('Dream RPC Error:', error);
-    return interaction.editReply({ content: lang === 'es' ? '❌ Algo salió mal.' : '❌ Something went wrong.' });
+  if (userError || !user) {
+    return interaction.editReply({ content: lang === 'es' ? '¡Usa `/start` primero!' : 'Use `/start` first!' });
   }
 
-  const result = data as any;
-
-  if (!result || !result.success) {
-    if (result?.error === 'user_not_found') {
-      return interaction.editReply({ content: lang === 'es' ? '¡Usa `/start` primero!' : 'Use `/start` first!' });
-    }
-    if (result?.error === 'on_cooldown') {
+  // Check cooldown (skip for staff)
+  if (!isStaff && user.last_explore) {
+    const elapsed = Date.now() - new Date(user.last_explore).getTime();
+    if (elapsed < DREAM_COOLDOWN_MS) {
+      const remaining = DREAM_COOLDOWN_MS - elapsed;
       const embed = new EmbedBuilder()
         .setColor(0xFFB6E1)
         .setTitle(lang === 'es' ? '💤 Aún estás soñando...' : '💤 You\'re still dreaming...')
         .setDescription(lang === 'es'
-          ? `Tus sueños están recargando. Intenta de nuevo en **${formatCooldown(result.cooldown_remaining_ms)}**`
-          : `Your dreams are recharging. Try again in **${formatCooldown(result.cooldown_remaining_ms)}**`);
+          ? `Tus sueños están recargando. Intenta de nuevo en **${formatCooldown(remaining)}**`
+          : `Your dreams are recharging. Try again in **${formatCooldown(remaining)}**`);
       return interaction.editReply({ embeds: [embed] });
     }
-    return interaction.editReply({ content: lang === 'es' ? '❌ Algo salió mal.' : '❌ Something went wrong.' });
+  }
+
+  const reward = Math.floor(Math.random() * 3501) + 1000; // 1000–4500
+  const newBalance = (user.coins || 0) + reward;
+
+  // Update coins and cooldown timestamp
+  const { error: updateError } = await supabase
+    .from('users')
+    .update({ coins: newBalance, last_explore: new Date().toISOString() })
+    .eq('user_id', userId);
+
+  if (updateError) {
+    return interaction.editReply({ content: '❌ Something went wrong.' });
   }
 
   const scenario = DREAM_SCENARIOS[Math.floor(Math.random() * DREAM_SCENARIOS.length)];
-  const earnedCoins = result.reward || reward;
-  const cooldownMs = DREAM_COOLDOWN_HOURS * 60 * 60 * 1000;
-  const nextAvailable = new Date(Date.now() + (isStaff ? 0 : cooldownMs));
+  const nextAvailable = new Date(Date.now() + DREAM_COOLDOWN_MS);
 
   const embed = new EmbedBuilder()
     .setColor(0xD8A8E8)
     .setTitle(lang === 'es' ? '🌙 ¡Tuviste un sueño!' : '🌙 You had a dream!')
     .setDescription(scenario)
     .addFields(
-      { name: lang === 'es' ? '✨ Ganaste' : '✨ Earned', value: `**${earnedCoins}** coins`, inline: true },
-      { name: lang === 'es' ? '💰 Saldo' : '💰 Balance', value: `**${result.new_balance}** coins`, inline: true }
+      { name: lang === 'es' ? '✨ Ganaste' : '✨ Earned', value: `**${reward}** coins`, inline: true },
+      { name: lang === 'es' ? '💰 Saldo' : '💰 Balance', value: `**${newBalance}** coins`, inline: true }
     );
 
   if (!isStaff) {
     embed.addFields({ name: lang === 'es' ? '⏰ Próximo sueño' : '⏰ Next dream', value: `<t:${Math.floor(nextAvailable.getTime() / 1000)}:R>`, inline: true });
-    scheduleReminder(interaction.client, userId, interaction.channelId, 'dream', cooldownMs);
+    scheduleReminder(interaction.client, userId, interaction.channelId, 'dream', DREAM_COOLDOWN_MS);
   } else {
     embed.addFields({ name: '⚡ Staff Perk', value: 'No cooldown!', inline: true });
   }

@@ -317,7 +317,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
   const command = commands.get(interaction.commandName);
   if (!command) return;
 
-  // Fetch only language — keep it fast so deferReply() in commands isn't too late
+  // Defer IMMEDIATELY so Discord's 3-second window is never missed
+  try { await interaction.deferReply(); } catch (_) { return; }
+
+  // Patch deferReply to no-op so commands calling it again don't throw
+  (interaction as any).deferReply = () => Promise.resolve();
+
+  // Now safely fetch language (deferred, so no timeout risk)
   let userLanguage = 'en';
   try {
     const { data: userData } = await supabase
