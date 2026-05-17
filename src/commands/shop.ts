@@ -111,14 +111,21 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       return interaction.editReply(`❌ No cards found for "${filter}". Try the exact group or idol name.`);
     }
 
-    // Block if fewer than 3 non-rarity-5 cards exist for this idol/group
-    const nonLegendaryCount = filtered.filter(c => c.rarity !== 5).length;
-    if (nonLegendaryCount < 3) {
-      return interaction.editReply(`❌ **${filter}** doesn't have enough non-Legendary cards yet. They need at least 3 cards of other rarities before you can buy them from a choice pack.`);
+    // If fewer than 3 non-rarity-5 cards exist, restrict pulls to non-legendary only
+    const nonLegendary = filtered.filter(c => c.rarity !== 5);
+    const pullPool = nonLegendary.length < 3 ? nonLegendary : filtered;
+
+    if (pullPool.length === 0) {
+      return interaction.editReply(`❌ No pullable cards found for "${filter}".`);
     }
-    
+
+    if (nonLegendary.length < 3 && nonLegendary.length > 0) {
+      // Inform user they can only pull non-legendary until 3+ exist
+      await interaction.followUp({ content: `ℹ️ **${filter}** only has **${nonLegendary.length}** non-Legendary card${nonLegendary.length === 1 ? '' : 's'} — you'll only receive those until they have 3 or more non-Legendary cards.`, ephemeral: true });
+    }
+
     for (let i = 0; i < (pack as any).cards; i++) {
-      pulled.push(filtered[Math.floor(Math.random() * filtered.length)]);
+      pulled.push(pullPool[Math.floor(Math.random() * pullPool.length)]);
     }
   } else if ((pack as any).type === 'legendary') {
     const legendaryCards = availableCards.filter(c => c.rarity === 5);
