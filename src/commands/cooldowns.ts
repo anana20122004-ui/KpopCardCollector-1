@@ -36,9 +36,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   // Cooldowns in hours
   const dailyStatus = getCDStatus(user.last_daily, 24);
   const weeklyStatus = getCDStatus(user.last_weekly, 168);
-  const exploreStatus = getCDStatus(user.last_explore, 1);
-  const dropStatus = getCDStatus(user.last_drop, 5 / 60); // 5 minutes
-  const claimStatus = getCDStatus(user.last_claim, 2 / 60); // 2 minutes
+  const dreamStatus  = getCDStatus(user.last_explore, 1);
+  const dropStatus   = getCDStatus(user.last_drop, 5 / 60); // 5 minutes
+  const claimStatus  = getCDStatus(user.last_claim, 2 / 60); // 2 minutes
 
   const description = [
     `${cdEmoji} **${lang === 'es' ? 'Recompensa Diaria' : 'Daily Rewards'}**`,
@@ -47,8 +47,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     `${cdEmoji} **${lang === 'es' ? 'Recompensa Semanal' : 'Weekly Rewards'}**`,
     weeklyStatus,
     '',
-    `${cdEmoji} **${lang === 'es' ? 'Exploración' : 'Explore'}**`,
-    exploreStatus,
+    `${cdEmoji} **${lang === 'es' ? 'Sueño' : 'Dream'}**`,
+    dreamStatus,
     '',
     `${cdEmoji} **Drop**`,
     dropStatus,
