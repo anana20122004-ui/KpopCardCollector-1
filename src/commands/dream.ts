@@ -39,13 +39,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const isStaff = isAdminUser(interaction.member);
 
   // Fetch user
-  const { data: user, error: userError } = await supabase
+  const { data: user } = await supabase
     .from('users')
-    .select('coins, last_explore')
+    .select('*')
     .eq('user_id', userId)
     .maybeSingle();
 
-  if (userError || !user) {
+  if (!user) {
     return interaction.editReply({ content: lang === 'es' ? '¡Usa `/start` primero!' : 'Use `/start` first!' });
   }
 
@@ -67,14 +67,22 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const reward = Math.floor(Math.random() * 3501) + 1000; // 1000–4500
   const newBalance = (user.coins || 0) + reward;
 
-  // Update coins and cooldown timestamp
+  // Update coins and cooldown timestamp (try with last_explore, fall back to coins only)
+  const now = new Date().toISOString();
   const { error: updateError } = await supabase
     .from('users')
-    .update({ coins: newBalance, last_explore: new Date().toISOString() })
+    .update({ coins: newBalance, last_explore: now })
     .eq('user_id', userId);
 
   if (updateError) {
-    return interaction.editReply({ content: '❌ Something went wrong.' });
+    // last_explore column may not exist — update coins only
+    const { error: fallbackError } = await supabase
+      .from('users')
+      .update({ coins: newBalance })
+      .eq('user_id', userId);
+    if (fallbackError) {
+      return interaction.editReply({ content: '❌ Something went wrong.' });
+    }
   }
 
   const scenario = DREAM_SCENARIOS[Math.floor(Math.random() * DREAM_SCENARIOS.length)];
