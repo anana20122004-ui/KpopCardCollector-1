@@ -33,6 +33,7 @@ const client = new Client({
 });
 
 const commands = new Collection<string, any>();
+const commandCooldowns = new Map<string, number>(); // userId -> last command timestamp
 
 /* =========================
    LOAD COMMANDS
@@ -316,6 +317,19 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
   const command = commands.get(interaction.commandName);
   if (!command) return;
+
+  // 8-second global per-user cooldown between commands
+  const now8 = Date.now();
+  const lastUsed = commandCooldowns.get(interaction.user.id) || 0;
+  const elapsed8 = now8 - lastUsed;
+  if (elapsed8 < 8000) {
+    const remaining = ((8000 - elapsed8) / 1000).toFixed(1);
+    try {
+      await interaction.reply({ content: `⏳ Please wait **${remaining}s** before using another command.`, ephemeral: true });
+    } catch (_) {}
+    return;
+  }
+  commandCooldowns.set(interaction.user.id, now8);
 
   // Defer IMMEDIATELY so Discord's 3-second window is never missed
   try { await interaction.deferReply(); } catch (_) { return; }
