@@ -31,7 +31,7 @@ export function getRarityName(rarity: number): string {
 
 export function getRarityEmoji(rarity: number): string {
   const filled = '<:emoji_62:1505577836134662325>';
-  const empty  = '⬜';
+  const empty  = '<:emoji_11:1480042903568122018>';
   const count  = Math.max(1, Math.min(rarity, 5));
   return filled.repeat(count) + empty.repeat(5 - count);
 }

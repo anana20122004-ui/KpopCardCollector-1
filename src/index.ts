@@ -317,13 +317,18 @@ client.on(Events.InteractionCreate, async (interaction) => {
   const command = commands.get(interaction.commandName);
   if (!command) return;
 
-  const { data: userData } = await supabase
-    .from('users')
-    .select('*')
-    .eq('user_id', interaction.user.id)
-    .maybeSingle();
+  // Fetch only language — keep it fast so deferReply() in commands isn't too late
+  let userLanguage = 'en';
+  try {
+    const { data: userData } = await supabase
+      .from('users')
+      .select('language')
+      .eq('user_id', interaction.user.id)
+      .maybeSingle();
+    userLanguage = (userData as any)?.language || 'en';
+  } catch (_) {}
 
-  (interaction as any).userLanguage = (userData as any)?.language || 'en';
+  (interaction as any).userLanguage = userLanguage;
 
   try {
 
