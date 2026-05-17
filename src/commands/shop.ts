@@ -115,13 +115,19 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const nonLegendary = filtered.filter(c => c.rarity !== 5);
     const pullPool = nonLegendary.length < 3 ? nonLegendary : filtered;
 
+    console.log(`[SHOP CHOICE] filter="${filter}" filtered=${filtered.length} nonLeg=${nonLegendary.length} pullPool=${pullPool.length} pullPoolRarities=${pullPool.map(c => c.rarity).join(',')}`);
+
     if (pullPool.length === 0) {
-      return interaction.editReply(`❌ No pullable cards found for "${filter}".`);
+      return interaction.editReply(`❌ No pullable cards found for "${filter}". They may only have Legendary cards.`);
     }
 
-    if (nonLegendary.length < 3 && nonLegendary.length > 0) {
-      // Inform user they can only pull non-legendary until 3+ exist
-      await interaction.followUp({ content: `ℹ️ **${filter}** only has **${nonLegendary.length}** non-Legendary card${nonLegendary.length === 1 ? '' : 's'} — you'll only receive those until they have 3 or more non-Legendary cards.`, ephemeral: true });
+    if (nonLegendary.length < 3) {
+      // Inform user they can only pull non-legendary until 3+ exist (embed message instead of followUp to avoid API issues)
+      const warnMsg = nonLegendary.length === 0
+        ? `⚠️ **${filter}** only has Legendary cards — no pullable cards available.`
+        : `ℹ️ **${filter}** only has **${nonLegendary.length}** non-Legendary card${nonLegendary.length === 1 ? '' : 's'} — you'll only receive those until they have 3 or more non-Legendary cards.`;
+      await interaction.editReply({ content: warnMsg });
+      if (nonLegendary.length === 0) return;
     }
 
     for (let i = 0; i < (pack as any).cards; i++) {
