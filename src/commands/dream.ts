@@ -87,21 +87,28 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const scenario = DREAM_SCENARIOS[Math.floor(Math.random() * DREAM_SCENARIOS.length)];
   const nextAvailable = new Date(Date.now() + DREAM_COOLDOWN_MS);
+  const nextTimestamp = `<t:${Math.floor(nextAvailable.getTime() / 1000)}:R>`;
+
+  const avatarUrl = interaction.user.displayAvatarURL({ size: 64 });
+  const username = interaction.user.username;
+
+  const description = lang === 'es'
+    ? `${scenario}\n\n¡Ganaste **${reward}** monedas! Tu saldo ahora es **${newBalance}** monedas, vuelve ${isStaff ? 'cuando quieras' : nextTimestamp}`
+    : `${scenario}\n\nYou earned **${reward}** coins! Your balance is now **${newBalance}** coins, come back ${isStaff ? 'whenever you want' : nextTimestamp}`;
+
+  const footerText = isStaff
+    ? (lang === 'es' ? '⚡ Ventaja de staff: sin cooldown' : '⚡ Staff perk: no cooldown')
+    : '...';
 
   const embed = new EmbedBuilder()
     .setColor(0xD8A8E8)
+    .setAuthor({ name: username, iconURL: avatarUrl })
     .setTitle(lang === 'es' ? '🌙 ¡Tuviste un sueño!' : '🌙 You had a dream!')
-    .setDescription(scenario)
-    .addFields(
-      { name: lang === 'es' ? '✨ Ganaste' : '✨ Earned', value: `**${reward}** coins`, inline: true },
-      { name: lang === 'es' ? '💰 Saldo' : '💰 Balance', value: `**${newBalance}** coins`, inline: true }
-    );
+    .setDescription(description)
+    .setFooter({ text: footerText });
 
   if (!isStaff) {
-    embed.addFields({ name: lang === 'es' ? '⏰ Próximo sueño' : '⏰ Next dream', value: `<t:${Math.floor(nextAvailable.getTime() / 1000)}:R>`, inline: true });
     scheduleReminder(interaction.client, userId, interaction.channelId, 'dream', DREAM_COOLDOWN_MS);
-  } else {
-    embed.addFields({ name: '⚡ Staff Perk', value: 'No cooldown!', inline: true });
   }
 
   await interaction.editReply({ embeds: [embed] });
