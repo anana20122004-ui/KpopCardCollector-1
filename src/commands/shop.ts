@@ -26,7 +26,8 @@ export const data = new SlashCommandBuilder()
       { name: 'Juun Pack - 10 choice (6500)', value: '4' },
       { name: 'Ye-on Pack - 5 legendary (25000)', value: '5' }
     ))
-    .addStringOption(o => o.setName('filter').setDescription('Filter by group or idol (for choice packs)').setRequired(false))
+    .addStringOption(o => o.setName('idol').setDescription('Filter by idol name (for choice packs)').setRequired(false))
+    .addStringOption(o => o.setName('group').setDescription('Filter by group name (for choice packs)').setRequired(false))
   );
 
 export async function execute(interaction: ChatInputCommandInteraction) {
@@ -48,7 +49,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   
   await interaction.deferReply();
   const packId = interaction.options.getString('pack', true);
-  const filter = interaction.options.getString('filter');
+  const idolFilter = interaction.options.getString('idol');
+  const groupFilter = interaction.options.getString('group');
   const pack = PACKS.find(p => p.id === packId);
   
   if (!pack) return interaction.editReply('❌ Pack not found');
@@ -89,43 +91,54 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       pulledIds.add(selectedCard.card_id);
     }
   } else if ((pack as any).type === 'choice') {
-    if (!filter) {
-      return interaction.editReply('❌ Please provide a group or idol name with `/filter`');
+    if (!idolFilter && !groupFilter) {
+      return interaction.editReply('❌ Please provide an `idol` and/or `group` name for choice packs.');
     }
-    
-    const filterLower = filter.toLowerCase().trim();
+
+    const idolLower = idolFilter?.toLowerCase().trim() ?? null;
+    const groupLower = groupFilter?.toLowerCase().trim() ?? null;
+
+    const matchesField = (value: string, term: string) => {
+      const v = value.toLowerCase().trim();
+      if (v === term) return true;
+      if (term.length >= 3 && v.includes(term)) return true;
+      return false;
+    };
+
     let filtered = availableCards.filter(c => {
-      const groupLower = (c.group || '').toLowerCase().trim();
-      const nameLower = (c.name || '').toLowerCase().trim();
-      
-      // Try exact match first
-      if (groupLower === filterLower || nameLower === filterLower) return true;
-      // Try partial match only if filter is 3+ chars (prevents single letter issues)
-      if (filterLower.length >= 3) {
-        if (groupLower.includes(filterLower) || nameLower.includes(filterLower)) return true;
+      const cardGroup = (c.group || '');
+      const cardName  = (c.name  || '');
+      // Both provided → must match BOTH idol and group
+      if (idolLower && groupLower) {
+        return matchesField(cardName, idolLower) && matchesField(cardGroup, groupLower);
       }
+      // Only idol provided
+      if (idolLower) return matchesField(cardName, idolLower);
+      // Only group provided
+      if (groupLower) return matchesField(cardGroup, groupLower);
       return false;
     });
-    
+
+    const searchDesc = [idolFilter && `idol: **${idolFilter}**`, groupFilter && `group: **${groupFilter}**`].filter(Boolean).join(', ');
+
     if (filtered.length === 0) {
-      return interaction.editReply(`❌ No cards found for "${filter}". Try the exact group or idol name.`);
+      return interaction.editReply(`❌ No cards found for ${searchDesc}. Check the spelling and try again.`);
     }
 
     // If fewer than 3 non-rarity-5 cards exist, restrict pulls to non-legendary only
     const nonLegendary = filtered.filter(c => c.rarity !== 5);
     const pullPool = nonLegendary.length < 3 ? nonLegendary : filtered;
 
-    console.log(`[SHOP CHOICE] filter="${filter}" filtered=${filtered.length} nonLeg=${nonLegendary.length} pullPool=${pullPool.length} pullPoolRarities=${pullPool.map(c => c.rarity).join(',')}`);
+    console.log(`[SHOP CHOICE] search="${searchDesc}" filtered=${filtered.length} nonLeg=${nonLegendary.length} pullPool=${pullPool.length} pullPoolRarities=${pullPool.map(c => c.rarity).join(',')}`);
 
     if (pullPool.length === 0) {
-      return interaction.editReply(`❌ No pullable cards found for "${filter}". They may only have Legendary cards.`);
+      return interaction.editReply(`❌ No pullable cards found for ${searchDesc}. They may only have Legendary cards.`);
     }
 
     if (nonLegendary.length < 3) {
-      // Inform user they can only pull non-legendary until 3+ exist (embed message instead of followUp to avoid API issues)
       const warnMsg = nonLegendary.length === 0
-        ? `⚠️ **${filter}** only has Legendary cards — no pullable cards available.`
-        : `ℹ️ **${filter}** only has **${nonLegendary.length}** non-Legendary card${nonLegendary.length === 1 ? '' : 's'} — you'll only receive those until they have 3 or more non-Legendary cards.`;
+        ? `⚠️ ${searchDesc} only has Legendary cards — no pullable cards available.`
+        : `ℹ️ ${searchDesc} only has **${nonLegendary.length}** non-Legendary card${nonLegendary.length === 1 ? '' : 's'} — you'll only receive those until they have 3 or more non-Legendary cards.`;
       await interaction.editReply({ content: warnMsg });
       if (nonLegendary.length === 0) return;
     }
