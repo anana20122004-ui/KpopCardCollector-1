@@ -25,7 +25,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     return interaction.editReply({ content: getTranslation(lang, 'drop_wait', { time: remaining }) });
   }
 
-  const { data: allCards } = await supabase.from('cards').select('*');
+  const { data: allCards } = await supabase.from('cards').select('*').eq('droppable', true);
   if (!allCards || allCards.length === 0) return interaction.editReply(getTranslation(lang, 'not_enough_cards'));
 
   const availableCards = await filterBlockedCards(allCards, userId);
