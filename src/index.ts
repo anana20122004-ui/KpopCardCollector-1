@@ -124,6 +124,156 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
     const customId = interaction.customId;
 
+    /* ===== GIFT BUTTONS ===== */
+
+    if (customId.startsWith('gift_confirm_')) {
+
+      const parts = customId.split('_');
+      const senderUserId = parts[2];
+      const receiverUserId = parts[3];
+      const cardAndAmount = parts[4].split(':');
+      const cardId = cardAndAmount[0];
+      const amount = parseInt(cardAndAmount[1]);
+
+      if (interaction.user.id !== senderUserId) {
+        return await interaction.reply({ content: '❌ You can\'t confirm someone else\'s gift!', ephemeral: true });
+      }
+
+      try {
+        // Check if sender still has the cards
+        const { data: inv } = await supabase
+          .from('inventory')
+          .select('*')
+          .eq('user_id', senderUserId)
+          .eq('card_id', cardId)
+          .maybeSingle();
+
+        if (!inv || inv.quantity < amount) {
+          return await interaction.reply({ content: '❌ You no longer have enough of this card!', ephemeral: true });
+        }
+
+        // Get card info for message
+        const { data: card } = await supabase
+          .from('cards')
+          .select('*')
+          .eq('card_id', cardId)
+          .single();
+
+        // Reduce sender's quantity
+        const newQuantity = inv.quantity - amount;
+        if (newQuantity === 0) {
+          await supabase.from('inventory').delete().eq('id', inv.id);
+        } else {
+          await supabase.from('inventory').update({ quantity: newQuantity }).eq('id', inv.id);
+        }
+
+        // Add to receiver's inventory
+        const { data: receiverInv } = await supabase
+          .from('inventory')
+          .select('*')
+          .eq('user_id', receiverUserId)
+          .eq('card_id', cardId)
+          .maybeSingle();
+
+        if (receiverInv) {
+          await supabase
+            .from('inventory')
+            .update({ quantity: receiverInv.quantity + amount })
+            .eq('id', receiverInv.id);
+        } else {
+          await supabase
+            .from('inventory')
+            .insert({ user_id: receiverUserId, card_id: cardId, quantity: amount });
+        }
+
+        const lang = (interaction as any).userLanguage || 'en';
+        const emoji = card?.rarity === 5 ? '⭐' : card?.rarity === 4 ? '✨' : card?.rarity === 3 ? '🌟' : '💫';
+        
+        await interaction.reply({
+          content: lang === 'es' 
+            ? `✅ ¡Regalado ${amount}x ${emoji} **${card?.name}** (${card?.group})!`
+            : `✅ Gifted ${amount}x ${emoji} **${card?.name}** (${card?.group})!`,
+          ephemeral: true
+        });
+      } catch (error) {
+        console.error('Gift error:', error);
+        await interaction.reply({ content: '❌ Error processing gift!', ephemeral: true });
+      }
+
+      return;
+    }
+
+    if (customId.startsWith('gift_cancel_')) {
+      const senderUserId = customId.split('_')[2];
+      if (interaction.user.id !== senderUserId) {
+        return await interaction.reply({ content: '❌ You can\'t cancel someone else\'s gift!', ephemeral: true });
+      }
+      await interaction.reply({ content: '❌ Gift cancelled.', ephemeral: true });
+      return;
+    }
+
+    /* ===== STAFFGIFT BUTTONS ===== */
+
+    if (customId.startsWith('staffgift_confirm_')) {
+
+      const parts = customId.split('_');
+      const senderUserId = parts[2];
+      const receiverUserId = parts[3];
+      const cardAndAmount = parts[4].split(':');
+      const cardId = cardAndAmount[0];
+      const amount = parseInt(cardAndAmount[1]);
+
+      if (interaction.user.id !== senderUserId) {
+        return await interaction.reply({ content: '❌ You can\'t confirm someone else\'s gift!', ephemeral: true });
+      }
+
+      try {
+        const { data: card } = await supabase
+          .from('cards')
+          .select('*')
+          .eq('card_id', cardId)
+          .single();
+
+        // Add to receiver's inventory
+        const { data: receiverInv } = await supabase
+          .from('inventory')
+          .select('*')
+          .eq('user_id', receiverUserId)
+          .eq('card_id', cardId)
+          .maybeSingle();
+
+        if (receiverInv) {
+          await supabase
+            .from('inventory')
+            .update({ quantity: receiverInv.quantity + amount })
+            .eq('id', receiverInv.id);
+        } else {
+          await supabase
+            .from('inventory')
+            .insert({ user_id: receiverUserId, card_id: cardId, quantity: amount });
+        }
+
+        await interaction.reply({
+          content: `✅ Staffgifted ${amount}x **${card?.name}** (${card?.group})!`,
+          ephemeral: true
+        });
+      } catch (error) {
+        console.error('Staffgift error:', error);
+        await interaction.reply({ content: '❌ Error processing staff gift!', ephemeral: true });
+      }
+
+      return;
+    }
+
+    if (customId.startsWith('staffgift_cancel_')) {
+      const senderUserId = customId.split('_')[2];
+      if (interaction.user.id !== senderUserId) {
+        return await interaction.reply({ content: '❌ You can\'t cancel someone else\'s gift!', ephemeral: true });
+      }
+      await interaction.reply({ content: '❌ Staff gift cancelled.', ephemeral: true });
+      return;
+    }
+
     /* ===== INVENTORY BUTTONS ===== */
 
     if (customId.startsWith('inv_')) {
