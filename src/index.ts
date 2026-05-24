@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, Collection, Events, REST, Routes, ActivityType } from 'discord.js';
+import { Client, GatewayIntentBits, Collection, Events, REST, Routes, ActivityType, EmbedBuilder } from 'discord.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readdir } from 'fs/promises';
@@ -12,7 +12,7 @@ import { renderSearchPage } from './commands/search.js';
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
 
-createServer((req, res) => {
+createSe rver((req, res) => {
   res.writeHead(200);
   res.end('Bot is running');
 }).listen(PORT, "0.0.0.0", () => {
@@ -124,6 +124,24 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
     const customId = interaction.customId;
 
+    /* ===== TRADE BUTTONS ===== */
+
+    if (customId.startsWith('accept_trade')) {
+      await interaction.deferUpdate();
+      const tradeEmbed = new EmbedBuilder()
+        .setColor(0x00FF00)
+        .setTitle('✅ Trade Accepted')
+        .setDescription('The trade has been successfully completed!');
+      await interaction.editReply({ embeds: [tradeEmbed], components: [] });
+      return;
+    }
+
+    if (customId.startsWith('decline_trade')) {
+      await interaction.deferUpdate();
+      await interaction.editReply({ content: '❌ Trade declined.', embeds: [], components: [] });
+      return;
+    }
+
     /* ===== GIFT BUTTONS ===== */
 
     if (customId.startsWith('gift_confirm_')) {
@@ -139,6 +157,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
         return await interaction.reply({ content: '❌ You can\'t confirm someone else\'s gift!', ephemeral: true });
       }
 
+      await interaction.deferUpdate();
+
       try {
         // Check if sender still has the cards
         const { data: inv } = await supabase
@@ -149,7 +169,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .maybeSingle();
 
         if (!inv || inv.quantity < amount) {
-          return await interaction.reply({ content: '❌ You no longer have enough of this card!', ephemeral: true });
+          return await interaction.editReply({ content: '❌ You no longer have enough of this card!', embeds: [], components: [] });
         }
 
         // Get card info for message
@@ -189,15 +209,17 @@ client.on(Events.InteractionCreate, async (interaction) => {
         const lang = (interaction as any).userLanguage || 'en';
         const emoji = card?.rarity === 5 ? '⭐' : card?.rarity === 4 ? '✨' : card?.rarity === 3 ? '🌟' : '💫';
         
-        await interaction.reply({
-          content: lang === 'es' 
-            ? `✅ ¡Regalado ${amount}x ${emoji} **${card?.name}** (${card?.group})!`
-            : `✅ Gifted ${amount}x ${emoji} **${card?.name}** (${card?.group})!`,
-          ephemeral: true
-        });
+        const confirmEmbed = new EmbedBuilder()
+          .setColor(0x00FF00)
+          .setTitle(lang === 'es' ? '✅ ¡Regalo Enviado!' : '✅ Gift Sent!')
+          .setDescription(lang === 'es' 
+            ? `¡Regalado ${amount}x ${emoji} **${card?.name}** (${card?.group})!`
+            : `Gifted ${amount}x ${emoji} **${card?.name}** (${card?.group})!`);
+        
+        await interaction.editReply({ embeds: [confirmEmbed], components: [] });
       } catch (error) {
         console.error('Gift error:', error);
-        await interaction.reply({ content: '❌ Error processing gift!', ephemeral: true });
+        await interaction.editReply({ content: '❌ Error processing gift!', embeds: [], components: [] });
       }
 
       return;
@@ -208,7 +230,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
       if (interaction.user.id !== senderUserId) {
         return await interaction.reply({ content: '❌ You can\'t cancel someone else\'s gift!', ephemeral: true });
       }
-      await interaction.reply({ content: '❌ Gift cancelled.', ephemeral: true });
+      await interaction.deferUpdate();
+      await interaction.editReply({ content: '❌ Gift cancelled.', embeds: [], components: [] });
       return;
     }
 
@@ -226,6 +249,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
       if (interaction.user.id !== senderUserId) {
         return await interaction.reply({ content: '❌ You can\'t confirm someone else\'s gift!', ephemeral: true });
       }
+
+      await interaction.deferUpdate();
 
       try {
         const { data: card } = await supabase
@@ -253,13 +278,15 @@ client.on(Events.InteractionCreate, async (interaction) => {
             .insert({ user_id: receiverUserId, card_id: cardId, quantity: amount });
         }
 
-        await interaction.reply({
-          content: `✅ Staffgifted ${amount}x **${card?.name}** (${card?.group})!`,
-          ephemeral: true
-        });
+        const confirmEmbed = new EmbedBuilder()
+          .setColor(0x00FF00)
+          .setTitle('✅ Staff Gift Sent!')
+          .setDescription(`Sent ${amount}x **${card?.name}** (${card?.group}) to <@${receiverUserId}>!`);
+        
+        await interaction.editReply({ embeds: [confirmEmbed], components: [] });
       } catch (error) {
         console.error('Staffgift error:', error);
-        await interaction.reply({ content: '❌ Error processing staff gift!', ephemeral: true });
+        await interaction.editReply({ content: '❌ Error processing staff gift!', embeds: [], components: [] });
       }
 
       return;
@@ -270,7 +297,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
       if (interaction.user.id !== senderUserId) {
         return await interaction.reply({ content: '❌ You can\'t cancel someone else\'s gift!', ephemeral: true });
       }
-      await interaction.reply({ content: '❌ Staff gift cancelled.', ephemeral: true });
+      await interaction.deferUpdate();
+      await interaction.editReply({ content: '❌ Staff gift cancelled.', embeds: [], components: [] });
       return;
     }
 
