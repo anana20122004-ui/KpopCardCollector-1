@@ -69,11 +69,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const cardcode = interaction.options.getString('cardcode', true).toUpperCase();
     
     // Check if card exists
-    const { data: card } = await supabase.from('cards').select('*').eq('cardcode', cardcode).single();
+    const { data: card } = await supabase.from('cards').select('*').eq('cardcode', cardcode).maybeSingle();
     if (!card) return interaction.editReply(`❌ Card \`${cardcode}\` not found!`);
     
     // Check if user owns this card
-    const { data: owned } = await supabase.from('inventory').select('*').eq('user_id', userId).eq('card_id', (card as any).card_id).single();
+    const { data: owned } = await supabase.from('inventory').select('*').eq('user_id', userId).eq('card_id', (card as any).card_id).maybeSingle();
     if (!owned) return interaction.editReply(`❌ You don't own \`${cardcode}\`! Get it from /drop or /shop first.`);
     
     // Set as favorite
