@@ -86,16 +86,18 @@ async function registerCommands() {
 
   try {
 
-    await rest.put(
+    console.log(`📝 Registering ${commandData.length} commands...`);
+    const result = await rest.put(
       Routes.applicationCommands(clientId),
       { body: commandData }
     );
 
-    console.log('<:cottage:1457128646274973766> Successfully registered slash commands!');
+    console.log(`✅ Successfully registered ${(result as any).length} slash commands!`);
 
   } catch (error) {
 
     console.error('Error registering commands:', error);
+    throw error;
 
   }
 
@@ -586,11 +588,10 @@ async function start() {
     
     console.log('📦 Loading commands...');
     await loadCommands();
-    console.log('✅ Commands loaded!');
+    console.log(`✅ ${commands.size} commands loaded!`);
     
-    console.log('📝 Registering slash commands...');
+    console.log('📝 Registering slash commands with Discord...');
     await registerCommands();
-    console.log('✅ Slash commands registered!');
     
     console.log('🔐 Logging into Discord...');
     await client.login(process.env.DISCORD_TOKEN);
