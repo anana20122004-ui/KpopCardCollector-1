@@ -40,8 +40,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const confirmEmbed = new EmbedBuilder()
     .setColor(0xFFB6D9)
-    .setTitle(`<:pink_bow:1508258538902786165> Do you want to gift **${amount1}** of **${card.name}** to @${receiverUser.username}?`)
-    .setDescription('');
+    .setTitle('<:pink_bow:1508258538902786165> Confirm Staff Gift')
+    .setDescription(`Do you want to gift **${amount1}** of **${card.name}** to @${receiverUser.username}?`);
 
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder().setCustomId(`staffgift_confirm_${senderUserId}_${receiverUserId}_${card.card_id}:${amount1}`).setLabel('Yes').setStyle(ButtonStyle.Success),

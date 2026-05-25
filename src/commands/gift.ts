@@ -45,8 +45,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const confirmEmbed = new EmbedBuilder()
     .setColor(0xFFB6D9)
-    .setTitle(`<:pink_bow:1508258538902786165> Do you want to gift **${amount1}** of **${card.name}** to @${receiverUser.username}?`)
-    .setDescription('');
+    .setTitle('<:pink_bow:1508258538902786165> Confirm Gift')
+    .setDescription(`Do you want to gift **${amount1}** of **${card.name}** to @${receiverUser.username}?`);
 
   if (card.image_url) confirmEmbed.setThumbnail(card.image_url);
 
