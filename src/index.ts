@@ -35,6 +35,8 @@ const client = new Client({
 const commands = new Collection<string, any>();
 const commandCooldowns = new Map<string, number>(); // userId -> last command timestamp
 
+const OWNER_ID = '1403958587843149937';
+
 /* =========================
    LOAD COMMANDS
    ========================= */
@@ -245,6 +247,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
       const cardId = cardAndAmount[0];
       const amount = parseInt(cardAndAmount[1]);
 
+      // Add owner check
+      if (interaction.user.id !== OWNER_ID) {
+        return await interaction.reply({ content: '🧚 Owner only!', ephemeral: true });
+      }
+
       if (interaction.user.id !== senderUserId) {
         return await interaction.reply({ content: '❌ You can\'t confirm someone else\'s gift!', ephemeral: true });
       }
@@ -297,6 +304,12 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
     if (customId.startsWith('staffgift_cancel_')) {
       const senderUserId = customId.split('_')[2];
+      
+      // Add owner check
+      if (interaction.user.id !== OWNER_ID) {
+        return await interaction.reply({ content: '🧚 Owner only!', ephemeral: true });
+      }
+      
       if (interaction.user.id !== senderUserId) {
         return await interaction.reply({ content: '❌ You can\'t cancel someone else\'s gift!', ephemeral: true });
       }
