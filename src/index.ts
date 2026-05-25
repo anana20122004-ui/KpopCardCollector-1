@@ -179,7 +179,12 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .from('cards')
           .select('*')
           .eq('card_id', cardId)
-          .single();
+          .maybeSingle();
+
+        if (!card) {
+          console.error('Card not found for gift:', cardId);
+          return await interaction.editReply({ content: '❌ Card not found!', embeds: [], components: [] });
+        }
 
         // Get receiver's username
         const receiver = await interaction.client.users.fetch(receiverUserId);
@@ -214,10 +219,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
         const confirmEmbed = new EmbedBuilder()
           .setColor(0xFFB6D9)
-          .setTitle(`<:pink_bow:1508258538902786165> You have successfully gifted **${amount}** of **${card?.name}** to @${receiverUsername}!`)
+          .setTitle(`<:pink_bow:1508258538902786165> You have successfully gifted **${amount}** of **${card.name}** to @${receiverUsername}!`)
           .setDescription('');
         
-        if (card?.image_url) {
+        if (card.image_url && card.image_url.trim()) {
           confirmEmbed.setThumbnail(card.image_url);
         }
 
@@ -267,7 +272,12 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .from('cards')
           .select('*')
           .eq('card_id', cardId)
-          .single();
+          .maybeSingle();
+
+        if (!card) {
+          console.error('Card not found for staffgift:', cardId);
+          return await interaction.editReply({ content: '❌ Card not found!', embeds: [], components: [] });
+        }
 
         // Get receiver's username
         const receiver = await interaction.client.users.fetch(receiverUserId);
@@ -294,10 +304,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
         const confirmEmbed = new EmbedBuilder()
           .setColor(0xFFB6D9)
-          .setTitle(`<:pink_bow:1508258538902786165> You have successfully gifted **${amount}** of **${card?.name}** to @${receiverUsername}!`)
+          .setTitle(`<:pink_bow:1508258538902786165> You have successfully gifted **${amount}** of **${card.name}** to @${receiverUsername}!`)
           .setDescription('');
         
-        if (card?.image_url) {
+        if (card.image_url && card.image_url.trim()) {
           confirmEmbed.setThumbnail(card.image_url);
         }
 
