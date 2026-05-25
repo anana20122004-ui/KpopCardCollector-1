@@ -217,6 +217,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .setTitle(`<:pink_bow:1508258538902786165> You have successfully gifted **${amount}** of **${card?.name}** to @${receiverUsername}!`)
           .setDescription('');
         
+        if (card?.image_url) {
+          confirmEmbed.setThumbnail(card.image_url);
+        }
+
         await interaction.editReply({ embeds: [confirmEmbed], components: [] });
       } catch (error) {
         console.error('Gift error:', error);
@@ -247,7 +251,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       const cardId = cardAndAmount[0];
       const amount = parseInt(cardAndAmount[1]);
 
-      // Add owner check
+      // Check owner first
       if (interaction.user.id !== OWNER_ID) {
         return await interaction.reply({ content: '🧚 Owner only!', ephemeral: true });
       }
@@ -293,6 +297,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .setTitle(`<:pink_bow:1508258538902786165> You have successfully gifted **${amount}** of **${card?.name}** to @${receiverUsername}!`)
           .setDescription('');
         
+        if (card?.image_url) {
+          confirmEmbed.setThumbnail(card.image_url);
+        }
+
         await interaction.editReply({ embeds: [confirmEmbed], components: [] });
       } catch (error) {
         console.error('Staffgift error:', error);
@@ -304,15 +312,16 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
     if (customId.startsWith('staffgift_cancel_')) {
       const senderUserId = customId.split('_')[2];
-      
-      // Add owner check
+
+      // Check owner first
       if (interaction.user.id !== OWNER_ID) {
         return await interaction.reply({ content: '🧚 Owner only!', ephemeral: true });
       }
-      
+
       if (interaction.user.id !== senderUserId) {
         return await interaction.reply({ content: '❌ You can\'t cancel someone else\'s gift!', ephemeral: true });
       }
+      
       await interaction.deferUpdate();
       await interaction.editReply({ content: '❌ Staff gift cancelled.', embeds: [], components: [] });
       return;
