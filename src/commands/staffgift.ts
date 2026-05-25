@@ -39,9 +39,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   if (!card) return interaction.editReply({ content: '🧚 Card not found!' });
 
   const confirmEmbed = new EmbedBuilder()
-    .setColor(0xFFB6E1)
-    .setTitle('🌲 Confirm Staff Gift')
-    .setDescription(`Send ${amount1}x **${card.name}** (${card.group}) to ${receiverUser.username}?`);
+    .setColor(0xFFB6D9)
+    .setTitle(`<:pink_bow:1508258538902786165> Do you want to gift **${amount1}** of **${card.name}** to @${receiverUser.username}?`)
+    .setDescription('');
 
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder().setCustomId(`staffgift_confirm_${senderUserId}_${receiverUserId}_${card.card_id}:${amount1}`).setLabel('Yes').setStyle(ButtonStyle.Success),

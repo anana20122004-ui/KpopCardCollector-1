@@ -43,11 +43,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const { data: inv } = await supabase.from('inventory').select('*').eq('user_id', senderUserId).eq('card_id', card.card_id).maybeSingle();
   if (!inv || inv.quantity < amount1) return interaction.editReply({ content: getTranslation(lang, 'error_insufficient_cards', { qty: inv?.quantity || 0 }) });
 
-  const rarityEmoji = getRarityEmoji(card.rarity);
   const confirmEmbed = new EmbedBuilder()
-    .setColor(0xFFB6E1)
-    .setTitle(getTranslation(lang, 'gift_confirm_title'))
-    .setDescription(getTranslation(lang, 'gift_confirm_desc', { amount: amount1, name: card.name, group: card.group, emoji: rarityEmoji, user: receiverUser.username }));
+    .setColor(0xFFB6D9)
+    .setTitle(`<:pink_bow:1508258538902786165> Do you want to gift **${amount1}** of **${card.name}** to @${receiverUser.username}?`)
+    .setDescription('');
 
   if (card.image_url) confirmEmbed.setThumbnail(card.image_url);
 

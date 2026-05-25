@@ -129,7 +129,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     if (customId.startsWith('accept_trade')) {
       await interaction.deferUpdate();
       const tradeEmbed = new EmbedBuilder()
-        .setColor(0x00FF00)
+        .setColor(0xFFB6D9)
         .setTitle('✅ Trade Accepted')
         .setDescription('The trade has been successfully completed!');
       await interaction.editReply({ embeds: [tradeEmbed], components: [] });
@@ -179,6 +179,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .eq('card_id', cardId)
           .single();
 
+        // Get receiver's username
+        const receiver = await interaction.client.users.fetch(receiverUserId);
+        const receiverUsername = receiver.username;
+
         // Reduce sender's quantity
         const newQuantity = inv.quantity - amount;
         if (newQuantity === 0) {
@@ -206,15 +210,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
             .insert({ user_id: receiverUserId, card_id: cardId, quantity: amount });
         }
 
-        const lang = (interaction as any).userLanguage || 'en';
-        const emoji = card?.rarity === 5 ? '⭐' : card?.rarity === 4 ? '✨' : card?.rarity === 3 ? '🌟' : '💫';
-        
         const confirmEmbed = new EmbedBuilder()
-          .setColor(0x00FF00)
-          .setTitle(lang === 'es' ? '✅ ¡Regalo Enviado!' : '✅ Gift Sent!')
-          .setDescription(lang === 'es' 
-            ? `¡Regalado ${amount}x ${emoji} **${card?.name}** (${card?.group})!`
-            : `Gifted ${amount}x ${emoji} **${card?.name}** (${card?.group})!`);
+          .setColor(0xFFB6D9)
+          .setTitle(`<:pink_bow:1508258538902786165> You have successfully gifted **${amount}** of **${card?.name}** to @${receiverUsername}!`)
+          .setDescription('');
         
         await interaction.editReply({ embeds: [confirmEmbed], components: [] });
       } catch (error) {
@@ -259,6 +258,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .eq('card_id', cardId)
           .single();
 
+        // Get receiver's username
+        const receiver = await interaction.client.users.fetch(receiverUserId);
+        const receiverUsername = receiver.username;
+
         // Add to receiver's inventory
         const { data: receiverInv } = await supabase
           .from('inventory')
@@ -279,9 +282,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
         }
 
         const confirmEmbed = new EmbedBuilder()
-          .setColor(0x00FF00)
-          .setTitle('✅ Staff Gift Sent!')
-          .setDescription(`Sent ${amount}x **${card?.name}** (${card?.group}) to <@${receiverUserId}>!`);
+          .setColor(0xFFB6D9)
+          .setTitle(`<:pink_bow:1508258538902786165> You have successfully gifted **${amount}** of **${card?.name}** to @${receiverUsername}!`)
+          .setDescription('');
         
         await interaction.editReply({ embeds: [confirmEmbed], components: [] });
       } catch (error) {
