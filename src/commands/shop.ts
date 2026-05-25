@@ -44,7 +44,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       .setTitle(getTranslation(lang, 'shop_title'))
       .setDescription(desc)
       .setColor(0xD8A8E8);
-    return await interaction.reply({ embeds: [embed] });
+    await interaction.reply({ embeds: [embed] });
+    return;
   }
   
   await interaction.deferReply();
@@ -138,7 +139,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (nonLegendary.length < 3) {
       const warnMsg = nonLegendary.length === 0
         ? `⚠️ ${searchDesc} only has Legendary cards — no pullable cards available.`
-        : `ℹ️ ${searchDesc} only has **${nonLegendary.length}** non-Legendary card${nonLegendary.length === 1 ? '' : 's'} — you'll only receive those until they have 3 or more non-Legendary options.`;
+        : `ℹ️ ${searchDesc} only has **${nonLegendary.length}** non-Legendary card${nonLegendary.length === 1 ? '' : 's'} — you'll only receive those until they have 3 or more non-Legendary cards.`;
       await interaction.editReply({ content: warnMsg });
       if (nonLegendary.length === 0) return;
     }
@@ -200,7 +201,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const embed = new EmbedBuilder()
     .setColor(0xD8A8E8)
-    .setTitle(`�� ${(pack as any).name} Purchased!`)
+    .setTitle(`🎁 ${(pack as any).name} Purchased!`)
     .setDescription(cardList)
     .setFooter({ text: `💰 -${(pack as any).cost} coins • ${pulled.length} cards acquired` });
   
