@@ -48,11 +48,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     .setTitle('<:pink_bow:1508258538902786165> Confirm Gift')
     .setDescription(`Do you want to gift **${amount1}** of **${card.name}** to <@${receiverUserId}>?`);
 
-  if (card.image_url) confirmEmbed.setImage(card.image_url);
+  if (card.image_url) confirmEmbed.setThumbnail(card.image_url);
 
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-    new ButtonBuilder().setCustomId(`gift_confirm_${senderUserId}_${receiverUserId}_${card.card_id}:${amount1}`).setLabel(lang === 'es' ? 'Sí' : 'Yes').setStyle(ButtonStyle.Success),
-    new ButtonBuilder().setCustomId(`gift_cancel_${senderUserId}`).setLabel(lang === 'es' ? 'No' : 'No').setStyle(ButtonStyle.Danger)
+    new ButtonBuilder().setCustomId(`gift_confirm_${senderUserId}_${receiverUserId}_${card.card_id}_${amount1}`).setLabel(lang === 'es' ? 'Sí' : 'Yes').setStyle(ButtonStyle.Success),
+    new ButtonBuilder().setCustomId(`gift_cancel_${senderUserId}_${receiverUserId}`).setLabel(lang === 'es' ? 'No' : 'No').setStyle(ButtonStyle.Danger)
   );
 
   await interaction.editReply({ embeds: [confirmEmbed], components: [row] });

@@ -1,6 +1,5 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, AttachmentBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { supabase } from '../database/supabase.js';
-import { mergeCardImages } from '../utils/imageUtils.js';
 import { getRarityEmoji } from '../utils/cards.js';
 
 export const data = new SlashCommandBuilder()
@@ -43,11 +42,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     .setTitle('<:pink_bow:1508258538902786165> Confirm Staff Gift')
     .setDescription(`Do you want to gift **${amount1}** of **${card.name}** to <@${receiverUserId}>?`);
 
-  if (card.image_url) confirmEmbed.setImage(card.image_url);
+  if (card.image_url) confirmEmbed.setThumbnail(card.image_url);
 
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-    new ButtonBuilder().setCustomId(`staffgift_confirm_${senderUserId}_${receiverUserId}_${card.card_id}:${amount1}`).setLabel('Yes').setStyle(ButtonStyle.Success),
-    new ButtonBuilder().setCustomId(`staffgift_cancel_${senderUserId}`).setLabel('No').setStyle(ButtonStyle.Danger)
+    new ButtonBuilder().setCustomId(`staffgift_confirm_${senderUserId}_${receiverUserId}_${card.card_id}_${amount1}`).setLabel('Yes').setStyle(ButtonStyle.Success),
+    new ButtonBuilder().setCustomId(`staffgift_cancel_${senderUserId}_${receiverUserId}`).setLabel('No').setStyle(ButtonStyle.Danger)
   );
 
   await interaction.editReply({ embeds: [confirmEmbed], components: [row] });

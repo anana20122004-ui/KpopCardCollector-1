@@ -128,150 +128,100 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
     const customId = interaction.customId;
 
-    /* ===== TRADE BUTTONS ===== */
-
-    if (customId.startsWith('accept_trade')) {
-      await interaction.deferUpdate();
-      const tradeEmbed = new EmbedBuilder()
-        .setColor(0xFFB6D9)
-        .setTitle('✅ Trade Accepted')
-        .setDescription('The trade has been successfully completed!');
-      await interaction.editReply({ embeds: [tradeEmbed], components: [] });
-      return;
-    }
-
-    if (customId.startsWith('decline_trade')) {
-      await interaction.deferUpdate();
-      await interaction.editReply({ content: '❌ Trade declined.', embeds: [], components: [] });
-      return;
-    }
-
     /* ===== GIFT BUTTONS ===== */
 
     if (customId.startsWith('gift_confirm_')) {
-
-      const parts = customId.split('_');
-      const senderUserId = parts[2];
-      const receiverUserId = parts[3];
-      const cardAndAmount = parts[4].split(':');
-      const cardId = cardAndAmount[0];
-      const amount = parseInt(cardAndAmount[1]);
-
-      console.log(`[GIFT] Sender: ${senderUserId}, Receiver: ${receiverUserId}, Card: ${cardId}, Amount: ${amount}`);
-
-      if (interaction.user.id !== senderUserId) {
-        return await interaction.reply({ content: '❌ You can\'t confirm someone else\'s gift!', ephemeral: true });
-      }
-
       await interaction.deferUpdate();
 
       try {
-        console.log(`[GIFT] Checking sender inventory...`);
-        // Check if sender still has the cards
-        const { data: inv, error: invError } = await supabase
+        const parts = customId.split('_');
+        const senderUserId = parts[2];
+        const receiverUserId = parts[3];
+        const cardId = parts[4];
+        const amount = parseInt(parts[5]);
+
+        if (interaction.user.id !== senderUserId) {
+          return await interaction.editReply({ content: '❌ You can\'t confirm someone else\'s gift!', embeds: [], components: [] });
+        }
+
+        // Get sender inventory
+        const { data: senderInv, error: senderInvError } = await supabase
           .from('inventory')
-          .select('*')
+          .select('id, quantity')
           .eq('user_id', senderUserId)
           .eq('card_id', cardId)
           .maybeSingle();
 
-        if (invError) {
-          console.error('[GIFT] Inventory query error:', invError);
-          return await interaction.editReply({ content: `❌ Database error: ${invError.message}`, embeds: [], components: [] });
-        }
-
-        if (!inv || inv.quantity < amount) {
-          console.error(`[GIFT] Insufficient cards: has ${inv?.quantity || 0}, needs ${amount}`);
+        if (senderInvError || !senderInv || senderInv.quantity < amount) {
           return await interaction.editReply({ content: '❌ You no longer have enough of this card!', embeds: [], components: [] });
         }
 
-        console.log(`[GIFT] Fetching card data...`);
-        // Get card info for message
+        // Get card
         const { data: card, error: cardError } = await supabase
           .from('cards')
           .select('*')
           .eq('card_id', cardId)
           .maybeSingle();
 
-        if (cardError) {
-          console.error('[GIFT] Card query error:', cardError);
-          return await interaction.editReply({ content: `❌ Database error: ${cardError.message}`, embeds: [], components: [] });
-        }
-
-        if (!card) {
-          console.error('[GIFT] Card not found:', cardId);
+        if (cardError || !card) {
           return await interaction.editReply({ content: '❌ Card not found!', embeds: [], components: [] });
         }
 
-        console.log(`[GIFT] Fetching receiver username...`);
-        // Get receiver's username
-        const receiver = await interaction.client.users.fetch(receiverUserId);
-        const receiverUsername = receiver.username;
-
-        console.log(`[GIFT] Updating sender inventory...`);
-        // Reduce sender's quantity
-        const newQuantity = inv.quantity - amount;
-        if (newQuantity === 0) {
-          const { error: deleteError } = await supabase.from('inventory').delete().eq('id', inv.id);
-          if (deleteError) throw deleteError;
+        // Reduce sender
+        const newSenderQty = senderInv.quantity - amount;
+        if (newSenderQty === 0) {
+          await supabase.from('inventory').delete().eq('id', senderInv.id);
         } else {
-          const { error: updateError } = await supabase.from('inventory').update({ quantity: newQuantity }).eq('id', inv.id);
-          if (updateError) throw updateError;
+          await supabase.from('inventory').update({ quantity: newSenderQty }).eq('id', senderInv.id);
         }
 
-        console.log(`[GIFT] Updating receiver inventory...`);
-        // Add to receiver's inventory
+        // Add to receiver
         const { data: receiverInv, error: receiverInvError } = await supabase
           .from('inventory')
-          .select('*')
+          .select('id, quantity')
           .eq('user_id', receiverUserId)
           .eq('card_id', cardId)
           .maybeSingle();
 
-        if (receiverInvError) {
-          console.error('[GIFT] Receiver inventory query error:', receiverInvError);
-          throw receiverInvError;
-        }
-
         if (receiverInv) {
-          const { error: updateError } = await supabase
+          await supabase
             .from('inventory')
             .update({ quantity: receiverInv.quantity + amount })
             .eq('id', receiverInv.id);
-          if (updateError) throw updateError;
         } else {
-          const { error: insertError } = await supabase
+          await supabase
             .from('inventory')
             .insert({ user_id: receiverUserId, card_id: cardId, quantity: amount });
-          if (insertError) throw insertError;
         }
 
-        console.log(`[GIFT] Success! Gift processed.`);
-        const confirmEmbed = new EmbedBuilder()
+        // Get receiver username
+        const receiver = await interaction.client.users.fetch(receiverUserId);
+
+        const successEmbed = new EmbedBuilder()
           .setColor(0xFFB6D9)
-          .setTitle(`<:pink_bow:1508258538902786165> You have successfully gifted **${amount}** of **${card.name}** to @${receiverUsername}!`)
-          .setDescription('');
-        
-        if (card.image_url && card.image_url.trim()) {
-          confirmEmbed.setThumbnail(card.image_url);
+          .setTitle(`<:pink_bow:1508258538902786165> Gift Sent!`)
+          .setDescription(`You gifted **${amount}** of **${card.name}** to **@${receiver.username}**`);
+
+        if (card.image_url?.trim()) {
+          successEmbed.setThumbnail(card.image_url);
         }
 
-        await interaction.editReply({ embeds: [confirmEmbed], components: [] });
+        await interaction.editReply({ embeds: [successEmbed], components: [] });
       } catch (error) {
-        console.error('[GIFT] Full error:', error);
-        const errorMsg = error instanceof Error ? error.message : String(error);
-        await interaction.editReply({ content: `❌ Error: ${errorMsg}`, embeds: [], components: [] });
+        console.error('[GIFT] Error:', error);
+        await interaction.editReply({ content: `❌ Error: ${error instanceof Error ? error.message : 'Unknown error'}`, embeds: [], components: [] });
       }
-
       return;
     }
 
     if (customId.startsWith('gift_cancel_')) {
-      const senderUserId = customId.split('_')[2];
-      if (interaction.user.id !== senderUserId) {
-        return await interaction.reply({ content: '❌ You can\'t cancel someone else\'s gift!', ephemeral: true });
-      }
       await interaction.deferUpdate();
+      const senderUserId = customId.split('_')[2];
+
+      if (interaction.user.id !== senderUserId) {
+        return await interaction.editReply({ content: '❌ You can\'t cancel someone else\'s gift!', embeds: [], components: [] });
+      }
+
       await interaction.editReply({ content: '❌ Gift cancelled.', embeds: [], components: [] });
       return;
     }
@@ -279,110 +229,85 @@ client.on(Events.InteractionCreate, async (interaction) => {
     /* ===== STAFFGIFT BUTTONS ===== */
 
     if (customId.startsWith('staffgift_confirm_')) {
-
-      const parts = customId.split('_');
-      const senderUserId = parts[2];
-      const receiverUserId = parts[3];
-      const cardAndAmount = parts[4].split(':');
-      const cardId = cardAndAmount[0];
-      const amount = parseInt(cardAndAmount[1]);
-
-      console.log(`[STAFFGIFT] Sender: ${senderUserId}, Receiver: ${receiverUserId}, Card: ${cardId}, Amount: ${amount}`);
-
-      // Check owner first
-      if (interaction.user.id !== OWNER_ID) {
-        return await interaction.reply({ content: '🧚 Owner only!', ephemeral: true });
-      }
-
-      if (interaction.user.id !== senderUserId) {
-        return await interaction.reply({ content: '❌ You can\'t confirm someone else\'s gift!', ephemeral: true });
-      }
-
       await interaction.deferUpdate();
 
       try {
-        console.log(`[STAFFGIFT] Fetching card data...`);
+        if (interaction.user.id !== OWNER_ID) {
+          return await interaction.editReply({ content: '🧚 Owner only!', embeds: [], components: [] });
+        }
+
+        const parts = customId.split('_');
+        const senderUserId = parts[2];
+        const receiverUserId = parts[3];
+        const cardId = parts[4];
+        const amount = parseInt(parts[5]);
+
+        if (interaction.user.id !== senderUserId) {
+          return await interaction.editReply({ content: '❌ You can\'t confirm someone else\'s gift!', embeds: [], components: [] });
+        }
+
+        // Get card
         const { data: card, error: cardError } = await supabase
           .from('cards')
           .select('*')
           .eq('card_id', cardId)
           .maybeSingle();
 
-        if (cardError) {
-          console.error('[STAFFGIFT] Card query error:', cardError);
-          return await interaction.editReply({ content: `❌ Database error: ${cardError.message}`, embeds: [], components: [] });
-        }
-
-        if (!card) {
-          console.error('[STAFFGIFT] Card not found:', cardId);
+        if (cardError || !card) {
           return await interaction.editReply({ content: '❌ Card not found!', embeds: [], components: [] });
         }
 
-        console.log(`[STAFFGIFT] Fetching receiver username...`);
-        // Get receiver's username
-        const receiver = await interaction.client.users.fetch(receiverUserId);
-        const receiverUsername = receiver.username;
-
-        console.log(`[STAFFGIFT] Updating receiver inventory...`);
-        // Add to receiver's inventory
+        // Add to receiver
         const { data: receiverInv, error: receiverInvError } = await supabase
           .from('inventory')
-          .select('*')
+          .select('id, quantity')
           .eq('user_id', receiverUserId)
           .eq('card_id', cardId)
           .maybeSingle();
 
-        if (receiverInvError) {
-          console.error('[STAFFGIFT] Receiver inventory query error:', receiverInvError);
-          throw receiverInvError;
-        }
-
         if (receiverInv) {
-          const { error: updateError } = await supabase
+          await supabase
             .from('inventory')
             .update({ quantity: receiverInv.quantity + amount })
             .eq('id', receiverInv.id);
-          if (updateError) throw updateError;
         } else {
-          const { error: insertError } = await supabase
+          await supabase
             .from('inventory')
             .insert({ user_id: receiverUserId, card_id: cardId, quantity: amount });
-          if (insertError) throw insertError;
         }
 
-        console.log(`[STAFFGIFT] Success! Gift processed.`);
-        const confirmEmbed = new EmbedBuilder()
+        // Get receiver username
+        const receiver = await interaction.client.users.fetch(receiverUserId);
+
+        const successEmbed = new EmbedBuilder()
           .setColor(0xFFB6D9)
-          .setTitle(`<:pink_bow:1508258538902786165> You have successfully gifted **${amount}** of **${card.name}** to @${receiverUsername}!`)
-          .setDescription('');
-        
-        if (card.image_url && card.image_url.trim()) {
-          confirmEmbed.setThumbnail(card.image_url);
+          .setTitle(`<:pink_bow:1508258538902786165> Staff Gift Sent!`)
+          .setDescription(`You gifted **${amount}** of **${card.name}** to **@${receiver.username}**`);
+
+        if (card.image_url?.trim()) {
+          successEmbed.setThumbnail(card.image_url);
         }
 
-        await interaction.editReply({ embeds: [confirmEmbed], components: [] });
+        await interaction.editReply({ embeds: [successEmbed], components: [] });
       } catch (error) {
-        console.error('[STAFFGIFT] Full error:', error);
-        const errorMsg = error instanceof Error ? error.message : String(error);
-        await interaction.editReply({ content: `❌ Error: ${errorMsg}`, embeds: [], components: [] });
+        console.error('[STAFFGIFT] Error:', error);
+        await interaction.editReply({ content: `❌ Error: ${error instanceof Error ? error.message : 'Unknown error'}`, embeds: [], components: [] });
       }
-
       return;
     }
 
     if (customId.startsWith('staffgift_cancel_')) {
-      const senderUserId = customId.split('_')[2];
-
-      // Check owner first
-      if (interaction.user.id !== OWNER_ID) {
-        return await interaction.reply({ content: '🧚 Owner only!', ephemeral: true });
-      }
-
-      if (interaction.user.id !== senderUserId) {
-        return await interaction.reply({ content: '❌ You can\'t cancel someone else\'s gift!', ephemeral: true });
-      }
-      
       await interaction.deferUpdate();
+
+      if (interaction.user.id !== OWNER_ID) {
+        return await interaction.editReply({ content: '🧚 Owner only!', embeds: [], components: [] });
+      }
+
+      const senderUserId = customId.split('_')[2];
+      if (interaction.user.id !== senderUserId) {
+        return await interaction.editReply({ content: '❌ You can\'t cancel someone else\'s gift!', embeds: [], components: [] });
+      }
+
       await interaction.editReply({ content: '❌ Staff gift cancelled.', embeds: [], components: [] });
       return;
     }
@@ -633,14 +558,14 @@ async function start() {
 
   try {
     console.log('🚀 Starting bot...');
-    
+
     console.log('📦 Loading commands...');
     await loadCommands();
     console.log(`✅ ${commands.size} commands loaded!`);
-    
+
     console.log('📝 Registering slash commands with Discord...');
     await registerCommands();
-    
+
     console.log('🔐 Logging into Discord...');
     await client.login(process.env.DISCORD_TOKEN);
     console.log('✅ Logged in!');
