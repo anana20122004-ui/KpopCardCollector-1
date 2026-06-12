@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { getTranslation } from '../utils/language.js';
 
@@ -7,8 +7,34 @@ export const data = new SlashCommandBuilder()
   .setDescription('View or edit your profile')
   .addSubcommand(s => s.setName('view').setDescription('View profile').addUserOption(o => o.setName('user').setDescription('User')))
   .addSubcommand(s => s.setName('bio').setDescription('Edit bio').addStringOption(o => o.setName('text').setDescription('Bio').setRequired(true).setMaxLength(200)))
-  .addSubcommand(s => s.setName('color').setDescription('Edit color').addStringOption(o => o.setName('hex').setDescription('#hex').setRequired(true)))
+  .addSubcommand(s => s.setName('color').setDescription('Edit embed color').addStringOption(o => o.setName('hex').setDescription('#RRGGBB').setRequired(true)))
   .addSubcommand(s => s.setName('favorite').setDescription('Set favorite card').addStringOption(o => o.setName('cardcode').setDescription('Card code (e.g., BP001)').setRequired(true)));
+
+async function buildProfileEmbed(targetUser: any, dbUser: any): Promise<EmbedBuilder> {
+  const colorHex = (dbUser.profile_color || '#ff69b4').replace('#', '');
+  const color = parseInt(colorHex, 16) || 0xff69b4;
+  const startDate = dbUser.created_at ? new Date(dbUser.created_at).toLocaleDateString() : 'N/A';
+
+  const embed = new EmbedBuilder()
+    .setColor(color)
+    .setAuthor({ name: targetUser.username, iconURL: targetUser.displayAvatarURL() })
+    .setDescription(dbUser.bio || '*No bio set*')
+    .addFields(
+      { name: '📅 Since', value: startDate, inline: true },
+      { name: '💫 Coins', value: `${dbUser.coins ?? 0}`, inline: true }
+    );
+
+  if (dbUser.favorite_card_id) {
+    const { data: card } = await supabase
+      .from('cards').select('*').eq('card_id', dbUser.favorite_card_id).maybeSingle();
+    if (card) {
+      embed.addFields({ name: '🎴 Favorite Card', value: `\`${card.cardcode}\` — **${card.name}** (${card.group})`, inline: false });
+      if ((card as any).image_url) embed.setImage((card as any).image_url);
+    }
+  }
+
+  return embed;
+}
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();
@@ -18,66 +44,78 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   if (sub === 'view') {
     const target = interaction.options.getUser('user') || interaction.user;
-    const { data: user } = await supabase.from('users').select('*').eq('user_id', target.id).single();
+    const { data: user, error } = await supabase
+      .from('users').select('*').eq('user_id', target.id).maybeSingle();
+
+    if (error) console.error('[profile view] DB error:', error);
     if (!user) return interaction.editReply(getTranslation(lang, 'not_started'));
-    
-    const startDate = user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A';
-    
-    // Get favorite card info if set
-    let favoriteCardInfo = '';
-    let favoriteCard = null;
-    if ((user as any).favorite_card_id) {
-      const { data: card } = await supabase.from('cards').select('*').eq('card_id', (user as any).favorite_card_id).single();
-      if (card) {
-        favoriteCard = card;
-        favoriteCardInfo = `\`${card.cardcode}\` - **${card.name}** (${card.group})`;
-      }
-    }
-    
-    const embed = new EmbedBuilder()
-      .setColor(parseInt((user as any).profile_color?.replace('#', '') || 'ff69b4', 16))
-      .setTitle(`${target.username}'s Profile`)
-      .setDescription((user as any).bio || 'No bio set yet')
-      .addFields(
-        { name: '**Username:**', value: target.username, inline: false },
-        { name: '**Start date:**', value: startDate, inline: false },
-        { name: '**Balance:**', value: `💫 ${(user as any).coins}`, inline: false }
-      );
-    
-    if (favoriteCardInfo && favoriteCard) {
-      embed.addFields({ name: '**Favorite Card:**', value: favoriteCardInfo, inline: false });
-      embed.setImage((favoriteCard as any).image_url);
-    }
-    
+
+    const embed = await buildProfileEmbed(target, user);
     return interaction.editReply({ embeds: [embed] });
   }
 
   if (sub === 'bio') {
     const text = interaction.options.getString('text', true);
-    await supabase.from('users').update({ bio: text }).eq('user_id', userId);
-    return interaction.editReply(`✅ Bio updated to: "${text}"`);
+    const { error } = await supabase.from('users').update({ bio: text }).eq('user_id', userId);
+    if (error) {
+      console.error('[profile bio] Update error:', error);
+      return interaction.editReply({ content: `❌ ${getTranslation(lang, 'error_generic')}` });
+    }
+
+    const { data: updated } = await supabase.from('users').select('*').eq('user_id', userId).maybeSingle();
+    if (!updated) return interaction.editReply(`✅ Bio updated!`);
+    const embed = await buildProfileEmbed(interaction.user, updated);
+    embed.setFooter({ text: lang === 'es' ? '✅ ¡Biografía actualizada!' : '✅ Bio updated!' });
+    return interaction.editReply({ embeds: [embed] });
   }
 
   if (sub === 'color') {
     const hex = interaction.options.getString('hex', true);
-    if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) return interaction.editReply('❌ Invalid hex color! Use format: #RRGGBB');
-    await supabase.from('users').update({ profile_color: hex }).eq('user_id', userId);
-    return interaction.editReply(`✅ Profile color updated to ${hex}`);
+    if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) {
+      return interaction.editReply({ content: `❌ ${getTranslation(lang, 'profile_invalid_hex')} Use format: #RRGGBB` });
+    }
+    const { error } = await supabase.from('users').update({ profile_color: hex }).eq('user_id', userId);
+    if (error) {
+      console.error('[profile color] Update error:', error);
+      return interaction.editReply({ content: `❌ ${getTranslation(lang, 'error_generic')}` });
+    }
+
+    const { data: updated } = await supabase.from('users').select('*').eq('user_id', userId).maybeSingle();
+    if (!updated) return interaction.editReply(`✅ Color updated to ${hex}!`);
+    const embed = await buildProfileEmbed(interaction.user, updated);
+    embed.setFooter({ text: lang === 'es' ? `✅ Color actualizado a ${hex}` : `✅ Color updated to ${hex}` });
+    return interaction.editReply({ embeds: [embed] });
   }
 
   if (sub === 'favorite') {
     const cardcode = interaction.options.getString('cardcode', true).toUpperCase();
-    
-    // Check if card exists
+
     const { data: card } = await supabase.from('cards').select('*').eq('cardcode', cardcode).maybeSingle();
-    if (!card) return interaction.editReply(`❌ Card \`${cardcode}\` not found!`);
-    
-    // Check if user owns this card
-    const { data: owned } = await supabase.from('inventory').select('*').eq('user_id', userId).eq('card_id', (card as any).card_id).maybeSingle();
-    if (!owned) return interaction.editReply(`❌ You don't own \`${cardcode}\`! Get it from /drop or /shop first.`);
-    
-    // Set as favorite
-    await supabase.from('users').update({ favorite_card_id: (card as any).card_id }).eq('user_id', userId);
-    return interaction.editReply(`✅ Favorite card set to **${(card as any).name}** (${(card as any).group})!`);
+    if (!card) {
+      return interaction.editReply({ content: `❌ Card \`${cardcode}\` not found!` });
+    }
+
+    const { data: owned } = await supabase
+      .from('inventory').select('*').eq('user_id', userId).eq('card_id', (card as any).card_id).maybeSingle();
+    if (!owned) {
+      return interaction.editReply({
+        content: lang === 'es'
+          ? `❌ ¡No tienes \`${cardcode}\`! Consíguela con /drop o /shop.`
+          : `❌ You don't own \`${cardcode}\`! Get it from /drop or /shop first.`
+      });
+    }
+
+    const { error } = await supabase
+      .from('users').update({ favorite_card_id: (card as any).card_id }).eq('user_id', userId);
+    if (error) {
+      console.error('[profile favorite] Update error:', error);
+      return interaction.editReply({ content: `❌ ${getTranslation(lang, 'error_generic')}` });
+    }
+
+    const { data: updated } = await supabase.from('users').select('*').eq('user_id', userId).maybeSingle();
+    if (!updated) return interaction.editReply(`✅ Favorite set to **${(card as any).name}**!`);
+    const embed = await buildProfileEmbed(interaction.user, updated);
+    embed.setFooter({ text: lang === 'es' ? `✅ Carta favorita: ${(card as any).name}` : `✅ Favorite card set to ${(card as any).name}` });
+    return interaction.editReply({ embeds: [embed] });
   }
 }
