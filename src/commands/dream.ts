@@ -38,7 +38,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const userId = interaction.user.id;
   const isStaff = isAdminUser(interaction.member);
 
-  // Fetch user
   const { data: user } = await supabase
     .from('users')
     .select('*')
@@ -49,9 +48,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     return interaction.editReply({ content: lang === 'es' ? '¡Usa `/start` primero!' : 'Use `/start` first!' });
   }
 
-  // Check cooldown (skip for staff)
-  if (!isStaff && user.last_explore) {
-    const elapsed = Date.now() - new Date(user.last_explore).getTime();
+  // Use last_surf column (exists in schema) for dream cooldown
+  if (!isStaff && user.last_surf) {
+    const elapsed = Date.now() - new Date(user.last_surf).getTime();
     if (elapsed < DREAM_COOLDOWN_MS) {
       const remaining = DREAM_COOLDOWN_MS - elapsed;
       const embed = new EmbedBuilder()
@@ -66,16 +65,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const reward = Math.floor(Math.random() * 3501) + 1000; // 1000–4500
   const newBalance = (user.coins || 0) + reward;
-
-  // Update coins and cooldown timestamp (try with last_explore, fall back to coins only)
   const now = new Date().toISOString();
+
   const { error: updateError } = await supabase
     .from('users')
-    .update({ coins: newBalance, last_explore: now })
+    .update({ coins: newBalance, last_surf: now })
     .eq('user_id', userId);
 
   if (updateError) {
-    // last_explore column may not exist — update coins only
     const { error: fallbackError } = await supabase
       .from('users')
       .update({ coins: newBalance })

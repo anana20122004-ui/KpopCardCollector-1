@@ -1,0 +1,1 @@
+- [Schema column mapping](schema-columns.md) — dream uses last_surf (not last_explore); schema has no last_explore column

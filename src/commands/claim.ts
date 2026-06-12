@@ -39,13 +39,23 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   await supabase.from('users').update({ last_claim: new Date().toISOString() }).eq('user_id', userId);
 
-  const resultEmbed = new EmbedBuilder()
+  const rarityEmoji = getRarityEmoji(card.rarity);
+  const fields: { name: string; value: string; inline: boolean }[] = [
+    { name: lang === 'es' ? '🎤 Ídolo' : '🎤 Idol', value: card.name, inline: true },
+    { name: lang === 'es' ? '🎶 Grupo' : '🎶 Group', value: card.group, inline: true },
+    { name: lang === 'es' ? '✨ Rareza' : '✨ Rarity', value: rarityEmoji, inline: true },
+  ];
+  if (card.era) fields.push({ name: 'Era', value: card.era, inline: true });
+  fields.push({ name: lang === 'es' ? '🏷️ Código' : '🏷️ Code', value: `\`${card.cardcode}\``, inline: true });
+
+  const embed = new EmbedBuilder()
     .setColor(getRarityColor(card.rarity))
+    .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
     .setTitle(getTranslation(lang, 'drop_claimed_title'))
-    .setDescription(getTranslation(lang, 'drop_claimed_desc', { emoji: getRarityEmoji(card.rarity), name: card.name, group: card.group, code: card.cardcode }));
+    .addFields(fields);
 
-  if (card.image_url) resultEmbed.setImage(card.image_url);
+  if (card.image_url) embed.setImage(card.image_url);
 
-  await interaction.editReply({ embeds: [resultEmbed] });
+  await interaction.editReply({ embeds: [embed] });
   scheduleReminder(interaction.client, userId, interaction.channelId, 'claim', COOLDOWN_MINUTES * 60 * 1000);
 }
