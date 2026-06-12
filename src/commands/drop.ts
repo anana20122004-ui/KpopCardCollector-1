@@ -162,17 +162,23 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 
     // Notify claimer with an ephemeral card reveal
+    const newQty = ex ? (ex as any).quantity + 1 : 1;
+    const eraText = card.era ? ` (${card.era})` : '';
+
+    const claimDescription = claimerLang === 'es'
+      ? `¡Reclamaste **__${card.name}__** de __${card.group}__${eraText}!`
+      : `You claimed **__${card.name}__** from __${card.group}__${eraText}!`;
+
+    const claimFooter = claimerLang === 'es'
+      ? `Tienes ${newQty} copia${newQty === 1 ? '' : 's'} de esta carta`
+      : `You own ${newQty} cop${newQty === 1 ? 'y' : 'ies'} of this card`;
+
     const claimEmbed = new EmbedBuilder()
       .setColor(getRarityColor(card.rarity))
       .setAuthor({ name: i.user.username, iconURL: i.user.displayAvatarURL() })
       .setTitle(getTranslation(claimerLang, 'drop_claimed_title'))
-      .addFields(
-        { name: claimerLang === 'es' ? '🎤 Ídolo' : '🎤 Idol', value: card.name, inline: true },
-        { name: claimerLang === 'es' ? '🎶 Grupo' : '🎶 Group', value: card.group, inline: true },
-        { name: claimerLang === 'es' ? '✨ Rareza' : '✨ Rarity', value: getRarityEmoji(card.rarity), inline: true },
-        ...(card.era ? [{ name: 'Era', value: card.era, inline: true }] : []),
-        { name: claimerLang === 'es' ? '🏷️ Código' : '🏷️ Code', value: `\`${card.cardcode}\``, inline: true },
-      );
+      .setDescription(claimDescription)
+      .setFooter({ text: claimFooter });
 
     if (card.image_url) claimEmbed.setImage(card.image_url);
 
