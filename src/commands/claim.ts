@@ -39,20 +39,23 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   await supabase.from('users').update({ last_claim: new Date().toISOString() }).eq('user_id', userId);
 
-  const rarityEmoji = getRarityEmoji(card.rarity);
-  const fields: { name: string; value: string; inline: boolean }[] = [
-    { name: lang === 'es' ? '🎤 Ídolo' : '🎤 Idol', value: card.name, inline: true },
-    { name: lang === 'es' ? '🎶 Grupo' : '🎶 Group', value: card.group, inline: true },
-    { name: lang === 'es' ? '✨ Rareza' : '✨ Rarity', value: rarityEmoji, inline: true },
-  ];
-  if (card.era) fields.push({ name: 'Era', value: card.era, inline: true });
-  fields.push({ name: lang === 'es' ? '🏷️ Código' : '🏷️ Code', value: `\`${card.cardcode}\``, inline: true });
+  const newQty = ex ? (ex as any).quantity + 1 : 1;
+  const eraText = card.era ? ` (${card.era})` : '';
+
+  const description = lang === 'es'
+    ? `¡Reclamaste **__${card.name}__** de __${card.group}__${eraText}!`
+    : `You claimed **__${card.name}__** from __${card.group}__${eraText}!`;
+
+  const footerText = lang === 'es'
+    ? `Tienes ${newQty} copia${newQty === 1 ? '' : 's'} de esta carta`
+    : `You own ${newQty} cop${newQty === 1 ? 'y' : 'ies'} of this card`;
 
   const embed = new EmbedBuilder()
     .setColor(getRarityColor(card.rarity))
     .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
     .setTitle(getTranslation(lang, 'drop_claimed_title'))
-    .addFields(fields);
+    .setDescription(description)
+    .setFooter({ text: footerText });
 
   if (card.image_url) embed.setImage(card.image_url);
 
