@@ -1,0 +1,495 @@
+card_id,name,group,cardcode,era,rarity,droppable,image_url,designer_id
+1,Winter,Aespa,AESPA.WINTER.SPICY,Spicy At 'Inkigayo',3,false,https://i.postimg.cc/cJjD97Ts/Untitled107-20260208104536.png,
+2,Ningning,aespa,AESPA.NINGNING.SPICY,Spicy,3,false,https://i.postimg.cc/4NxstNvk/Untitled107_20260204164721.png,
+6,Ian,Hearts2Hearts,H2H.IAN.TC,The Chase,2,false,https://i.postimg.cc/RCRvNntM/Untitled105_Restored_20260129235224.png,1403958587843149937
+9,Seeun,STAYC,STAYC.SEEUN.S,S,1,true,https://i.postimg.cc/85BVQvm7/Untitled110_20260306102524.png,1403958587843149937
+10,Sieun,STAYC,STAYC.SIEUN.S,S,1,true,https://i.postimg.cc/Y9fwKFzL/Untitled110_20260306103929.png,1403958587843149937
+11,Sumin,STAYC,STAYC.SUMIN.S,S,1,true,https://i.postimg.cc/Y9fwKFzj/Untitled110_20260306104156.png,1403958587843149937
+12,Jiwoo,Hearts2Hearts,H2H.JIWOO.TCAI,The Chase At 'Inkigayo',3,true,https://i.postimg.cc/Xvw0rqpd/Ian_Reg_Template2_20260308164540.png,1403958587843149937
+13,Yuha,Hearts2Hearts,H2H.YUHA.TCAI,The Chase At 'Inkigayo',3,true,https://i.postimg.cc/KYny1jRt/Ian_Reg_Template2_20260308164718.png,1403958587843149937
+14,Sion,NCT Wish,NWISH.SION.SONGBIRD,Songbird,1,true,https://i.postimg.cc/28B8gS9h/Untitled111_20260306113218.png,1403958587843149937
+15,Riku,NCT Wish,NWISH.RIKU.SONGBIRD,Songbird,1,true,https://i.postimg.cc/K8SvbhCT/Untitled111_Restored_20260307041339.png,1403958587843149937
+16,Yushi,NCT Wish,NWISH.YUSHI.SONGBIRD,Songbird,1,true,https://i.postimg.cc/QdGxDZv9/Untitled111_Restored_20260307041815.png,1403958587843149937
+17,Jaehee,NCT Wish,NWISH.JAEHEE.SONGBIRD,Songbird,1,true,https://i.postimg.cc/XYS7W6tF/Untitled111_Restored_20260307042143.png,1403958587843149937
+18,Ryo,NCT Wish,NWISH.RYO.SONGBIRD,Songbird,1,true,https://i.postimg.cc/k5DnFMS3/Untitled111_Restored_20260307042353.png,1403958587843149937
+19,Sakuya,NCT Wish,NWISH.SAKUYA.SONGBIRD,Songbird,1,true,https://i.postimg.cc/cJ6sM138/Untitled111_Restored_20260307042820.png,1403958587843149937
+20,Eunchae,LE SSERAFIM,LSFM.EUNCHAE.FEARLESS,FEARLESS,1,true,https://i.postimg.cc/76MLSgpH/Ian-Reg-Template8-20260511173743.png,1403958587843149937
+21,Wumuti,XLOV,XLOV.WUMUTI.IB,I'mma Be,1,true,https://i.postimg.cc/x86xRQMk/Ian_Reg_Template_20260307234733.png,1147195711797080165
+22,Rui,XLOV,XLOV.RUI.IB,I'mma Be,1,true,https://i.postimg.cc/2jGKmQJQ/Ian_Reg_Template_20260307234938.png,1147195711797080165
+23,Hyun,XLOV,XLOV.HYUN.IB,I'mma Be,1,true,https://i.postimg.cc/44PSZ6Mv/Untitled189_20260307233425.png,1147195711797080165
+24,Haru,XLOV,XLOV.HARU.IB,I'mma Be,1,true,https://i.postimg.cc/SQdvq65W/Untitled189_20260307230907.png,1147195711797080165
+26,Sakura,LE SSERAFIM,LSFM.SAKURA.FEARLESS,FEARLESS,1,true,https://i.postimg.cc/d35txJsb/Ian-Reg-Template8-20260511173024.png,1403958587843149937
+34,San,ATEEZ,ATEEZ.SAN.GH4,GOLDEN HOUR: PART.4,1,true,https://i.postimg.cc/15Rdrpcj/Ian_Reg_Template3_20260310202509.png,949395112641839154
+35,Hongjoong,ATEEZ,ATEEZ.HONGJOONG.GH4,GOLDEN HOUR: PART.4,1,true,https://i.postimg.cc/CLM2sjHv/Ian_Reg_Template3_20260310193603.png,949395112641839154
+36,Seonghwa,ATEEZ,ATEEZ.SEONGHWA.GH4,GOLDEN HOUR: PART.4,1,true,https://i.postimg.cc/mZyq9dMq/Ian_Reg_Template3_20260310202039.png,949395112641839154
+37,Yunho,ATEEZ,ATEEZ.YUNHO.GH4,GOLDEN HOUR: PART.4,1,true,https://i.postimg.cc/ZYxgNf3G/Ian_Reg_Template3_20260310202207.png,949395112641839154
+38,Yeosang,ATEEZ,ATEEZ.YEOSANG.GH4,GOLDEN HOUR: PART.4,1,true,https://i.postimg.cc/T2JSbkmF/Ian_Reg_Template3_20260310202350.png,949395112641839154
+39,Mingi,ATEEZ,ATEEZ.MINGI.GH4,GOLDEN HOUR: PART.4,1,true,https://i.postimg.cc/FsF6VjgM/Ian_Reg_Template3_20260310202630.png,949395112641839154
+40,Wooyoung,ATEEZ,ATEEZ.WOOYOUNG.GH4,GOLDEN HOUR: PART.4,1,true,https://i.postimg.cc/tCRcNhN0/Ian_Reg_Template3_20260310202731.png,949395112641839154
+41,Jongho,ATEEZ,ATEEZ.JONGHO.GH4,GOLDEN HOUR: PART.4,1,true,https://i.postimg.cc/HsWN9Q4F/Ian_Reg_Template3_20260310202900.png,949395112641839154
+42,Sunghoon,ENHYPEN,ENHYPEN.SUNGHOON.TSV,THE SIN : VANISH,1,true,https://i.postimg.cc/1Xz7KS1t/Ian_Reg_Template3_20260308185304.png,1446629518511968347
+43,Jake,ENHYPEN,ENHYPEN.JAKE.TSV,THE SIN : VANISH,1,true,https://i.postimg.cc/6qQbhKxy/Ian_Reg_Template3_20260308185542.png,1446629518511968347
+44,Jay,ENHYPEN,ENHYPEN.JAY.TSV,THE SIN : VANISH,1,true,https://i.postimg.cc/x8dpPQV8/Ian_Reg_Template3_20260308185954.png,1446629518511968347
+45,Sunoo,ENHYPEN,ENHYPEN.SUNOO.TSV,THE SIN : VANISH,1,true,https://i.postimg.cc/Bbv7C3ft/Ian_Reg_Template3_20260308190315.png,1446629518511968347
+46,Chaewon,LE SSERAFIM,LSFM.CHAEWON.FEARLESS,FEARLESS,1,true,https://i.postimg.cc/fy8TrMWn/Ian-Reg-Template8-20260511173130.png,1403958587843149937
+47,Ni-ki,ENHYPEN,ENHYPEN.NIKI.TSV,THE SIN : VANISH,1,true,https://i.postimg.cc/QCn44zj8/Ian_Reg_Template3_20260308191045.png,1446629518511968347
+48,Jungwon,ENHYPEN,ENHYPEN.JUNGWON.TSV,THE SIN : VANISH,1,true,https://i.postimg.cc/0jHWW498/Ian_Reg_Template3_20260308191515.png,1446629518511968347
+49,Heeseung,ENHYPEN,ENHYPEN.HEESEUNG.TSV,THE SIN : VANISH,1,true,https://i.postimg.cc/8cnKKYTk/Ian_Reg_Template3_20260308191718.png,1446629518511968347
+50,Yunjin,LE SSERAFIM,LSFM.YUNJIN.FEARLESS,FEARLESS,1,true,https://i.postimg.cc/kGTXp7MP/Ian-Reg-Template8-20260511173340.png,1403958587843149937
+51,Kazuha,LE SSERAFIM,LSFM.KAZUHA.FEARLESS,FEARLESS,1,true,https://i.postimg.cc/1tczDpLS/Ian-Reg-Template8-20260511173432.png,1403958587843149937
+52,Garam,LE SSERAFIM,LSFM.GARAM.FEARLESS,FEARLESS,1,true,https://i.postimg.cc/Ss7KcWwQ/Ian-Reg-Template8-20260511173630.png,1403958587843149937
+53,Chaewon,LE SSERAFIM,LSFM.CHAEWON.ANTIFRAGILE,ANTIFRAGILE,1,true,https://i.postimg.cc/8c4s5KWT/Ian_Reg_Template5_20260308212858.png,1446629518511968347
+54,Yunjin,LE SSERAFIM,LSFM.YUNJIN.ANTIFRAGILE,ANTIFRAGILE,1,true,https://i.postimg.cc/C57d1PDM/Ian_Reg_Template4_20260308213920.png,1446629518511968347
+55,Sakura,LE SSERAFIM,LSFM.SAKURA.ANTIFRAGILE,ANTIFRAGILE,1,true,https://i.postimg.cc/Bbpt6YDS/Ian_Reg_Template4_20260308214640.png,1446629518511968347
+56,Kazuha,LE SSERAFIM,LSFM.KAZUHA.ANTIFRAGILE,ANTIFRAGILE,1,true,https://i.postimg.cc/j2cC5gNt/Ian_Reg_Template4_20260308215045.png,1446629518511968347
+57,Eunchae,LE SSERAFIM,LSFM.EUNCHAE.ANTIFRAGILE,ANTIFRAGILE,1,true,https://i.postimg.cc/qqwgRbn3/Ian_Reg_Template4_20260308215706.png,1446629518511968347
+58,Eunchae,LE SSERAFIM,LSFM.EUNCHAE.PN,Perfect Night,1,true,https://i.postimg.cc/4NCT7bwy/Ian_Reg_Template4_20260309083538.png,1446629518511968347
+59,Kazuha,LE SSERAFIM,LSFM.KAZUHA.PN,Perfect Night,1,true,https://i.postimg.cc/rF6L0Cg8/Ian_Reg_Template4_20260309083413.png,1446629518511968347
+60,Yunjin,LE SSERAFIM,LSFM.YUNJIN.PN,Perfect Night,1,true,https://i.postimg.cc/nc8tjYTn/Ian_Reg_Template4_20260309083643.png,1446629518511968347
+61,Chaewon,LE SSERAFIM,LSFM.CHAEWON.PN,Perfect Night,1,true,https://i.postimg.cc/m2xGzNVB/Ian_Reg_Template4_20260309083802.png,1446629518511968347
+62,Sakura,LE SSERAFIM,LSFM.SAKURA.PN,Perfect Night,1,true,https://i.postimg.cc/sDpCpQ06/Ian_Reg_Template4_20260309083858.png,1446629518511968347
+65,Yeji,ITZY,ITZY.YEJI.TV,Tunnel Vision,1,true,https://i.postimg.cc/FRz8BGgr/Ian-Reg-Template4-20260309000844.png,1446629518511968347
+66,Lia,ITZY,ITZY.LIA.TV,Tunnel Vision,1,true,https://i.postimg.cc/QtCwySkk/Ian-Reg-Template5-20260309001508.png,1446629518511968347
+67,Ryujin,ITZY,ITZY.RYUJIN.TV,Tunnel Vision,1,true,https://i.postimg.cc/Y90Zs8f6/Ian-Reg-Template5-20260309001734.png,1446629518511968347
+68,Chaeryeong,ITZY,ITZY.CHAERYEONG.TV,Tunnel Vision,1,true,https://i.postimg.cc/PxJ9RKzD/Ian-Reg-Template5-20260309002146.png,1446629518511968347
+69,Yuna,ITZY,ITZY.YUNA.TV,Tunnel Vision,1,true,https://i.postimg.cc/pTr46kYF/Ian-Reg-Template5-20260309002747.png,1446629518511968347
+70,Seonghwa,ATEEZ,ATEEZ.SEONGHWA.IYF,In Your Fantasy,1,true,https://i.postimg.cc/Vvh9vkXB/Ian_Reg_Template_2.png,1361728618870473026
+71,Yeosang,ATEEZ,ATEEZ.YEOSANG.IYF,In Your Fantasy,1,true,https://i.postimg.cc/fyP7yRY7/Ian_Reg_Template_4.png,1361728618870473026
+72,Yunho,ATEEZ,ATEEZ.YUNHO.IYF,In Your Fantasy,1,true,https://i.postimg.cc/qqFcqv2G/Ian_Reg_Template_3.png,1361728618870473026
+73,Hongjoong,ATEEZ,ATEEZ.HONGJOONG.IYF,In Your Fantasy,1,true,https://i.postimg.cc/j2162Sy4/Ian_Reg_Template.png,1361728618870473026
+74,Jongho,ATEEZ,ATEEZ.JONGHO.IYF,In Your Fantasy,1,true,https://i.postimg.cc/h4Z1ppN4/Ian_Reg_Template_8.png,1361728618870473026
+75,San,ATEEZ,ATEEZ.SAN.IYF,In Your Fantasy,1,true,https://i.postimg.cc/y6pyvv27/Ian_Reg_Template_5.png,1361728618870473026
+76,Mingi,ATEEZ,ATEEZ.MINGI.IYF,In Your Fantasy,1,true,https://i.postimg.cc/h4Z1ppNS/Ian_Reg_Template_6.png,1361728618870473026
+77,Wooyoung,ATEEZ,ATEEZ.WOOYOUNG.IYF,In Your Fantasy,1,true,https://i.postimg.cc/63NJyCdf/Ian-Reg-Template-7.png,1361728618870473026
+78,Rei,IVE,IVE.REI.REVIVE,Revive+,1,true,https://i.postimg.cc/QxtfpSJM/Ian-Reg-Template2-20260308093202.png,1029858840679817296
+79,Leeseo,IVE,IVE.LEESEO.REVIVE,Revive+,1,true,https://i.postimg.cc/BQVMNDmD/Ian-Reg-Template3-20260308094302.png,1029858840679817296
+80,Wonyoung,IVE,IVE.WONYOUNG.REVIVE,Revive+,1,true,https://i.postimg.cc/L8gvWXWW/Ian-Reg-Template4-20260308095458.png,1029858840679817296
+82,Liz,IVE,IVE.LIZ.REVIVE,Revive+,1,true,https://i.postimg.cc/Zqkjzmty/Ian-Reg-Template5-20260308095816.png,1029858840679817296
+83,Gaeul,IVE,IVE.GAEUL.REVIVE,Revive+,1,true,https://i.postimg.cc/LX9bGSLq/Ian-Reg-Template6-20260308100151.png,1029858840679817296
+84,Yujin,IVE,IVE.YUJIN.REVIVE,Revive+,1,true,https://i.postimg.cc/VvccJpCs/Ian-Reg-Template7-20260308100503.png,1029858840679817296
+87,SeoYeon,tripleS,TRIPLES.SEOYEON.A25,ASSEMBLE25,1,true,https://i.postimg.cc/d0YHRPBv/Triples-Regs-20260310092418.png,1446629518511968347
+88,HyeRin,tripleS,TRIPLES.HYERIN.A25,ASSEMBLE25,1,true,https://i.postimg.cc/zvbFZ0jH/Triples-Regs-20260310092901.png,1446629518511968347
+89,JiWoo,tripleS,TRIPLES.JIWOO.A25,ASSEMBLE25,1,true,https://i.postimg.cc/HLkSv0fM/Ian-Reg-Template12-20260310095329.png,1446629518511968347
+90,ChaeYeon,tripleS,TRIPLES.CHAEYEON.A25,ASSEMBLE25,1,true,https://i.postimg.cc/LsWVycty/Triples-Regs-20260310093205.png,1446629518511968347
+91,YooYeon,tripleS,TRIPLES.YOOYEON.A25,ASSEMBLE25,1,true,https://i.postimg.cc/ZKJ6LYkw/Triples-Regs-20260310093410.png,1446629518511968347
+92,SooMin,tripleS,TRIPLES.SOOMIN.A25,ASSEMBLE25,1,true,https://i.postimg.cc/dt0L1hPr/Triples-Regs-20260310093631.png,1446629518511968347
+93,NaKyoung,tripleS,TRIPLES.NAKYOUNG.A25,ASSEMBLE25,1,true,https://i.postimg.cc/631Ffbq2/Ian-Reg-Template12-20260310094406.png,1446629518511968347
+94,Karina,AESPA,AESPA.KARINA.DW,Dirty Work,1,true,https://i.postimg.cc/KYSYJmgM/Ian-Reg-Template9-20260517162540.png,1403958587843149937
+95,YuBin,tripleS,TRIPLES.YUBIN.A25,ASSEMBLE25,1,true,https://i.postimg.cc/xChn11K4/Triples-Regs-20260310094615.png,1446629518511968347
+96,Ningning,AESPA,AESPA.NINGNING.DW,Dirty Work,1,true,https://i.postimg.cc/SxqYkc9M/Ian-Reg-Template9-20260517161825.png,1403958587843149937
+98,Winter,AESPA,AESPA.WINTER.DW,Dirty Work,1,true,https://i.postimg.cc/QxcK2fFd/Ian-Reg-Template9-20260517162128.png,1403958587843149937
+99,Giselle,AESPA,AESPA.GISELLE.DW,Dirty Work,1,true,https://i.postimg.cc/TP3yWGQs/Ian-Reg-Template9-20260517162358.png,1403958587843149937
+101,Kaede,tripleS,TRIPLES.KAEDE.A25,ASSEMBLE25,1,true,https://i.postimg.cc/FzcyPGNR/Ian-Reg-Template12-20260310094913.webp,1446629518511968347
+102,Dahyun,tripleS,TRIPLES.DAHYUN.A25,ASSEMBLE25,1,true,https://i.postimg.cc/brGbZgsd/Triples-Regs-20260310095102.png,1446629518511968347
+103,Kotone,tripleS,TRIPLES.KOTONE.A25,ASSEMBLE25,1,true,https://i.postimg.cc/k5nT2r9T/Triples-Regs-20260310095721.png,1446629518511968347
+104,Yeonji,tripleS,TRIPLES.YEONJI.A25,ASSEMBLE25,1,true,https://i.postimg.cc/3rDz5Twy/Triples-Regs-20260310100008.png,1446629518511968347
+105,Nien,tripleS,TRIPLES.NIEN.A25,ASSEMBLE25,1,true,https://i.postimg.cc/P5cmkBJY/Triples-Regs-20260310100134.png,1446629518511968347
+106,Sohyun,tripleS,TRIPLES.SOHYUN.A25,ASSEMBLE25,1,true,https://i.postimg.cc/W3tLJqjh/Ian-Reg-Template12-20260310100355.png,1446629518511968347
+107,Xinyu,tripleS,TRIPLES.XINYU.A25,ASSEMBLE25,1,true,https://i.postimg.cc/ZYdYfXtw/Ian-Reg-Template12-20260310100711.png,1446629518511968347
+108,Mayu,tripleS,TRIPLES.MAYU.A25,ASSEMBLE25,1,true,https://i.postimg.cc/437jfk12/Triples-Regs-20260310101030.png,1446629518511968347
+109,Lynn,tripleS,TRIPLES.LYNN.A25,ASSEMBLE25,1,true,https://i.postimg.cc/Hx1vTJnV/Triples-Regs-20260310101203.png,1446629518511968347
+110,Joobin,tripleS,TRIPLES.JOOBIN.A25,ASSEMBLE25,1,true,https://i.postimg.cc/63hcwYFZ/Triples-Regs-20260310101629.png,1446629518511968347
+111,Hayeon,tripleS,TRIPLES.HAYEON.A25,ASSEMBLE25,1,true,https://i.postimg.cc/j5vHBCJ1/Triples-Regs-20260310101801.png,1446629518511968347
+112,Shion,tripleS,TRIPLES.SHION.A25,ASSEMBLE25,1,true,https://i.postimg.cc/bJYb08BX/Ian-Reg-Template12-20260310102158.png,1446629518511968347
+113,Chaewon,tripleS,TRIPLES.CHAEWON.A25,ASSEMBLE25,1,true,https://i.postimg.cc/nL29hgcv/Ian-Reg-Template12-20260310102311.png,1446629518511968347
+114,Sullin,tripleS,TRIPLES.SULLIN.A25,ASSEMBLE25,1,true,https://i.postimg.cc/Ss5LfR2B/Ian-Reg-Template12-20260310102424.png,1446629518511968347
+115,Seoah,tripleS,TRIPLES.SEOAH.A25,ASSEMBLE25,1,true,https://i.postimg.cc/CM3HZZVQ/Ian-Reg-Template12-20260310102523.png,1446629518511968347
+116,Jiyeon,tripleS,TRIPLES.JIYEON.A25,ASSEMBLE25,1,true,https://i.postimg.cc/9X7yjWqQ/Ian-Reg-Template12-20260310102632.png,1446629518511968347
+117,Tzuyu,TWICE,TWICE.TZUYU.STRATEGY,Strategy,1,true,https://i.postimg.cc/RCDpgVxq/Ian-Reg-Template17-20260308232414.png,1029858840679817296
+118,Chaeyoung,TWICE,TWICE.CHAEYOUNG.STRATEGY,Strategy,1,true,https://i.postimg.cc/wTPKRQjW/Ian-Reg-Template16-20260308232439.png,1029858840679817296
+119,Dahyun,TWICE,TWICE.DAHYUN.STRATEGY,Strategy,1,true,https://i.postimg.cc/HsKG89Lg/Ian-Reg-Template15-20260308232509.png,1029858840679817296
+120,Mina,TWICE,TWICE.MINA.STRATEGY,Strategy,1,true,https://i.postimg.cc/HLvvFp8N/Ian-Reg-Template14-20260308232526.png,1029858840679817296
+121,Jihyo,TWICE,TWICE.JIHYO.STRATEGY,Strategy,1,true,https://i.postimg.cc/BQ5Y451b/Ian-Reg-Template13-20260308232541.png,1029858840679817296
+122,Sana,TWICE,TWICE.SANA.STRATEGY,Strategy,1,true,https://i.postimg.cc/C1f7tbgd/Ian-Reg-Template12-20260308232557.png,1029858840679817296
+123,Nayeon,TWICE,TWICE.NAYEON.STRATEGY,Strategy,1,true,https://i.postimg.cc/L53tKT0g/Ian-Reg-Template11-20260308232612.png,1029858840679817296
+124,Momo,TWICE,TWICE.MOMO.STRATEGY,Strategy,1,true,https://i.postimg.cc/sf472Tw3/Ian-Reg-Template10-20260308232629.png,1029858840679817296
+125,Jeongyeon,TWICE,TWICE.JEONGYEON.STRATEGY,Strategy,1,true,https://i.postimg.cc/FzTYVnB3/Ian-Reg-Template9-20260308232645.png,1029858840679817296
+126,YANGDONGHWA,Soloist,SOLOIST.DONGHWA.BLACKOUT,Blackout,1,true,https://i.postimg.cc/vZg45hLQ/Ian_Reg_Template2_20260309072750.png,866913743932489738
+127,YANGDONGHWA,Soloist,SOLOIST.DONGHWA.BLACKOUT.B,Blackout,1,true,https://i.postimg.cc/t4ZsFktW/Ian_Reg_Template2_20260309072932.png,866913743932489738
+128,Lily,NMIXX,NMIXX.LILY.BV,Blue Valentine,1,true,https://i.postimg.cc/TYgTqs5D/Ian_Reg_Template6_20260309115154.png,1446629518511968347
+129,Haewon,NMIXX,NMIXX.HAEWON.BV,Blue Valentine,1,true,https://i.postimg.cc/nh1ZNQ16/Ian_Reg_Template6_20260309115527.png,1446629518511968347
+130,Sullyoon,NMIXX,NMIXX.SULLYOON.BV,Blue Valentine,1,true,https://i.postimg.cc/vmHMyHq8/Ian_Reg_Template6_20260309120251.png,1446629518511968347
+131,Bae,NMIXX,NMIXX.BAE.BV,Blue Valentine,1,true,https://i.postimg.cc/YSn7CKZ3/Ian_Reg_Template6_20260309120657.png,1446629518511968347
+132,Jiwoo,NMIXX,NMIXX.JIWOO.BV,Blue Valentine,1,true,https://i.postimg.cc/YSn7CKTM/Ian_Reg_Template6_20260309120959.png,1446629518511968347
+133,Kyujin,NMIXX,NMIXX.KYUJIN.BV,Blue Valentine,1,true,https://i.postimg.cc/FRY4fCQK/Ian_Reg_Template6_20260309121248.png,1446629518511968347
+134,Kino,SOLOIST,SOLOIST.KINO.POSE,Pose,1,true,https://i.postimg.cc/0N1GynbB/Ian-Reg-Template2-20260308191726.png,1362108076882264204
+135,Kino,SOLOIST,SOLOIST.KINO.POSE.B,Pose,1,true,https://i.postimg.cc/T2sDP0sz/Ian-Reg-Template2-20260308192540.png,1362108076882264204
+136,A-na,Hearts2Hearts,H2H.ANA.TCAI,The Chase At 'Inkigayo',3,true,https://i.postimg.cc/VNjcJvdB/Ian_Reg_Template2_20260308165326.png,1403958587843149937
+137,Juun,Hearts2Hearts,H2H.JUUN.TCAI,The Chase At 'Inkigayo',3,true,https://i.postimg.cc/5twMXy65/Ian_Reg_Template2_20260308165723.png,1403958587843149937
+138,Ye-on,Hearts2Hearts,H2H.YEON.TCAI,The Chase At 'Inkigayo',3,true,https://i.postimg.cc/NMBvmtH9/Ian_Reg_Template2_20260308165826.png,1403958587843149937
+139,Carmen,Hearts2Hearts,H2H.CARMEN.TCAI,The Chase At 'Inkigayo',3,true,https://i.postimg.cc/fLDQms9S/Ian_Reg_Template2_20260308170016.png,1403958587843149937
+140,Stella,Hearts2Hearts,H2H.STELLA.TCAI,The Chase At 'Inkigayo',3,true,https://i.postimg.cc/FRNX3vLJ/Ian_Reg_Template2_20260308170100.png,1403958587843149937
+141,Ian,Hearts2Hearts,H2H.IAN.TCAI,The Chase At 'Inkigayo',3,true,https://i.postimg.cc/TwfvgxDb/Ian_Reg_Template2_20260308170223.png,1403958587843149937
+142,J,STAYC,STAYC.J.S,S,1,true,https://i.postimg.cc/pTYtbjJp/Untitled110_20260306104352.png,1403958587843149937
+143,Isa,STAYC,STAYC.ISA.S,S,1,true,https://i.postimg.cc/kGJPn5TS/Untitled110_20260306104505.png,1403958587843149937
+144,Yoon,STAYC,STAYC.YOON.S,S,1,true,https://i.postimg.cc/j2xYsjMN/Untitled110_20260306104635.png,1403958587843149937
+145,Seowon,UNIS,UNIS.SEOWON.IHYNBC,I Hope You Never Become Happy,1,true,https://i.postimg.cc/J4MZvxsk/Ian_Reg_Template6_20260309211622.png,1446629518511968347
+146,Hyeonju,UNIS,UNIS.HYEONJU.IHYNBC,I Hope You Never Become Happy,1,true,https://i.postimg.cc/WbTgC8dD/Ian_Reg_Template6_20260309211746.png,1446629518511968347
+147,Gehlee,UNIS,UNIS.GEHLEE.IHYNBC,I Hope You Never Become Happy,1,true,https://i.postimg.cc/ncpBg2Xj/Ian_Reg_Template6_20260309211857.png,1446629518511968347
+148,Yunha,UNIS,UNIS.YUNHA.IHYNBC,I Hope You Never Become Happy,1,true,https://i.postimg.cc/X74dmLry/Ian_Reg_Template6_20260309212035.png,1446629518511968347
+149,Kotoko,UNIS,UNIS.KOTOKO.IHYNBC,I Hope You Never Become Happy,1,true,https://i.postimg.cc/bNgkhnnS/Ian_Reg_Template6_20260309212214.png,1446629518511968347
+150,Yoona,UNIS,UNIS.YOONA.IHYNBC,I Hope You Never Become Happy,1,true,https://i.postimg.cc/pXRz4CmB/Ian_Reg_Template6_20260309212316.png,1446629518511968347
+151,Nana,UNIS,UNIS.NANA.IHYNBC,I Hope You Never Become Happy,1,true,https://i.postimg.cc/PrTY9yC4/Ian_Reg_Template6_20260309212509.png,1446629518511968347
+152,Elisia,UNIS,UNIS.ELISIA.IHYNBC,I Hope You Never Become Happy,1,true,https://i.postimg.cc/jdcPbffJ/Ian_Reg_Template6_20260309212620.png,1446629518511968347
+153,Bang Chan,Stray Kids,SKZ.BANGCHAN.YELLOWWOOD,Cle2: Yellow Wood,1,true,https://i.postimg.cc/7hJGjqdD/Ian_Reg_Template4_20260309182039.png,1185511897592770682
+154,Lee Know,Stray Kids,SKZ.LEEKNOW.YELLOWWOOD,Cle2: Yellow Wood,1,true,https://i.postimg.cc/ydtXDpz6/Ian_Reg_Template4_20260309182051.png,1185511897592770682
+155,Changbin,Stray Kids,SKZ.CHANGBIN.YELLOWWOOD,Cle2: Yellow Wood,1,true,https://i.postimg.cc/QtQx7V28/Ian_Reg_Template4_20260309182101.png,1185511897592770682
+156,Hyunjin,Stray Kids,SKZ.HYUNJIN.YELLOWWOOD,Cle2: Yellow Wood,1,true,https://i.postimg.cc/1tG5F4kR/Ian_Reg_Template4_20260309182110.png,1185511897592770682
+157,Han,Stray Kids,SKZ.HAN.YELLOWWOOD,Cle2: Yellow Wood,1,true,https://i.postimg.cc/B6TQFtr6/Ian_Reg_Template4_20260309182119.png,1185511897592770682
+158,Felix,Stray Kids,SKZ.FELIX.YELLOWWOOD,Cle2: Yellow Wood,1,true,https://i.postimg.cc/Y96qFj5C/Ian_Reg_Template4_20260309182139.png,1185511897592770682
+159,Seungmin,Stray Kids,SKZ.SEUNGMIN.YELLOWWOOD,Cle2: Yellow Wood,1,true,https://i.postimg.cc/nz4cmMy9/Ian_Reg_Template4_20260309182148.png,1185511897592770682
+160,I.N,Stray Kids,SKZ.IN.YELLOWWOOD,Cle2: Yellow Wood,1,true,https://i.postimg.cc/C1GL8d3H/Ian_Reg_Template4_20260309182156.png,1185511897592770682
+161,Bang Chan,Stray Kids,SKZ.BANGCHAN.CL,Clé : Levanter,1,true,https://i.postimg.cc/j2T9WjTd/Ian_Reg_Template3_20260309222847.png,949395112641839154
+162,Lee Know,Stray Kids,SKZ.LEEKNOW.CL,Clé : Levanter,1,true,https://i.postimg.cc/PJHcLqH5/Ian_Reg_Template3_20260309223308.png,949395112641839154
+163,Changbin,Stray Kids,SKZ.CHANGBIN.CL,Clé : Levanter,1,true,https://i.postimg.cc/HnmKJLmc/Ian_Reg_Template3_20260309223541.png,949395112641839154
+164,Hyunjin,Stray Kids,SKZ.HYUNJIN.CL,Clé : Levanter,1,true,https://i.postimg.cc/1XSTgzSX/Ian_Reg_Template3_20260309223725.png,949395112641839154
+165,Han,Stray Kids,SKZ.HAN.CL,Clé : Levanter,1,true,https://i.postimg.cc/7h4cCL4L/Ian_Reg_Template3_20260309223946.png,949395112641839154
+166,Felix,Stray Kids,SKZ.FELIX.CL,Clé : Levanter,1,true,https://i.postimg.cc/L5S7qsSq/Ian_Reg_Template3_20260309224135.png,949395112641839154
+167,Seungmin,Stray Kids,SKZ.SEUNGMIN.CL,Clé : Levanter,1,true,https://i.postimg.cc/rsTbdpTR/Ian_Reg_Template3_20260309224319.png,949395112641839154
+168,I.N,Stray Kids,SKZ.IN.CL,Clé : Levanter,1,true,https://i.postimg.cc/D0cN1Kf0/Ian_Reg_Template3_20260309224503.png,949395112641839154
+169,Bang Chan,Stray Kids,SKZ.BANGCHAN.5STAR,5 Star,1,true,https://i.postimg.cc/k4P9cq97/Ian_Reg_Template28_20260309215112.png,1029858840679817296
+170,Felix,Stray Kids,SKZ.FELIX.5STAR,5 Star,1,true,https://i.postimg.cc/G2nrQdrC/Ian_Reg_Template33_20260309223504.png,1029858840679817296
+171,Han,Stray Kids,SKZ.HAN.5STAR,5 Star,1,true,https://i.postimg.cc/nLDpBMy7/Ian_Reg_Template32_20260309223522.png,1029858840679817296
+172,Hyunjin,Stray Kids,SKZ.HYUNJIN.5STAR,5 Star,1,true,https://i.postimg.cc/B6fsg4ss/Ian_Reg_Template31_20260309223539.png,1029858840679817296
+173,Changbin,Stray Kids,SKZ.CHANGBIN.5STAR,5 Star,1,true,https://i.postimg.cc/SxjyQgD4/Ian_Reg_Template30_20260309223610.png,1029858840679817296
+174,Seungmin,Stray Kids,SKZ.SEUNGMIN.5STAR,5 Star,1,true,https://i.postimg.cc/QdVXNf0Z/Ian_Reg_Template34_20260309224806.png,1029858840679817296
+175,I.N,Stray Kids,SKZ.IN.5STAR,5 Star,1,true,https://i.postimg.cc/HkKTrbPK/Ian_Reg_Template35_20260309225110_1.png,1029858840679817296
+176,Lee Know,Stray Kids,SKZ.LEEKNOW.5STAR,5 Star,1,true,https://i.postimg.cc/RZ8vWwD5/Ian_Reg_Template36_20260309225356.png,1029858840679817296
+178,Bobby,SOLOIST,SOLOIST.BOBBY.SR,Sir Robert’s,1,true,https://i.postimg.cc/Yq7cKPtf/Untitled113.png,1361728618870473026
+179,Yeonjun,SOLOIST,SOLOIST.YEONJUN.NLPT1,No Labels: Part 01,1,true,https://i.postimg.cc/rpWh2t0H/Ian-Reg-Template3-20260308204428.png,1362108076882264204
+180,Yeonjun,SOLOIST,SOLOIST.YEONJUN.NLPT1.B,No Labels: Part 01,1,true,https://i.postimg.cc/s2FcmD67/Ian-Reg-Template3-20260308204821.png,1362108076882264204
+181,Chuu,SOLOIST,SOLOIST.CHUU.HB,Honeybee,1,true,https://i.postimg.cc/cJZ36KkX/A54E4695-CB50-4BA6-8E8D-9AC87412B9A5.png,1029858840679817296
+182,Intak,P1HARMONY,P1HARMONY.INTAK.SADSONG,Sad Song,1,true,https://i.postimg.cc/tRhYnRP2/Ian-Reg-Template3-20260308162303.png,1403958587843149937
+183,Keeho,P1HARMONY,P1HARMONY.KEEHO.SADSONG,Sad Song,1,true,https://i.postimg.cc/fLD1Hv2K/Ian-Reg-Template3-20260308162408.png,1403958587843149937
+184,Theo,P1HARMONY,P1HARMONY.THEO.SADSONG,Sad Song,1,true,https://i.postimg.cc/Dy9jjgmv/Ian-Reg-Template3-20260308162557.png,1403958587843149937
+185,Jongseob,P1HARMONY,P1HARMONY.JONGSEOB.SADSONG,Sad Song,1,true,https://i.postimg.cc/W1c861fd/Ian-Reg-Template3-20260308162700.png,1403958587843149937
+186,Soul,P1HARMONY,P1HARMONY.SOUL.SADSONG,Sad Song,1,true,https://i.postimg.cc/Z5mgYHmQ/Ian-Reg-Template3-20260308162750.png,1403958587843149937
+187,Jiung,P1HARMONY,P1HARMONY.JIUNG.SADSONG,Sad Song,1,true,https://i.postimg.cc/KvSpQf1Y/Ian-Reg-Template3-20260308162856.png,1403958587843149937
+188,Yeonjun,SOLOIST,SOLOIST.YEONJUN.GGUM,GGUM,2,true,https://i.postimg.cc/d0y48TJ1/Ian-Reg-Template9-20260309212739.png,1362108076882264204
+189,Yeonjun,SOLOIST,SOLOIST.YEONJUN.GGUM.B,GGUM,2,true,https://i.postimg.cc/ZRJpC9nm/Ian-Reg-Template9-20260309213015.png,1362108076882264204
+190,Bang Chan,STRAY KIDS,SKZ.BANGCHAN.IAMYOU,I Am YOU,1,true,https://i.postimg.cc/gcXBVJKx/Ian-Reg-Template4-20260308222300.png,1362108076882264204
+191,Lee Know,STRAY KIDS,SKZ.LEEKNOW.IAMYOU,I Am YOU,1,true,https://i.postimg.cc/yY7cVpWW/Ian-Reg-Template4-20260308222516.png,1362108076882264204
+192,Changbin,STRAY KIDS,SKZ.CHANGBIN.IAMYOU,I Am YOU,1,true,https://i.postimg.cc/nzZcv5yF/Ian-Reg-Template4-20260308222649.png,1362108076882264204
+193,Hyunjin,STRAY KIDS,SKZ.HYUNJIN.IAMYOU,I Am YOU,1,true,https://i.postimg.cc/BbjWDBnD/Ian-Reg-Template4-20260308222814.png,1362108076882264204
+194,Han,STRAY KIDS,SKZ.HAN.IAMYOU,I Am YOU,1,true,https://i.postimg.cc/NM9q2x0z/Ian-Reg-Template4-20260308222927.png,1362108076882264204
+195,Felix,STRAY KIDS,SKZ.FELIX.IAMYOU,I Am YOU,1,true,https://i.postimg.cc/3xdBTfbJ/Ian-Reg-Template4-20260308223038.png,1362108076882264204
+196,Seungmin,STRAY KIDS,SKZ.SEUNGMIN.IAMYOU,I Am YOU,1,true,https://i.postimg.cc/dVy5CSR9/Ian-Reg-Template4-20260308223153.png,1362108076882264204
+197,I.N,STRAY KIDS,SKZ.IN.IAMYOU,I Am YOU,1,true,https://i.postimg.cc/g0pHZc2R/Ian-Reg-Template4-20260308223344.png,1362108076882264204
+198,Bang Chan,STRAY KIDS,SKZ.BANGCHAN.CEREMONY,CEREMONY,1,true,https://i.postimg.cc/vBFTBDYC/Ian-Reg-Template3-20260309181657.png,1185511897592770682
+199,Lee Know,STRAY KIDS,SKZ.LEEKNOW.CEREMONY,CEREMONY,1,true,https://i.postimg.cc/zB7NrfVW/Ian-Reg-Template3-20260309181710.png,1185511897592770682
+200,Changbin,STRAY KIDS,SKZ.CHANGBIN.CEREMONY,CEREMONY,1,true,https://i.postimg.cc/h4Yw7xWx/Ian-Reg-Template3-20260309181719.png,1185511897592770682
+201,Hyunjin,STRAY KIDS,SKZ.HYUNJIN.CEREMONY,CEREMONY,1,true,https://i.postimg.cc/NM9nNfmW/Ian-Reg-Template3-20260309181729.png,1185511897592770682
+202,Han,STRAY KIDS,SKZ.HAN.CEREMONY,CEREMONY,1,true,https://i.postimg.cc/GhQXxs6H/Ian-Reg-Template3-20260309181739.png,1185511897592770682
+203,Felix,STRAY KIDS,SKZ.FELIX.CEREMONY,CEREMONY,1,true,https://i.postimg.cc/3xk204TV/Ian-Reg-Template3-20260309181748.png,1185511897592770682
+204,Seungmin,STRAY KIDS,SKZ.SEUNGMIN.CEREMONY,CEREMONY,1,true,https://i.postimg.cc/fLCVrDsx/Ian-Reg-Template3-20260309181757.png,1185511897592770682
+205,I.N,STRAY KIDS,SKZ.IN.CEREMONY,CEREMONY,1,true,https://i.postimg.cc/NMjsLThn/Ian-Reg-Template3-20260309181807.png,1185511897592770682
+206,Yeji,SOLOIST,SOLOIST.YEJI.AIR,Air,1,true,https://i.postimg.cc/fykY7Jdm/6221A0DF-1E45-44F9-B158-D24537073FD4.png,1029858840679817296
+207,Yeji,SOLOIST,SOLOIST.YEJI.AIR.B,Air,2,true,https://i.postimg.cc/SQXrzvf1/A00CCFAF-5E13-429A-98B2-FB15BD45C753.png,1029858840679817296
+208,Kino,SOLOIST,SOLOIST.KINO.POSE.D,Pose,2,true,https://i.postimg.cc/rsCzrTnf/Ian-Reg-Template8-20260309210940.png,1362108076882264204
+209,Kino,SOLOIST,SOLOIST.KINO.POSE.C,Pose,2,true,https://i.postimg.cc/Y21vVNrm/Ian-Reg-Template8-20260309210947.png,1362108076882264204
+210,IU,SOLOIST,SOLOIST.IU.LILAC,Lilac,1,true,https://i.postimg.cc/cCZwjXVq/55FF7B16-C7D5-4AF4-A63A-A808E86F90A4.png,1029858840679817296
+211,IU,SOLOIST,SOLOIST.IU.LILAC.B,Lilac,2,true,https://i.postimg.cc/NG71Tvrx/A717233D-D4CB-49CB-A534-6AD8C8DE9EC6.png,1029858840679817296
+212,IU,SOLOIST,SOLOIST.IU.LWA,Love Wins All,2,true,https://i.postimg.cc/02XZM1TR/517D20CC-06AF-4DC6-84CB-3C0D84788C8B.png,1029858840679817296
+213,Chuu,SOLOIST,SOLOIST.CHUU.OCITR,Only cry in the rain,2,true,https://i.postimg.cc/MHvMgNd1/69E81145-789D-40CE-AFB2-702ED375529D.png,1029858840679817296
+214,Chuu,SOLOIST,SOLOIST.CHUU.SB,Strawberry Rush,1,true,https://i.postimg.cc/6qcKHCZ7/F36D50A6-2B27-492E-A9DF-3A1F7A32B12B.png,1029858840679817296
+215,Chuu,SOLOIST,SOLOIST.CHUU.SB.B,Strawberry Rush,2,true,https://i.postimg.cc/pX0xzYx0/DF5AE4F5-54D3-4702-A819-F5B3C8746997.png,1029858840679817296
+216,Chuu,SOLOIST,SOLOIST.CHUU.HOWL,Howl,1,true,https://i.postimg.cc/rFqxKcF0/BFE16D1E-8EEE-40CE-8C40-2552017C4A96.png,1029858840679817296
+217,Chuu,SOLOIST,SOLOIST.CHUU.HOWL.B,Howl,2,true,https://i.postimg.cc/K8HMqM7f/C3641DB1-20D3-4294-9823-BE885F88AC12.png,1029858840679817296
+218,Keeho,P1Harmony,P1HARMONY.KEEHO.DUH,DUH,2,true,https://i.postimg.cc/W16CL0bh/Ian_Reg_Template5_20260310181123.png,685872167786643494
+219,Jiung,P1Harmony,P1HARMONY.JIUNG.DUH,DUH,2,true,https://i.postimg.cc/MHMm6J0v/Ian_Reg_Template5_20260310180640.png,685872167786643494
+220,Theo,P1Harmony,P1HARMONY.THEO.DUH,DUH,2,true,https://i.postimg.cc/1RfkngJZ/Ian_Reg_Template4_20260310180058.png,685872167786643494
+221,Intak,P1Harmony,P1HARMONY.INTAK.DUH,DUH,2,true,https://i.postimg.cc/kG6vJPNX/Ian_Reg_Template_20260310144155.png,685872167786643494
+222,Jongseob,P1Harmony,P1HARMONY.JONGSEOB.DUH,DUH,2,true,https://i.postimg.cc/PJpQXnbJ/Ian_Reg_Template3_20260310175055.png,685872167786643494
+223,Soul,P1Harmony,P1HARMONY.SOUL.DUH,DUH,2,true,https://i.postimg.cc/brD9yf0v/Ian_Reg_Template2_20260310160207.png,685872167786643494
+224,Bang Chan,Stray Kids,SKZ.BANGCHAN.SKZOOSELCA,Skzoo Selca,4,true,https://i.postimg.cc/sXyYhHkq/Ian_Reg_Template8_20260310174918.png,1185511897592770682
+227,Lee Know,Stray Kids,SKZ.LEEKNOW.SKZOOSELCA,Skzoo Selca,4,true,https://i.postimg.cc/N0x4pwkq/Ian_Reg_Template8_20260310174911.png,1185511897592770682
+228,Wumuti,XLOV,XLOV.WUMUTI.IONE,I ONE,2,true,https://i.postimg.cc/B6szngMn/Ian_Reg_Template_20260308000037.png,1147195711797080165
+229,Rui,XLOV,XLOV.RUI.IONE,I ONE,2,true,https://i.postimg.cc/85DYzHtM/Ian_Reg_Template_20260308000333.png,1147195711797080165
+230,Hyun,XLOV,XLOV.HYUN.IONE,I ONE,2,true,https://i.postimg.cc/Pxh7542b/Ian_Reg_Template_20260308000528.png,1147195711797080165
+231,Haru,XLOV,XLOV.HARU.IONE,I ONE,2,true,https://i.postimg.cc/V61hkRDM/Ian_Reg_Template_20260308000722.png,1147195711797080165
+232,Changbin,Stray Kids,SKZ.CHANGBIN.SKZOOSELCA,Skzoo Selca,4,true,https://i.postimg.cc/gr9z53kz/Ian_Reg_Template8_20260310174902.png,1185511897592770682
+233,Hyunjin,Stray Kids,SKZ.HYUNJIN.SKZOOSELCA,Skzoo Selca,4,true,https://i.postimg.cc/1zMztgM7/Ian_Reg_Template8_20260310174852.png,1185511897592770682
+234,Han,Stray Kids,SKZ.HAN.SKZOOSELCA,Skzoo Selca,4,true,https://i.postimg.cc/CKJK1ZJd/Ian_Reg_Template8_20260310174828.png,1185511897592770682
+235,Wumuti,XLOV,XLOV.WUMUTI.1AFC,1st Anniversary Fan Con,3,true,https://i.postimg.cc/Px30VDQZ/Ian_Reg_Template_20260308003417.png,1147195711797080165
+236,Felix,Stray Kids,SKZ.FELIX.SKZOOSELCA,Skzoo Selca,4,true,https://i.postimg.cc/cJdH077w/Ian_Reg_Template8_20260310174821.png,1185511897592770682
+237,Rui,XLOV,XLOV.RUI.1AFC,1st Anniversary Fan Con,3,true,https://i.postimg.cc/Jn6SYX5j/Ian_Reg_Template_20260308003203.png,1147195711797080165
+238,Hyun,XLOV,XLOV.HYUN.1AFC,1st Anniversary Fan Con,3,true,https://i.postimg.cc/nzRNSmGB/Ian_Reg_Template_20260308003615.png,1147195711797080165
+239,Seungmin,Stray Kids,SKZ.SEUNGMIN.SKZOOSELCA,Skzoo Selca,4,true,https://i.postimg.cc/QMjthgQ2/Ian_Reg_Template8_20260310174648.png,1185511897592770682
+240,Haru,XLOV,XLOV.HARU.1AFC,1st Anniversary Fan Con,3,true,https://i.postimg.cc/gJS1thHv/Ian_Reg_Template_20260308003758.png,1147195711797080165
+241,I.N,Stray Kids,SKZ.IN.SKZOOSELCA,Skzoo Selca,4,true,https://i.postimg.cc/4NbRZDWt/Ian_Reg_Template8_20260310174639.png,1185511897592770682
+242,Wumuti,XLOV,XLOV.WUMUTI.TWTU,250928 Twitter Update,4,true,https://i.postimg.cc/NjZ6DjHP/Ian_Reg_Template_20260308010201.png,1147195711797080165
+243,Rui,XLOV,XLOV.RUI.TWTU,250928 Twitter Update,4,true,https://i.postimg.cc/BnRTpnKY/Ian_Reg_Template_20260308010341.png,1147195711797080165
+244,Hyun,XLOV,XLOV.HYUN.TWTU,250928 Twitter Update,4,true,https://i.postimg.cc/bw4xgwtB/Ian_Reg_Template_20260308010525.png,1147195711797080165
+245,Haru,XLOV,XLOV.HARU.TWTU,250928,4,true,https://i.postimg.cc/L8GtD81Q/Ian_Reg_Template_20260308010729.png,1147195711797080165
+246,Soobin,TXT,TXT.SOOBIN.TSCT,The Star Chapter: TOGETHER,1,true,https://i.postimg.cc/zDVPZgVx/Soobin_TCS_T.webp,1362108076882264204
+247,Yeonjun,TXT,TXT.YEONJUN.TSCT,The Star Chapter: TOGETHER,1,true,https://i.postimg.cc/Y2hyKWhD/Yeonjun_TCS_T.webp,1362108076882264204
+248,Taehyun,TXT,TXT.TAEHYUN.TSCT,The Star Chapter: TOGETHER,1,true,https://i.postimg.cc/c1r5ynrD/Taehyun_TCS_T.webp,1362108076882264204
+249,Beomgyu,TXT,TXT.BEOMGYU.TSCT,The Star Chapter: TOGETHER,1,true,https://i.postimg.cc/grbnJpzY/Beomgyu_TCS_T.webp,1362108076882264204
+250,Huening Kai,TXT,TXT.HUENINGKAI.TSCT,The Star Chapter: TOGETHER,1,true,https://i.postimg.cc/kMBh3bBf/Huening_Kai_TCS_T.webp,1362108076882264204
+252,Wonhee,ILLIT,ILLIT.WONHEE.NCA,Not Cute Anymore,1,true,https://i.postimg.cc/KzKMcrYq/Ian-Reg-Template16-20260512070818.png,1185511897592770682
+253,Moka,ILLIT,ILLIT.MOKA.NCA,Not Cute Anymore,1,true,https://i.postimg.cc/tRnKFXsv/Moka_Not_Cute_Anymore.webp,1446629518511968347
+254,Minju,ILLIT,ILLIT.MINJU.NCA,Not Cute Anymore,1,true,https://i.postimg.cc/59Qh8xXk/Minju_Not_Cute_Anymore.webp,1446629518511968347
+255,Iroha,ILLIT,ILLIT.IROHA.NCA,Not Cute Anymore,1,true,https://i.postimg.cc/CMn3bFRJ/Iroha_Not_Cute_Anymore.webp,1446629518511968347
+256,Yunah,ILLIT,ILLIT.YUNAH.NCA,Not Cute Anymore,1,true,https://i.postimg.cc/ZR9dYFqD/Ian-Reg-Template16-20260512070916.png,1446629518511968347
+258,Jihyo,TWICE,TWICE.JIHYO.OPENING,Opening Event,5,true,https://i.postimg.cc/V6mF9PK3/Ian-opening-event-20260311095829.png,"842172611697573929,685872167786643494"
+259,Ningning,aespa,AESPA.NINGNING.OPENING,Opening Event,5,true,https://i.postimg.cc/L57C30Yq/Untitled236-20260310103508.png,842172611697573929
+260,Fuma,&TEAM,&TEAM.FUMA.OPENING,Opening Event,5,true,https://i.postimg.cc/RCbDmqs9/Ian-opening-event3-20260311023025.png,"842172611697573929,1222653247798382723"
+262,Tsuki,BILLLIE,BILLLIE.TSUKI.OPENING,Opening Event,5,true,https://i.postimg.cc/DfYMhmj2/Ian-opening-event2-20260312011850.png,"842172611697573929,1222653247798382723"
+263,Hyunjin,Stray Kids,SKZ.HYUNJIN.OPENING,Opening Event,5,true,https://i.postimg.cc/ZYDMm0fD/Ian-opening-event2-20260311002328.png,"1222653247798382723,842172611697573929"
+264,Serim,CRAVITY,CRAVITY.SERIM.OPENING,Opening Event,5,true,https://i.postimg.cc/mDp8T6SJ/Ian-opening-event-20260311100301.png,"842172611697573929,1105911692266844314"
+265,Woozi,SEVENTEEN,SVT.WOOZI.OPENING,Opening Event,5,true,https://i.postimg.cc/Y25kxbQD/Ian-opening-event-20260311100645.png,"842172611697573929,685872167786643494"
+266,Minnie,IDLE,IDLE.MINNIE.OPENING,Opening Event,5,true,https://i.postimg.cc/ncS459hF/Ian-opening-event2-20260312001232.png,"842172611697573929,949395112641839154"
+267,Heejin,ARTMS,ARTMS.HEEJIN.OPENING,Opening Event,5,true,https://i.postimg.cc/hGBf3Kxw/Ian-opening-event2-20260312000358.png,"842172611697573929,949395112641839154"
+268,Huening Kai,TXT,TXT.KAI.OPENING,Opening Event,5,true,https://i.postimg.cc/vHC1frmL/Ian-opening-event-20260312153718.png,"842172611697573929,1163261551336247328"
+269,Yechan,xikers,XIKERS.YECHAN.OPENING,Opening Event,5,true,https://i.postimg.cc/xCkr1yQs/Ian-opening-event5-20260312154117.png,"842172611697573929,1163261551336247328"
+270,Junhan,Xdinary Heroes,XDH.JUNHAN.OPENING,Opening Event,5,true,https://i.postimg.cc/4dKCxbGW/Ian-opening-event2-20260312154050.png,"842172611697573929,1163261551336247328"
+271,Rui,XLOV,XLOV.RUI.OPENING,Opening Event,5,true,https://i.postimg.cc/jq9zRDJQ/Ian-opening-event5-20260312230355.png,842172611697573929
+272,Lily,NMIXX,NMIXX.LILY.OPENING,Opening Event,5,true,https://i.postimg.cc/nV5vnXQq/Ian-opening-event4-20260312225541.png,842172611697573929
+273,Yeojin,LOOSSEMBLE,LOOSSEMBLE.YEOJIN.OPENING,Opening Event,5,true,https://i.postimg.cc/3NPp1qH6/Ian-opening-event4-20260312154418.png,"842172611697573929,1163261551336247328"
+274,Yuna,ITZY,ITZY.YUNA.OPENING,Opening Event,5,true,https://i.postimg.cc/1XL6BdZd/Ian-opening-event3-20260312234345.png,"842172611697573929,1105911692266844314"
+275,San,ATEEZ,ATEEZ.SAN.OPENING,Opening Event,5,true,https://i.postimg.cc/kMZx72tx/Ian-opening-event3-20260312224732.png,842172611697573929
+276,D.O,EXO,EXO.DO.OPENING,Opening Event,5,true,https://i.postimg.cc/WzQr8yPf/Ian-opening-event2-20260313012925.png,"842172611697573929,1105911692266844314"
+277,Jiyu,KIIIKIII,KIIIKIII.JIYU.OPENING,Opening Event,5,true,https://i.postimg.cc/gjfRs7PQ/Ian-opening-event3-20260312154103.png,"842172611697573929,1163261551336247328"
+278,IU,Soloist,SOLOIST.IU.OPENING,Opening Event,5,true,https://i.postimg.cc/J7gbRsBB/Ian-opening-event-20260312235259.png,"842172611697573929,1105911692266844314"
+279,Chuu,Soloist,SOLOIST.CHUU.OPENING,Opening Event,5,true,https://i.postimg.cc/rscBFbYV/Ian-opening-event8-20260312232958.png,842172611697573929
+280,Shinyu,TWS,TWS.SHINYU.OPENING,Opening Event,5,true,https://i.postimg.cc/d3vbtXSJ/Ian-opening-event7-20260312232256.png,842172611697573929
+281,Yena,SOLOIST,SOLOIST.YENA.LC,Love Catcher,1,true,https://i.postimg.cc/25dYZfj6/Ian-Reg-Template11-20260402162600.png,1185511897592770682
+282,Yena,SOLOIST,SOLOIST.YENA.LC.B,Love Catcher,1,true,https://i.postimg.cc/N0vYF0tT/Ian-Reg-Template11-20260402162554.png,1185511897592770682
+283,Baekhyun,SOLOIST,SOLOIST.BAEKHYUN.EOR,Essence of Reverie,1,true,https://i.postimg.cc/jjYK2jT7/Ian-Reg-Template12-20260403142949.png,1185511897592770682
+284,Baekhyun,SOLOIST,SOLOIST.BAEKHYUN.EOR.B,Essence of Reverie,1,true,https://i.postimg.cc/25Nmy5YL/Ian-Reg-Template12-20260403050233.png,1185511897592770682
+285,Jooyeon,XDINARY HEROES,XDINARY.JOOYEON.XBLADE,X-Blade,1,true,https://i.postimg.cc/w3Ymxm6W/Ian-Reg-Template10-20260401222739.png,1185511897592770682
+286,Junhan,XDINARY HEROES,XDINARY.JUNHAN.XBLADE,X-Blade,1,true,https://i.postimg.cc/Z0zdYdTD/Ian-Reg-Template10-20260401222750.png,1185511897592770682
+287,Gaon,XDINARY HEROES,XDINARY.GAON.XBLADE,X-Blade,1,true,https://i.postimg.cc/9zH7X7WJ/Ian-Reg-Template10-20260401222759.png,1185511897592770682
+288,O.de,XDINARY HEROES,XDINARY.ODE.XBLADE,X-Blade,1,true,https://i.postimg.cc/bdftYtzT/Ian-Reg-Template10-20260401222812.png,1185511897592770682
+289,Jungsu,XDINARY HEROES,XDINARY.JUNGSU.XBLADE,X-Blade,1,true,https://i.postimg.cc/2jVxyhfP/Ian-Reg-Template10-20260401222822.png,1185511897592770682
+290,Gunil,XDINARY HEROES,XDINARY.GUNIL.XBLADE,X-Blade,1,true,https://i.postimg.cc/v8cvTfsT/Ian-Reg-Template10-20260401223426.png,1185511897592770682
+291,Seulgi,SOLOIST,SOLOIST.SEULGI.BNBAI,"Baby, Not Baby At 'Inkiagyo'",3,true,https://i.postimg.cc/m2Hv0sxP/Untitled115-20260307111851.png,1403958587843149937
+292,Seulgi,SOLOIST,SOLOIST.SEULGI.BNBAI.B,"Baby, Not Baby At 'Inkiagyo' Set B",3,true,https://i.postimg.cc/L61crpdy/Untitled115-20260307111902.png,1403958587843149937
+293,Sowon,GFRIEND,GFRIEND.SOWON.SNOWFLAKE,Snowflake,1,true,https://i.postimg.cc/dtWwnM6k/Ian-Reg-Template-20260308111755.png,866913743932489738
+294,Yerin,GFRIEND,GFRIEND.YERIN.SNOWFLAKE,Snowflake,1,true,https://i.postimg.cc/zXd8pm7h/Ian-Reg-Template-20260308112404.png,866913743932489738
+295,Eunha,GFRIEND,GFRIEND.EUNHA.SNOWFLAKE,Snowflake,1,true,https://i.postimg.cc/pXVPDVfD/Ian-Reg-Template-20260308112616.png,866913743932489738
+296,Yuju,GFRIEND,GFRIEND.YUJU.SNOWFLAKE,Snowflake,1,true,https://i.postimg.cc/Pr6TKGy8/Ian-Reg-Template-20260308112844.png,866913743932489738
+297,Sinb,GFRIEND,GFRIEND.SINB.SNOWFLAKE,Snowflake,1,true,https://i.postimg.cc/gkMm49s4/Ian-Reg-Template-20260308113037.png,866913743932489738
+298,Umji,GFRIEND,GFRIEND.UMJI.SNOWFLAKE,Snowflake,1,true,https://i.postimg.cc/rFhMg6jQ/Ian-Reg-Template-20260308113203.png,866913743932489738
+299,Q,THE BOYZ,TBZ.Q.REVEAL,Reveal,1,true,https://i.postimg.cc/xdC3tjkW/Ian-Reg-Template17-20260517200331.png,1362108076882264204
+300,New,THE BOYZ,TBZ.NEW.REVEAL,Reveal,1,true,https://i.postimg.cc/yNdyv6Jt/Ian-Reg-Template17-20260517200845.png,1362108076882264204
+301,Sangyeon,THE BOYZ,TBZ.SANGYEON.REVEAL,Reveal,1,true,https://i.postimg.cc/rpPCb6WP/Ian-Reg-Template17-20260517200949.png,
+302,Sunwoo,THE BOYZ,TBZ.SUNWOO.REVEAL,Reveal,1,true,https://i.postimg.cc/CK1smMZr/Ian-Reg-Template17-20260517201254.png,1362108076882264204
+303,Younghoon,THE BOYZ,TBZ.YOUNGHOON.REVEAL,Reveal,1,true,https://i.postimg.cc/yNbX5q92/Ian-Reg-Template17-20260517201407.png,1362108076882264204
+304,Jacob,THE BOYZ,TBZ.JACOB.REVEAL,Reveal,1,true,https://i.postimg.cc/HLh4KG5K/Ian-Reg-Template17-20260517201539.png,
+305,Juyeon,THE BOYZ,TBZ.JUYEON.REVEAL,Reveal,1,true,https://i.postimg.cc/ZqMFgk3Q/Ian-Reg-Template17-20260517201651.png,1362108076882264204
+306,Juhaknyeon,THE BOYZ,TBZ.JUHAKNYEON.REVEAL,reveal,1,true,https://i.postimg.cc/MGFb4kVq/Ian-Reg-Template17-20260517201807.png,1362108076882264204
+308,Hyunjae,THE BOYZ,TBZ.HYUNJAE.REVEAL,Reveal,1,true,https://i.postimg.cc/YSsfVcYv/Ian-Reg-Template17-20260517202101.png,1362108076882264204
+309,Kevin,THE BOYZ,TBZ.KEVIN.REVEAL,Reveal,1,true,https://i.postimg.cc/7LWMcv0b/Ian-Reg-Template17-20260517201955.png,1362108076882264204
+310,Gunil,XDINARY HEROES,XDINARY.GUNIL.DEADLOCK,Deadlock,1,true,https://i.postimg.cc/4d32HkR7/Ian-Reg-Template5-20260309121049.png,1362108076882264204
+311,Jungsu,XDINARY HEROES,XDINARY.JUNGSU.DEADLOCK,Deadlock,1,true,https://i.postimg.cc/LXsQgKF5/Ian-Reg-Template5-20260309125138.png,1362108076882264204
+313,Jae Hyun,K-DRAMA,KDRAMA.JAEHYUN.TW,Twinkling Watermelon,1,true,https://i.postimg.cc/1tgMkqRX/3C2FCD8A-49AA-42CF-88FA-10CF6A9B9FCE.png,1029858840679817296
+314,Gaon,XDINARY HEROES,XDINARY.GAON.DEADLOCK,Deadlock,1,true,https://i.postimg.cc/tTgvnQGs/Ian-Reg-Template5-20260309125234.png,1362108076882264204
+315,O.de,XDINARY HEROES,XDINARY.ODE.DEADLOCK,Deadlock,1,true,https://i.postimg.cc/4d32HkRm/Ian-Reg-Template5-20260309125325.png,1362108076882264204
+316,Junhan,XDINARY HEROES,XDINARY.JUNHAN.DEADLOCK,Deadlock,1,true,https://i.postimg.cc/MKRwpRY5/Ian-Reg-Template5-20260309125424.png,1362108076882264204
+317,Jooyeon,XDINARY HEROES,XDINARY.JOOYEON.DEADLOCK,Deadlock,1,true,https://i.postimg.cc/cJDybcsM/Ian-Reg-Template5-20260309125518.png,1362108076882264204
+318,Ryeoun,K-DRAMA,KDRAMA.RYEOUN.TW,Twinkling Watermelon,1,true,https://i.postimg.cc/nz6TphMX/4D8524D3-8CDA-4433-B3DB-EA43D32FE579.png,1029858840679817296
+319,Hyunwook,K-DRAMA,KDRAMA.HYUNWOOK.TW,Twinkling Watermelon,1,true,https://i.postimg.cc/VvQ92ZHx/545A4A1C-25E5-4638-90C0-2FD5B9510C0D.png,1029858840679817296
+320,Eun-Soo,K-DRAMA,KDRAMA.EUNSOO.TW,Twinkling Watermelon,1,true,https://i.postimg.cc/qR9Q4vg7/6B425520-5D5B-4C30-9DF0-BF29F4D1942B.png,1029858840679817296
+321,Danielle,NewJeans,NEWJEANS.DANIELLE.HS,How Sweet,1,true,https://i.postimg.cc/zXmChZnB/Ian-Reg-Template7-20260309092251.png,
+322,Seol In-Ah,K-DRAMA,KDRAMA.SEOLINAH.TW,Twinkling Watermelon,1,true,https://i.postimg.cc/DZt5nwm0/F318E07C-E9A4-49B2-961D-9E3A41CCA22F.png,1029858840679817296
+323,Hanni,NewJeans,NEWJEANS.HANNI.HS,How Sweet,1,true,https://i.postimg.cc/Gp3JpFk0/Ian-Reg-Template7-20260309093102.png,
+324,Haerin,NewJeans,NEWJEANS.HAERIN.HS,How Sweet,1,true,https://i.postimg.cc/9MKG1sKy/Ian-Reg-Template7-20260309093447.png,
+325,Hyein,NewJeans,NEWJEANS.HYEIN.HS,How Sweet,1,true,https://i.postimg.cc/1tfGGyCp/Ian-Reg-Template7-20260309093902.png,
+326,Minji,NewJeans,NEWJEANS.MINJI.HS,How Sweet,1,true,https://i.postimg.cc/cHrRRd9h/Ian-Reg-Template7-20260309094217.png,
+327,Sui,KIIIKIII,KIIIKIII.SUI.DELULU,Delulu Pack,1,true,https://i.postimg.cc/kgj3Gyk5/Ian-Reg-Template2-20260308140854.png,866913743932489738
+328,Leesol,KIIIKIII,KIIIKIII.LEESOL.DELULU,Delulu Pack,1,true,https://i.postimg.cc/Ls7cB846/Ian-Reg-Template2-20260309000416.png,866913743932489738
+329,Haum,KIIIKIII,KIIIKIII.HAUM.DELULU,Delulu Pack,1,true,https://i.postimg.cc/3xL5NZPK/Ian-Reg-Template2-20260309000558.png,866913743932489738
+330,Ohyul,LNGSHOT,LNGSHOT.OHYUL.SC,Shot Callers,1,true,https://i.postimg.cc/xTV4WJWF/ianbot-template-20260315031715.png,866913743932489738
+331,Jiyu,KIIIKIII,KIIIKIII.JIYU.DELULU,Delulu Pack,1,true,https://i.postimg.cc/HkSDntfY/Ian-Reg-Template2-20260309000637.png,866913743932489738
+332,Ryul,LNGSHOT,LNGSHOT.RYUL.SC,Shot Callers,1,true,https://i.postimg.cc/BQfVdLdy/ianbot-template-20260315032115.png,866913743932489738
+333,Kya,KIIIKIII,KIIIKIII.KYA.DELULU,Delulu Pack,1,true,https://i.postimg.cc/52PdymZ9/Ian-Reg-Template2-20260309000814.png,866913743932489738
+334,Woojin,LNGSHOT,LNGSHOT.WOOJIN.SC,Shot Callers,1,true,https://i.postimg.cc/28NKPbPK/ianbot-template-20260315104443.png,866913743932489738
+335,Louis,LNGSHOT,LNGSHOT.LOUIS.SC,Shot Callers,1,true,https://i.postimg.cc/FsXB2d26/ianbot-template-20260315104547.png,866913743932489738
+336,Dami,DREAMCATCHER,DC.DAMI.ASU,Apocalypse : Save us,1,true,https://i.postimg.cc/ZnT0ZcG7/Ian-Reg-Template9-20260309223225.png,
+337,Yoohyeon,DREAMCATCHER,DC.YOOHYEON.ASU,Apocalypse : Save us,1,true,https://i.postimg.cc/XqVX38R1/Ian-Reg-Template9-20260309223341.png,
+338,Handong,DREAMCATCHER,DC.HANDONG.ASU,Apocalypse : Save us,1,true,https://i.postimg.cc/qqkg0LPF/Ian-Reg-Template9-20260309223527.png,
+339,Siyeon,DREAMCATCHER,DC.SIYEON.ASU,Apocalypse : Save us,1,true,https://i.postimg.cc/KjJjYTFb/Ian-Reg-Template9-20260309223655.png,
+340,Sua,DREAMCATCHER,DC.SUA.ASU,Apocalypse : Save us,1,true,https://i.postimg.cc/K8KjZ4Wm/Ian-Reg-Template9-20260309223805.png,
+341,Jiu,DREAMCATCHER,DC.JIU.ASU,Apocalypse : Save us,1,true,https://i.postimg.cc/rwvmzM6V/Ian-Reg-Template9-20260309223933.png,
+343,Gahyun,DREAMCATCHER,DC.GAHYUN.ASU,Apocalypse : Save us,1,true,https://i.postimg.cc/1zrfd2T8/Ian-Reg-Template9-20260309223008.png,
+344,Gyubin,SOLOIST,SOLOIST.GYUBIN.SPECIAL,Special,1,true,https://i.imgur.com/AX1mASy.png,949395112641839154
+345,Gyubin,SOLOIST,SOLOIST.GYUBIN.STS,Start To Shine,1,true,https://i.imgur.com/QT4cbqz.png,949395112641839154
+346,Ben,CIRCRL,CIRCRL.BEN.WIN,Want it Now,1,true,https://i.postimg.cc/2j2XY5vZ/Ian-Reg-Template2.png,1361728618870473026
+347,Pie,CIRCRL,CIRCRL.PIE.WIN,Want it Now,1,true,https://i.postimg.cc/T2CHxPmm/Ian-Reg-Template2-5.png,1361728618870473026
+348,Leon,CIRCRL,CIRCRL.LEON.WIN,Want it Now,1,true,https://i.postimg.cc/FFDnvKcg/Ian-Reg-Template2-2.png,1361728618870473026
+349,Phee,CIRCRL,CIRCRL.PHEE.WIN,Want it Now,1,true,https://i.postimg.cc/Dy0pwKdc/Ian-Reg-Template2-4.png,1361728618870473026
+351,Sungho,BOYNEXTDOOR,BND.SUNGHO.19.99,19.99,1,true,https://i.postimg.cc/k5HBgSK2/5E1D34AC-7E3E-4CE5-BF45-0ECBD643FEB1.png,1029858840679817296
+352,Sam,CIRCRL,CIRCRL.SAM.WIN,Want it Now,1,true,https://i.postimg.cc/1tNYsxx4/Ian-Reg-Template2-7.png,1361728618870473026
+353,Riwoo,BOYNEXTDOOR,BND.RIWOO.19.99,19.99,1,true,https://i.postimg.cc/W4yh1Zgz/AF465187-0921-4CDA-A3FA-00882F322095.png,1029858840679817296
+354,Tutor,CIRCRL,CIRCRL.TUTOR.WIN,Want it Now,1,true,https://i.postimg.cc/c4z9K5Fd/Ian-Reg-Template2-3.png,1361728618870473026
+355,Jaehyun,BOYNEXTDOOR,BND.JAEHYUN.19.99,19.99,1,true,https://i.postimg.cc/g0jxpsXz/AFF75D38-B23F-412A-AE18-8211DC37A3A8.png,1029858840679817296
+356,Leehan,BOYNEXTDOOR,BND.LEEHAN.19.99,19.99,1,true,https://i.postimg.cc/vmT4yhgF/Ian-Reg-Template67-20260322154859.png,1029858840679817296
+357,Woonhak,BOYNEXTDOOR,BND.WOONHAK.19.99,19.99,1,true,https://i.postimg.cc/VspFt5Qr/FF87C4CE-3B72-40D1-950B-4354DE3A056C.png,1029858840679817296
+358,Taesan,BOYNEXTDOOR,BND.TAESAN.19.99,19.99,1,true,https://i.postimg.cc/0yLT52r9/28F1957D-7E4F-4949-948F-9784AD735978.png,1029858840679817296
+359,Hearts2Hearts,Limited,LIMITED.H2H.OPENING,Opening Event,5,true,https://i.postimg.cc/HWNT4740/Ian-opening-event9-20260312234925.png,842172611697573929
+360,Jongseob,P1Harmony,P1H.JONGSEOB.OPENING,Opening Event,5,true,https://i.postimg.cc/NjqYZqn0/Ian-opening-event6-20260402181611.png,
+361,Bahiyyih,Kep1er,KEP1ER.BAHIYYIH.OPENING,Opening Event,5,true,https://i.postimg.cc/pVSPYnYf/Ian-opening-event6-20260312231305.png,
+362,Haechan,NCT,NCT.HAECHAN.OPENING,Opening Event,5,true,https://i.postimg.cc/pLbx3bSm/Ian-opening-event2-20260327185258.png,
+363,Leeseo,IVE,IVE.LEESEO.OPENING,Opening Event,5,true,https://i.postimg.cc/6pJwFJPt/Ian-opening-event-20260327185318.png,
+364,Chaewon,LE SSERAFIM,LSFM.CHAEWON.OPENING,Opening Event,5,true,https://i.postimg.cc/dtTwWt4r/Ian-opening-event-20260313152842.png,
+365,Jaehyun,Boynextdoor,BND.JAEHYUN.OPENING,Opening Event,5,true,https://i.postimg.cc/YC6kHDcC/Ian-opening-event-20260311150502.png,"842172611697573929,1403958587843149937"
+366,Minju,ILLIT,ILLIT.MINJU.OPENING,Opening Event,5,true,https://i.postimg.cc/pXnR0Xqg/Ian-opening-event2-20260313154147.png,
+367,Yuqi,i-dle,I-DLE.YUQI.ISAMC,I Sway At 'M Countdown',3,true,https://i.postimg.cc/6qd3cDMr/Ian_Reg_Template9_20260310224646.png,1185511897592770682
+368,Soyeon,i-dle,I-DLE.SOYEON.ISAMC,I Sway At 'M Countdown',3,true,https://i.postimg.cc/PrQJwnpk/Ian_Reg_Template9_20260310224656.png,1185511897592770682
+369,Minnie,i-dle,I-DLE.MINNIE.ISAMC,I Sway At 'M Countdown',3,true,https://i.postimg.cc/tRPY9x9T/Ian_Reg_Template9_20260310224709.png,1185511897592770682
+370,Shuhua,i-dle,I-DLE.SHUHUA.ISAMC,I Sway At 'M Countdown',3,true,https://i.postimg.cc/15rXq1g2/Ian_Reg_Template9_20260310224718.png,1185511897592770682
+371,Miyeon,i-dle,I-DLE.MIYEON.ISAMC,I Sway At 'M Countdown',3,true,https://i.postimg.cc/1znyMktc/Ian_Reg_Template9_20260310224730.png,1185511897592770682
+372,Asa,BABYMONSTER,BM.ASA.CAI,"""Choom"" At 'Inkigayo'",3,true,https://i.postimg.cc/Gt4dncrs/Ian-Reg-Template10-20260517181237.png,1403958587843149937
+373,Pharita,BABYMONSTER,BM.PHARITA.CAI,"""Choom"" At 'Inkigayo'",3,true,https://i.postimg.cc/L5J2FHRq/Ian-Reg-Template10-20260517181729.png,1403958587843149937
+374,Chiquita,BABYMONSTER,BM.CHIQUITA.CAI,"""Choom"" At 'Inkigayo'",3,true,https://i.postimg.cc/brZpfz8S/Ian-Reg-Template10-20260517182109.png,1403958587843149937
+375,Ahyeon,BABYMONSTER,BM.AHYEON.CAI,"""Choom"" At 'Inkigayo'",3,true,https://i.postimg.cc/4dwG5TLH/Ian-Reg-Template10-20260517182335.png,1403958587843149937
+376,Ruka,BABYMONSTER,BM.RUKA.CAI,"""Choom"" At 'Inkigayo'",3,true,https://i.postimg.cc/fTVsxpxH/Ian-Reg-Template10-20260517182554.png,1403958587843149937
+377,Rora,BABYMONSTER,BM.RORA.CAI,"""Choom"" At 'Inkigayo'",3,true,https://i.postimg.cc/L6GpvDDp/Ian-Reg-Template10-20260517182915.png,1403958587843149937
+378,D.O.,EXO,EXO.DO.LOVESHOT,Love Shot,1,true,https://i.postimg.cc/D0S9CrG6/Ian-Reg-Template6-20260309161807.png,1362108076882264204
+379,SUHO,EXO,EXO.SUHO.LOVESHOT,Love Shot,1,true,https://i.postimg.cc/RhWkP7tg/Ian-Reg-Template6-20260309161904.png,1362108076882264204
+380,Xiumin,EXO,EXO.XIUMIN.LOVESHOT,Love Shot,1,true,https://i.postimg.cc/rs7v7DCX/Ian-Reg-Template6-20260309162433.png,1362108076882264204
+381,Chen,EXO,EXO.CHEN.LOVESHOT,Love Shot,1,true,https://i.postimg.cc/cCvpDR3X/Ian-Reg-Template6-20260309162528.png,1362108076882264204
+382,Baekhyun,EXO,EXO.BAEKHYUN.LOVESHOT,Love Shot,1,true,https://i.postimg.cc/Y0TJTvfp/Ian-Reg-Template6-20260309162620.png,1362108076882264204
+383,Chanyeol,EXO,EXO.CHANYEOL.LOVESHOT,Love Shot,1,true,https://i.postimg.cc/gj1f1xqG/Ian-Reg-Template6-20260309162720.png,1362108076882264204
+384,Sehun,EXO,EXO.SEHUN.LOVESHOT,Love Shot,1,true,https://i.postimg.cc/Gt6Z64J2/Ian-Reg-Template6-20260309162812.png,1362108076882264204
+385,Kai,EXO,EXO.KAI.LOVESHOT,Love Shot,1,true,https://i.postimg.cc/2ygPg1Fb/Ian-Reg-Template6-20260309162945.png,1362108076882264204
+386,Martin,CORTIS,CORTIS.MARTIN.COTL,Color Outside The Lines,2,true,https://i.imgur.com/NLv1JZk.png,866913743932489738
+387,James,CORTIS,CORTIS.JAMES.COTL,Color Outside The Lines,2,true,https://i.imgur.com/Svdkxxc.png,866913743932489738
+388,Juhoon,CORTIS,CORTIS.JUHOON.COTL,Color Outside The Lines,2,true,https://i.imgur.com/2ZX1Kpi.png,866913743932489738
+389,Seonghyeon,CORTIS,CORTIS.SEONGHYEON.COTL,Color Outside The Lines,2,true,https://i.imgur.com/HAPwKsS.png,866913743932489738
+390,Keonho,CORTIS,CORTIS.KEONHO.COTL,Color Outside The Lines,2,true,https://i.imgur.com/tkMWBor.png,866913743932489738
+391,Fuma,&TEAM,&TEAM.FUMA.FHN,First Howling: NOW,1,true,https://i.imgur.com/M00wpNL.png,1185511897592770682
+392,EJ,&TEAM,&TEAM.EJ.FHN,First Howling: NOW,1,true,https://i.imgur.com/iEQJklG.png,1185511897592770682
+393,K,&TEAM,&TEAM.K.FHN,First Howling: NOW,1,true,https://i.imgur.com/f9amAkT.png,1185511897592770682
+394,Nicholas,&TEAM,&TEAM.NICHOLAS.FHN,First Howling: NOW,1,true,https://i.imgur.com/ULpNjKi.png,1185511897592770682
+395,Yuma,&TEAM,&TEAM.YUMA.FHN,First Howling: NOW,1,true,https://i.imgur.com/QDyKgmZ.png,1185511897592770682
+396,Jo,&TEAM,&TEAM.JO.FHN,First Howling: NOW,1,true,https://i.imgur.com/WXoJt3b.png,1185511897592770682
+397,Harua,&TEAM,&TEAM.HARUA.FHN,First Howling: NOW,1,true,https://i.imgur.com/pdMmj8J.png,1185511897592770682
+398,Taki,&TEAM,&TEAM.TAKI.FHN,First Howling: NOW,1,true,https://i.imgur.com/2t2tq1T.png,1185511897592770682
+399,Maki,&TEAM,&TEAM.MAKI.FHN,First Howling: NOW,1,true,https://i.imgur.com/5h79wjL.png,1185511897592770682
+400,Junhan,Vals,VALS.JUNHAN.EARLYCC,Early Supporter Custom,5,false,https://i.imgur.com/QMHBlcv.png,1163261551336247328
+401,Heeseung,ENHYPEN,FORAYA.HEESEUNG.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/c1Ypf45L/image.png,912041265154105405
+402,Nine,QQQ,QQQ.NINE.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/SKnS4bQy/Untitled231-20260306164316.png,842172611697573929
+403,Stray Kids,Stray Kids,RACER.STRAYKIDS.GIVEAWAYCC,Giveaway Custom,5,false,https://i.postimg.cc/jjDxTYqC/Untitled256-20260331191317.png,842172611697573929
+404,Joost,Soloist,WATCHMUZIEK.JOOST.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/tgsqbGR4/image.png,912041265154105405
+405,Ian,Hearts2Hearts,H2H.IAN.COLLAB,Collaboration,5,true,https://i.imgur.com/iHvta7M.png,
+406,Huening Kai,TXT,TXT.KAI.COLLAB,Collaboration,5,true,https://i.imgur.com/4dBPqvU.png,
+410,San,ATEEZ,ATEEZ.SAN.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/8C4V4kKf/Untitled232-20260308212447.png,842172611697573929
+411,Sakuya,NCT Wish,NCTWISH.SAKUYA.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/FRKXBt8V/Untitled191-20260306183702-1.png,1163261551336247328
+412,Jiung,P1HARMONY,P1HARMONY.JIUNG.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/MTrJkP88/Untitled197-20260308221055.png,1163261551336247328
+413,Fuma,&TEAM,TEAM.FUMA.EAARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/5trWTKJ2/image.png,1105911692266844314
+414,San,ATEEZ,ATEEZ.CHOISAN.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/s2QNQjF2/Untitled238-20260311235020.png,842172611697573929
+415,Sunoo,ENHYPEN,ENHYPEN.SUNOO.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/vHTLHPFk/IMG-0749.png,1222653247798382723
+416,Sulli,F(X),FX.SULLI.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/597LGwY3/IMG-0832.png,1222653247798382723
+417,Seungmin,Stray Kids,SKZ.SEUNGMIN.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/PNshCjk8/picsart-be470980-54f5-46e3-a675-81fe13b93797.png,1222653247798382723
+418,Ni-ki,ENHYPEN,ENHYPEN.NIKI.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/TY632V25/Untitled15-20260306214805.png,949395112641839154
+419,Han,Stray Kids,SKZ.HAN.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/vHsZ8r83/Untitled17-20260307150917.png,949395112641839154
+420,Minho & Han,Stray Kids,SKZ.MINSUNG.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/vTj790PQ/Untitled11-20260309164429.png,685872167786643494
+421,Theo,P1HARMONY,P1HARMONY.THEO.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/KjV7L09P/Untitled12-20260312114552.png,685872167786643494
+422,Jungwon,ENHYPEN,ENHYPEN.JUNGWON.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/2SYGxKkT/image.png,1105911692266844314
+423,Keeho,P1HARMONY,P1HARMONY.KEEHO.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/8CPb2frJ/Untitled1-20260313150816.png,1105911692266844314
+424,Juyeon,THE BOYZ,TBZ.JUYEON.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/6q0qxqZW/Untitled19-20260314131112.png,949395112641839154
+425,Seonghwa,ATEEZ,ATEEZ.SEONGHWA.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/PfzPw3R7/image.png,842172611697573929
+426,Choi Young Woo,KDRAMA,KDRAMA.YOUNGWOO.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/fR0sxkb7/image.png,1105911692266844314
+427,Jiwoo & Stella,HEARTS2HEARTS,H2H.STARZ.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/QMQryP1G/Untitled49-20260307120411.png,
+428,Yeonjun,TXT,TXT.YEONJUN.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/76qy8Vnf/Untitled23-20260320080026.png,
+429,San,ATEEZ,LOAD1NGG.SAN.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/8cB48RwT/picsart-082e48f1-63fa-41dc-99b6-666535907e9d.png,949395112641839154
+430,Anna,MEOVV,MEOVV.ANNA.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/J724JfQb/picsart-e614fbb7-bb36-4d78-a75b-ef23b5747ee5.png,1105911692266844314
+431,Yumnyang,YUMA,YUMA.YUMNYANG.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/MTXJpGg6/picsart-1a31d42a-8727-461e-a357-006cd7b724e5.png,1222653247798382723
+432,Rui,XLOV,XLOV.RUI.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/Xq3hy7zg/Untitled208-1.png,1163261551336247328
+433,Ni-ki,ENHYPEN,AMBROSIIA.NIKI.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/mZNKWCPV/Untitled209-20260323163746.webp,1163261551336247328
+434,Youngjae,TWS,TWS.YOUNGJAE.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/T1JsjLLx/Untitled211-20260323174329.png,1163261551336247328
+435,Jiahao,ALPHA DRIVE ONE,ALD1.JIAHAO.EARLYCC,Early supporter Custom,5,false,https://i.postimg.cc/TwrNGLcf/Untitled214-20260323191747.png,1163261551336247328
+436,Marbas,MAIRUMA,MAIRUMA.MARBAS.EARLYCC,Early Support Custom,5,false,https://i.postimg.cc/MpQyhk5Z/Untitled216-20260324155244-(1).png,1163261551336247328
+437,Yuha & Stella,HEARTS2HEARTS,HEARTS2HEARTS.NYUTELLAZ.EARLYCC,Early Support Custom,5,false,https://i.postimg.cc/XJpFcTrS/Untitled217-20260324163043.png,1163261551336247328
+438,Song,IKON,IKON.SONG.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/gcL8wb9T/Untitled193.png,1163261551336247328
+439,Jihyo,TWICE,TWICE.JIHYO.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/c4Q3m7L1/Untitled192-20260306214804.png,1163261551336247328
+440,Jaehee,NCT Wish,SNOWFALL.JAEHEE.EARLYCC,Ealy Support Custom,5,false,https://i.postimg.cc/g0vk9s1N/Untitled199-20260309205320.png,1163261551336247328
+441,Suzuka,SCHOOL LEADERS,SCHOOLLEADERS.SUZUKA.EARLYCC,Early Support Custom,5,false,https://i.postimg.cc/nrwnKP9N/Untitled218-20260325015812.png,1163261551336247328
+442,Ryujin,ITZY,BLUE.RYUJIN.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/65yW6tDv/Untitled27-20260325182519.png,
+443,JL,AHOF,AHOPE.JL.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/kXcpHbj7/Untitled219-20260325174259.png,1163261551336247328
+444,Felix,Stray Kids,FELIXCOSMIC.FELIX.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/598GwGLw/picsart-0b54d4c3-9393-44e3-91f0-c2b2edcd2aae.png,1222653247798382723
+445,Kim Jae Joong,TVXQ,2000S.KIMJAEJOONG.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/sD6JS96p/jaejong.png,912041265154105405
+446,Hongjoong,ATEEZ,NASAXADRENALINE.HONGJOONG.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/jSvCCZMj/Untitled24-20260327195221.png,949395112641839154
+447,TVXQ,TVXQ,PICTUREOFYOU.TVXQ.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/1ztXFwdF/IMG-2563.png,1222653247798382723
+448,Ningning,AESPA,HEARTS4SIE.NINGNING.EARLYCC,Early Supporter Custom,5,false,https://i.postimg.cc/9fnMYz3G/Untitled248-20260526231255.webp,1163261551336247328
+449,Yeonjun,TXT,TXT.YEONJUN.PPULBATUSELCA,Ppulbatu Selca,4,true,https://i.postimg.cc/Qd71zMWt/Ian-Reg-Template12-20260311221359.png,1362108076882264204
+450,Soobin,TXT,TXT.SOOBIN.PPULBATUSELCA,Ppulbatu Selca,4,true,https://i.postimg.cc/T3bgsPWy/Ian-Reg-Template12-20260311221513.png,1362108076882264204
+451,Beomgyu,TXT,TXT.BEOMGYU.PPULBATUSELCA,Ppulbatu Selca,4,true,https://i.postimg.cc/8kyRJ9SS/Ian-Reg-Template12-20260311221655.png,1362108076882264204
+452,Taehyun,TXT,TXT.TAEHYUN.PPULBATUSELCA,Ppulbatu Selca,4,true,https://i.postimg.cc/mgk61CJ2/Ian-Reg-Template12-20260311221819.png,1362108076882264204
+453,Huening Kai,TXT,TXT.HUENINGKAI.PPULBATUSELCA,Ppulbatu Selca,4,true,https://i.postimg.cc/9XPk6WZG/Ian-Reg-Template12-20260311221941.png,1362108076882264204
+454,Mark,NCT Dream,NDREAM.MARK.CANDY,Candy,1,true,https://i.postimg.cc/XvyHQ3n9/Ian-Reg-Template19-20260312200700.png,
+455,Renjun,NCT Dream,NDREAM.RENJUN.CANDY,Candy,1,true,https://i.postimg.cc/Cx56nkXK/Ian-Reg-Template19-20260312201004.png,
+456,Jeno,NCT Dream,NDREAM.JENO.CANDY,Candy,1,true,https://i.postimg.cc/qMy7V6QF/Ian-Reg-Template19-20260312204329.png,
+457,Haechan,NCT Dream,NDREAM.HAECHAN.CANDY,Candy,1,true,https://i.postimg.cc/28h5RLTM/Ian-Reg-Template19-20260312204637.png,
+458,Jaemin,NCT Dream,NDREAM.JAEMIN.CANDY,Candy,1,true,https://i.postimg.cc/y8K8V6bP/Ian-Reg-Template19-20260312205148.png,
+459,Chenle,NCT Dream,NDREAM.CHENLE.CANDY,Candy,1,true,https://i.postimg.cc/d1xbDnQb/Ian-Reg-Template19-20260312205447.png,
+460,Jisung,NCT Dream,NDREAM.JISUNG.CANDY,Candy,1,true,https://i.postimg.cc/wTZjnchy/Ian-Reg-Template19-20260312205700.png,
+461,Minji,NewJeans,NEWJEANS.MINJI.NJAI,"""NEWJEANS"" at 'Inkigayo'",3,true,https://i.postimg.cc/dQz8jdLg/Ian-Reg-Template7-20260309221602.png,1185511897592770682
+462,Hanni,NewJeans,NEWJEANS.HANNI.NJAI,"""NEWJEANS"" at 'Inkigayo'",3,true,https://i.postimg.cc/qBtsKQMb/Ian-Reg-Template7-20260309221613.png,1185511897592770682
+463,Danielle,NewJeans,NEWJEANS.DANIELLE.NJAI,"""NEWJEANS"" at 'Inkigayo'",3,true,https://i.postimg.cc/WpDGZSbC/Ian-Reg-Template7-20260309221625.png,1185511897592770682
+464,Haerin,NewJeans,NEWJEANS.HAERIN.NJAI,"""NEWJEANS"" at 'Inkigayo'",3,true,https://i.postimg.cc/pybX5PV4/Ian-Reg-Template7-20260309221647.png,1185511897592770682
+465,Hyein,NewJeans,NEWJEANS.HYEIN.NJAI,"""NEWJEANS"" at 'Inkigayo'",3,true,https://i.postimg.cc/MHXjmZSn/Ian-Reg-Template7-20260309221730.png,1185511897592770682
+466,Somin,KARD,KARD.SOMIN.DRIFT,Drift,1,true,https://i.postimg.cc/rw7QHmyj/Ian-Reg-Template2-20260311164418.png,949395112641839154
+467,Jiwoo,KARD,KARD.JIWOO.DRIFT,Drift,1,true,https://files.catbox.moe/2o4q5d.png,949395112641839154
+468,BM,KARD,KARD.BM.DRIFT,Drift,1,true,https://i.postimg.cc/0jZVX0rV/Ian-Reg-Template2-20260311164919.png,949395112641839154
+469,J.seph,KARD,KARD.JSEPH.DRIFT,Drift,1,true,https://i.postimg.cc/PfMVqTKz/Ian-Reg-Template2-20260311164739.png,949395112641839154
+470,Bang Chan,Stray Kids,SKZ.BANGCHAN.DOIT,DO IT,2,true,https://i.postimg.cc/zvfDXK6d/Ian-Reg-Template4-2.png,1361728618870473026
+471,Lee Know,Stray Kids,SKZ.LEEKNOW.DOIT,DO IT,2,true,https://i.postimg.cc/k5xgjnWV/Ian-Reg-Template5-2.png,1361728618870473026
+472,CHANGBIN,Stray Kids,SKZ.CHANGBIN.DOIT,DO IT,2,true,https://i.postimg.cc/C1SLXWNK/Ian-Reg-Template5-3.png,1361728618870473026
+473,Hyunjin,Stray Kids,SKZ.HYUNJIN.DOIT,DO IT,2,true,https://i.postimg.cc/j2kxWCYF/Ian-Reg-Template5-4.png,1361728618870473026
+474,Han,Stray Kids,SKZ.HAN.DOIT,DO IT,2,true,https://i.postimg.cc/5yt9NLTw/Ian-Reg-Template5-5.png,1361728618870473026
+475,Felix,Stray Kids,SKZ.FELIX.DOIT,DO IT,2,true,https://i.postimg.cc/JhbzT1jf/Ian-Reg-Template5-6.png,1361728618870473026
+476,Seungmin,Stray Kids,SKZ.SEUNGMIN.DOIT,DO IT,2,true,https://i.postimg.cc/qRwMTjbg/Ian-Reg-Template5-7.png,1361728618870473026
+477,I.N,Stray Kids,SKZ.IN.DOIT,DO IT,2,true,https://i.postimg.cc/5tctqHQj/Ian-Reg-Template5-8.png,1361728618870473026
+478,Seulgi,RED VELVET,RV.SEULGI.COSMIC,Cosmic,1,true,https://i.postimg.cc/YqzcyhPm/Ian-Reg-Template13-20260312162708.png,1362108076882264204
+479,Joy,RED VELVET,RV.JOY.COSMIC,Cosmic,1,true,https://i.postimg.cc/hPBWr92g/Ian-Reg-Template13-20260312163357.png,1362108076882264204
+480,Yeri,RED VELVET,RV.YERI.COSMIC,Cosmic,1,true,https://i.postimg.cc/VL8QRjDK/Ian-Reg-Template13-20260312163554.png,1362108076882264204
+481,Irene,RED VELVET,RV.IRENE.COSMIC,Cosmic,1,true,https://i.postimg.cc/PfZnY6zS/Ian-Reg-Template13-20260312164537.png,1362108076882264204
+482,Wendy,RED VELVET,RV.WENDY.COSMIC,Cosmic,1,true,https://i.postimg.cc/CMDpkvH5/Ian-Reg-Template13-20260312164734.png,1362108076882264204
+483,S.Coups,SEVENTEEN,SVT.SCOUPS.SHOKIHIGEN,Shokihigen,1,true,https://i.postimg.cc/bYFSSwgZ/Seventeen-Regs-20260310000815.png,
+484,Jeonghan,SEVENTEEN,SVT.JEONGHAN.SHOKIHIGEN,Shokihigen,1,true,https://i.postimg.cc/h43QQtsz/Seventeen-Regs-20260310001123.png,
+485,Joshua,SEVENTEEN,SVT.JOSHUA.SHOKIHIGEN,Shokihigen,1,true,https://i.postimg.cc/h43QQts7/Seventeen-Regs-20260310002200.png,
+486,Jun,SEVENTEEN,SVT.JUN.SHOKIHIGEN,Shokihigen,1,true,https://i.postimg.cc/Kcs338f3/Seventeen-Regs-20260310003212.png,
+487,Hoshi,SEVENTEEN,SVT.HOSHI.SHOKIHIGEN,Shokihigen,1,true,https://i.postimg.cc/SN226b1T/Seventeen-Regs-20260310042304.png,
+488,Wonwoo,SEVENTEEN,SVT.WONWOO.SHOKIHIGEN,Shokihigen,1,true,https://i.postimg.cc/J4DDNCYd/Seventeen-Regs-20260310042737.png,
+489,Woozi,SEVENTEEN,SVT.WOOZI.SHOKIHIGEN,Shokihigen,1,true,https://i.postimg.cc/5NYYBWKR/Seventeen-Regs-20260310043212.png,
+490,Mingyu,SEVENTEEN,SVT.MINGYU.SHOKIHIGEN,Shokihigen,1,true,https://i.postimg.cc/sDkBKHtZ/Seventeen-Regs-20260310045756.png,
+491,DK,SEVENTEEN,SVT.DK.SHOKIHIGEN,Shokihigen,1,true,https://i.postimg.cc/13D8dcQX/Seventeen-Regs-20260310083149.png,
+492,Seungkwan,SEVENTEEN,SVT.SEUNGKWAN.SHOKIHIGEN,Shokihigen,1,true,https://i.postimg.cc/0y7z4dsm/Seventeen-Regs-20260310083845.png,
+493,Vernon,SEVENTEEN,SVT.VERNON.SHOKIHIGEN,Shokihigen,1,true,https://i.postimg.cc/dVGhfmYm/Seventeen-Regs-20260310084555.png,
+494,Dino,SEVENTEEN,SVT.DINO.SHOKIHIGEN,Shokihigen,1,true,https://i.postimg.cc/cLfvzMSm/Seventeen-Regs-20260310085201.png,
+495,THE8,SEVENTEEN,SVT.THE8.SHOKIHIGEN,Shokihigen,1,true,https://i.postimg.cc/XNDxN3yG/Ian-Reg-Template4-20260310184706.png,
+496,Seeun,STAYC,STAYC.SEEUN.JUNE26,June 2026,5,true,https://i.imgur.com/wHBosrQ.png,1403958587843149937
+497,Manon,KATSEYE,KATSEYE.MANON.JUNE26,June 2026,5,true,https://i.imgur.com/wS4y7vb.png,
+498,Jungsu,XDINARY HEROES,XDH.JUNGSU.JUNE26,June 2026,5,true,https://i.postimg.cc/TYKLV53v/IAN-APRIL26-TEMP7-20260529105527.png,"1403958587843149937,1163261551336247328"
+499,Riku,NCT,NCT.RIKU.JUNE26,June 2026,5,true,https://i.postimg.cc/jqPdt62y/IAN-APRIL26-TEMP-20260610211153.png,1403958587843149937
+500,Haechan,NCT,NCT.HAECHAN.JUNE26,June 2026,5,true,https://i.imgur.com/phiEym5.png,1403958587843149937
+501,Nien,tripleS,TRIPLES.NIEN.JUNE26,June 2026,5,true,https://i.postimg.cc/KzQfM3vz/IAN-APRIL26-TEMP-20260529233249.png,"1403958587843149937,1106323962482401372"
+502,Choerry,ARTMS,ARTMS.CHOERRY.JUNE26,June 2026,5,true,https://i.postimg.cc/3xggG0tp/IAN-APRIL26-TEMP-20260601020226.png,"1403958587843149937,1106323962482401372"
+503,Seohyun,SNSD,SNSD.SEOHYUN.JUNE26,June 2026,5,true,https://i.postimg.cc/htbC9tst/IAN-APRIL26-TEMP3-20260605183802.png,"1403958587843149937,949395112641839154"
+504,Tzuyu,Twice,TWICE.TZUYU.JUNE26,June 2026,5,true,https://i.imgur.com/NBfDog0.png,1403958587843149937
+505,Stella,Hearts2Hearts,H2H.STELLA.JUNE26,June 2026,5,true,https://i.imgur.com/TY9QHjN.png,1403958587843149937
+506,Seoah,tripleS,TRIPLES.SEOAH.JUNE26,June 2026,5,true,https://i.postimg.cc/65KnCLmW/IAN-APRIL26-TEMP-20260605183722.png,"1403958587843149937,949395112641839154"
+507,Kelly,BADVILLAIN,BADVILLAIN.KELLY.JUNE26,June 2026,5,true,https://i.postimg.cc/YSTm01Fv/IAN-APRIL26-TEMP2-20260605223336.png,"1403958587843149937,949395112641839154"
+508,Wonhee,ILLIT,ILLIT.WONHEE.JUNE26,June 2026,5,true,https://i.postimg.cc/6qb7sntM/APRIL-26-Temp3-20260528145439.png,"1403958587843149937,845912696766595092"
+509,Chaeryeong,ITZY,ITZY.CHAERYEONG.JUNE26,June 2026,5,true,https://i.postimg.cc/Njm0DW9W/APRIL-26-Temp3-20260528150340.png,"1403958587843149937,845912696766595092"
+510,Dawn,SOLOIST,SOLOIST.DAWN.JUNE26,June 2026,5,true,https://i.postimg.cc/pLHmwWHy/APRIL-26-Temp3-20260528145406.png,"1403958587843149937,845912696766595092"
+511,Hyeri,Girl's Day,GIRLSDAY.HYERI.JUNE26,June 2026,5,true,https://i.postimg.cc/XJC3N5f1/APRIL-26-Temp4-20260608081632.png,"1403958587843149937,845912696766595092"
+512,Jinsoul,ARTMS,ARTMS.JINSOUL.JUNE26,June 2026,5,true,https://i.postimg.cc/J0MgwHPZ/APRIL-26-Temp4-20260608082110.png,"1403958587843149937,845912696766595092"
+513,SinB,Viviz,VIVIZ.SINB.JUNE26,June 2026,5,true,https://i.postimg.cc/jqMvq15t/APRIL-26-Temp4-20260608075110.png,"1403958587843149937,845912696766595092"
+514,Seongbin,82MAJOR,82MAJOR.SEONGBIN.JUNE26,June 2026,5,true,https://i.postimg.cc/QCKB3VCX/APRIL-26-Temp5-20260608084524.png,"1403958587843149937,845912696766595092"
+515,Jurin,XG,XG.JURIN.JUNE26,June 2026,5,true,https://i.postimg.cc/Qt95XfnK/APRIL-26-Temp4-20260608081506.png,"1403958587843149937,845912696766595092"
+516,Jiho,Ampers&One,AMPERS&ONE.JIHO.JUNE26,June 2026,5,true,https://i.postimg.cc/DzsnnsPn/APRIL-26-Temp5-20260608084605.png,"1403958587843149937,845912696766595092"
+517,Jaehee,NCT Wish,NCT.JAEHEE.JUNE26,June 2026,5,true,https://i.postimg.cc/BZh9WMfm/APRIL-26-Temp5-20260608084446.png,"1403958587843149937,845912696766595092"
+518,O.de,XDINARY HEROES,XDINARY.ODE.JUNE26,June 2026,5,true,https://i.postimg.cc/sXqLX0jp/APRIL-26-Temp5-20260608084351.png,"1403958587843149937,845912696766595092"
+519,J.seph,KARD,KARD.JSEPH.JUNE26,June 2026,5,true,https://i.postimg.cc/1zL0NxFc/APRIL-26-Temp5-20260610120634.png,"1403958587843149937,845912696766595092"
+520,Hanbin,ZEROBASEONE,ZB1.HANBIN.JUNE26,June 2026,5,true,https://i.postimg.cc/fTTdyWP6/APRIL-26-Temp5-20260610120712.png,"1403958587843149937,845912696766595092"
+521,Fuma,&TEAM,&TEAM.FUMA.JUNE26,June 2026,5,true,https://i.postimg.cc/tRD1KQgS/APRIL-26-Temp5-20260610120804.png,"1403958587843149937,845912696766595092"
+522,Jun,SEVENTEEN,SEVENTEEN.JUN.JUNE26,June 2026,5,true,https://i.postimg.cc/wT7Bn1Zp/APRIL-26-Temp5-20260610120848.png,"1403958587843149937,845912696766595092"
+523,yeosang,ATEEZ,ATEEZ.YEOSANG.JUNE26,June 2026,5,true,https://i.postimg.cc/g0DdxpQD/APRIL-26-Temp5-20260610120940.png,"1403958587843149937,845912696766595092"
+524,Kamden,Ampers&One,AMPERS&ONE.KAMDEN.JUNE26,June 2026,5,true,https://i.imgur.com/2zIfjCI.png,"1403958587843149937,949395112641839154"
+525,Sunoo,ENHYPEN,ENHYPEN.SUNOO.JUNE26,June 2026,5,true,https://i.imgur.com/PNWC1dI.png,"1403958587843149937,845912696766595092"
+526,Shownu,MONSTA X,MONSTAX.SHOWNU.JUNE26,June 2026,5,true,https://i.imgur.com/deLvyW8.png,"1403958587843149937,845912696766595092"
+527,Hinata,XG,XG.HINATA.JUNE26,June 2026,5,true,https://i.imgur.com/RXLCsZj.png,"1403958587843149937,845912696766595092"
