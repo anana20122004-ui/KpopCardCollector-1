@@ -37,7 +37,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const { error: insertError } = await supabase
     .from('users')
-    .insert([{ user_id: userId, coins: 100, language: lang }]);
+    .insert([{ user_id: userId, coins: 100 }]);
 
   if (insertError) {
     console.error('Error creating user:', insertError);
