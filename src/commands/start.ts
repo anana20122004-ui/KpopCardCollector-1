@@ -35,9 +35,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     return interaction.editReply({ embeds: [embed] });
   }
 
+  // Promotional starting bonus — 100,000 coins until June 26 2026, then 100
+  const PROMO_END = new Date('2026-06-27T00:00:00Z');
+  const startingCoins = Date.now() < PROMO_END.getTime() ? 100000 : 100;
+
   const { error: insertError } = await supabase
     .from('users')
-    .insert([{ user_id: userId, coins: 100 }]);
+    .insert([{ user_id: userId, coins: startingCoins }]);
 
   if (insertError) {
     console.error('Error creating user:', insertError);
@@ -48,7 +52,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     .setColor(0xff69b4)
     .setTitle(getTranslation(lang, 'start_title_new'))
     .setDescription(getTranslation(lang, 'start_desc_new'))
-    .addFields({ name: getTranslation(lang, 'start_field_coins'), value: '100' });
+    .addFields({ name: getTranslation(lang, 'start_field_coins'), value: `${startingCoins.toLocaleString()}` });
+
+  if (startingCoins === 100000) {
+    embed.setFooter({ text: lang === 'es' ? '🎉 ¡Bono de lanzamiento! Expira el 26 de junio' : '🎉 Launch bonus! Expires June 26' });
+  }
 
   await interaction.editReply({ embeds: [embed] });
 }

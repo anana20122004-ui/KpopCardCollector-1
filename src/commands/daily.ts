@@ -7,8 +7,8 @@ import { scheduleReminder } from '../utils/reminders.js';
 import { getTranslation } from '../utils/language.js';
 import { filterBlockedCards } from '../utils/blockFilter.js';
 
-const MIN_COINS = 50;
-const MAX_COINS = 100;
+const MIN_COINS = 1000;
+const MAX_COINS = 3500;
 const DAILY_COOLDOWN_HOURS = 24;
 
 export const data = new SlashCommandBuilder()

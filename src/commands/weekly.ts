@@ -9,7 +9,8 @@ import { getTranslation } from '../utils/language.js';
 import { filterBlockedCards } from '../utils/blockFilter.js';
 import { getRandomRarity } from '../utils/cards.js';
 
-const WEEKLY_REWARD = 1500;
+const WEEKLY_MIN = 3500;
+const WEEKLY_MAX = 8000;
 const WEEKLY_COOLDOWN_HOURS = 168;
 
 export const data = new SlashCommandBuilder()
@@ -21,10 +22,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const userId = interaction.user.id;
   const lang = (interaction as any).userLanguage || 'en';
   const cooldownHours = isAdminUser(userId) ? 0 : WEEKLY_COOLDOWN_HOURS;
+  const weeklyReward = Math.floor(Math.random() * (WEEKLY_MAX - WEEKLY_MIN + 1)) + WEEKLY_MIN;
 
   const { data, error } = await supabase.rpc('claim_weekly_reward', {
     p_user_id: userId,
-    p_reward: WEEKLY_REWARD,
+    p_reward: weeklyReward,
     p_cooldown_hours: cooldownHours
   });
 
