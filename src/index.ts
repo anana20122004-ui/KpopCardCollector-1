@@ -5,6 +5,7 @@ import { readdir } from 'fs/promises';
 import { createServer } from 'http';
 import { supabase } from './database/supabase.js';
 import { renderSearchPage } from './commands/search.js';
+import { isAdminUser } from './utils/constants.js';
 
 /* =========================
    START WEB SERVER FIRST
@@ -35,7 +36,6 @@ const client = new Client({
 const commands = new Collection<string, any>();
 const commandCooldowns = new Map<string, number>(); // userId -> last command timestamp
 
-const OWNER_ID = '1403958587843149937';
 
 /* =========================
    LOAD COMMANDS
@@ -232,8 +232,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
       await interaction.deferUpdate();
 
       try {
-        if (interaction.user.id !== OWNER_ID) {
-          return await interaction.editReply({ content: '🧚 Owner only!', embeds: [], components: [] });
+        if (!isAdminUser(interaction.member)) {
+          return await interaction.editReply({ content: '🧚 Staff only!', embeds: [], components: [] });
         }
 
         const parts = customId.split('_');
@@ -299,8 +299,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
     if (customId.startsWith('staffgift_cancel_')) {
       await interaction.deferUpdate();
 
-      if (interaction.user.id !== OWNER_ID) {
-        return await interaction.editReply({ content: '🧚 Owner only!', embeds: [], components: [] });
+      if (!isAdminUser(interaction.member)) {
+        return await interaction.editReply({ content: '🧚 Staff only!', embeds: [], components: [] });
       }
 
       const senderUserId = customId.split('_')[2];

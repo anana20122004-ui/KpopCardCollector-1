@@ -1,11 +1,10 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { supabase } from '../database/supabase.js';
-import { getRarityEmoji } from '../utils/cards.js';
+import { isAdminUser } from '../utils/constants.js';
 
 export const data = new SlashCommandBuilder()
   .setName('staffgift')
   .setDescription('Staff only: Gift cards to a user')
-  .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
   .addUserOption(option =>
     option.setName('user')
       .setDescription('User to gift to')
@@ -24,9 +23,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const senderUserId = interaction.user.id;
   const receiverUser = interaction.options.getUser('user', true);
   const receiverUserId = receiverUser.id;
-  const OWNER_ID = '1403958587843149937';
-
-  if (senderUserId !== OWNER_ID) return interaction.editReply({ content: '🧚 Owner only!' });
+  if (!isAdminUser(interaction.member)) return interaction.editReply({ content: '🧚 Staff only!' });
 
   const { data: receiver } = await supabase.from('users').select('*').eq('user_id', receiverUserId).single();
   if (!receiver) return interaction.editReply({ content: '🧚 User needs to use `/start`!' });

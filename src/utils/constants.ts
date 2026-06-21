@@ -12,18 +12,28 @@ export const BOOSTER_ROLE_ID = '1479309772569313290';
 // Users who can use bot during lockdown
 export const LOCKDOWN_WHITELIST = ADMIN_USERS;
 
-// Helper function to check if user is admin or staff
-export const isAdminUser = (member: any): boolean => {
-  if (!member) return false;
-  
-  // Check if ID is in ADMIN_USERS list
-  const userId = typeof member === 'string' ? member : member.id;
-  if (ADMIN_USERS.includes(userId)) return true;
+const getMemberUserId = (member: any): string | undefined => {
+  if (!member) return undefined;
+  if (typeof member === 'string') return member;
+  return member.id || member.user?.id;
+};
 
-  // Check for staff role if member object is provided
-  if (typeof member !== 'string' && member.roles) {
-    return member.roles.cache.has(STAFF_ROLE_ID);
+const memberHasRole = (member: any, roleId: string): boolean => {
+  if (!member || typeof member === 'string' || !member.roles) return false;
+
+  if (member.roles.cache?.has(roleId)) return true;
+
+  if (Array.isArray(member.roles)) {
+    return member.roles.some((role: any) => role === roleId || role?.id === roleId);
   }
 
   return false;
+};
+
+// Helper function to check if user is admin or has the staff role
+export const isAdminUser = (member: any): boolean => {
+  const userId = getMemberUserId(member);
+  if (userId && ADMIN_USERS.includes(userId)) return true;
+
+  return memberHasRole(member, STAFF_ROLE_ID);
 };

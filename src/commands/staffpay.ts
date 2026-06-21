@@ -1,10 +1,10 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
+import { isAdminUser } from '../utils/constants.js';
 
 export const data = new SlashCommandBuilder()
   .setName('staffpay')
   .setDescription('Staff only: Send coins to a user')
-  .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
   .addUserOption(option =>
     option.setName('user')
       .setDescription('User to pay')
@@ -17,8 +17,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();
-  const OWNER_ID = '1403958587843149937';
-  if (interaction.user.id !== OWNER_ID) return interaction.editReply({ content: '🧚 Owner only!' });
+  if (!isAdminUser(interaction.member)) return interaction.editReply({ content: '🧚 Staff only!' });
 
   const receiverUser = interaction.options.getUser('user', true);
   const amount = interaction.options.getInteger('amount', true);
@@ -30,8 +29,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const embed = new EmbedBuilder()
     .setColor(0xFFB6E1)
-    .setTitle('💸 Staff Payment Sent!')
-    .setDescription(`🌲 You sent **${amount} coins** to ${receiverUser.username}!\n\n💰 Their new balance: **${receiver.coins + amount} coins**`);
+    .setTitle('Staff Payment Sent!')
+    .setDescription(`You sent **${amount} coins** to ${receiverUser.username}!\n\n
+Their new balance: **${receiver.coins + amount} coins**`);
 
   await interaction.editReply({ embeds: [embed] });
 }
