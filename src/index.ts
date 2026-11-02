@@ -111,9 +111,9 @@ client.once(Events.ClientReady, async () => {
 
   console.log(`✨ Bot is online as ${client.user?.username}`);
 
-  client.user?.setActivity('RUDE!', {
+  client.user?.setActivity('iconic heart', {
     type: ActivityType.Streaming,
-    url: 'https://www.youtube.com/watch?v=Q4AE3ub4nBM'
+    url: 'https://www.youtube.com/watch?v=chl0R8C4NJ8'
   });
 
 });
