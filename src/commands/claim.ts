@@ -50,9 +50,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     ? `Tienes ${newQty} copia${newQty === 1 ? '' : 's'} de esta carta`
     : `You own ${newQty} cop${newQty === 1 ? 'y' : 'ies'} of this card`;
 
+  const avatarUrl = interaction.user.displayAvatarURL({ size: 256 });
   const embed = new EmbedBuilder()
     .setColor(getRarityColor(card.rarity))
-    .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
+    .setAuthor({ name: interaction.user.username, iconURL: avatarUrl })
+    .setThumbnail(avatarUrl)
     .setTitle(getTranslation(lang, 'drop_claimed_title'))
     .setDescription(description)
     .setFooter({ text: footerText });

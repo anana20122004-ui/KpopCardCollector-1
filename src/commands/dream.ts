@@ -86,7 +86,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const nextAvailable = new Date(Date.now() + DREAM_COOLDOWN_MS);
   const nextTimestamp = `<t:${Math.floor(nextAvailable.getTime() / 1000)}:R>`;
 
-  const avatarUrl = interaction.user.displayAvatarURL({ size: 64 });
+  const avatarUrl = interaction.user.displayAvatarURL({ size: 256 });
   const username = interaction.user.username;
 
   const description = lang === 'es'
@@ -100,6 +100,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const embed = new EmbedBuilder()
     .setColor(0xD8A8E8)
     .setAuthor({ name: username, iconURL: avatarUrl })
+    .setThumbnail(avatarUrl)
     .setTitle(lang === 'es' ? '🌙 ¡Tuviste un sueño!' : '🌙 You had a dream!')
     .setDescription(description)
     .setFooter({ text: footerText });
