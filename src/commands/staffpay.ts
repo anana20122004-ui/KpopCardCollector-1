@@ -1,17 +1,18 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { isAdminUser } from '../utils/constants.js';
+import { formatS2UCoins } from '../utils/currency.js';
 
 export const data = new SlashCommandBuilder()
   .setName('staffpay')
-  .setDescription('Staff only: Send coins to a user')
+  .setDescription('Staff only: Send S2UCoins to a user')
   .addUserOption(option =>
     option.setName('user')
       .setDescription('User to pay')
       .setRequired(true))
   .addIntegerOption(option =>
     option.setName('amount')
-      .setDescription('Number of coins to send')
+      .setDescription('Number of S2UCoins to send')
       .setRequired(true)
       .setMinValue(1));
 
@@ -30,8 +31,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const embed = new EmbedBuilder()
     .setColor(0xFFB6E1)
     .setTitle('Staff Payment Sent!')
-    .setDescription(`You sent **${amount} coins** to ${receiverUser.username}!\n\n
-Their new balance: **${receiver.coins + amount} coins**`);
+    .setDescription(`You sent ${formatS2UCoins(amount)} to ${receiverUser.username}!\n\n
+Their new balance: ${formatS2UCoins(receiver.coins + amount)}`);
 
   await interaction.editReply({ embeds: [embed] });
 }

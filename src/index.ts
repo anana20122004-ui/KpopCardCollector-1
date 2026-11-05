@@ -30,7 +30,11 @@ const __dirname = dirname(__filename);
 (global as any).botState = { lockdownMode: false };
 
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages]
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent
+  ]
 });
 
 const commands = new Collection<string, any>();

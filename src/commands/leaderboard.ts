@@ -7,8 +7,8 @@ export const data = new SlashCommandBuilder()
   .setDescription('View the top collectors')
   .addSubcommand(subcommand =>
     subcommand
-      .setName('coins')
-      .setDescription('Show users with the most coins'))
+      .setName('s2ucoins')
+      .setDescription('Show users with the most S2UCoins'))
   .addSubcommand(subcommand =>
     subcommand
       .setName('collection')
@@ -19,7 +19,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const lang = (interaction as any).userLanguage || 'en';
   const subcommand = interaction.options.getSubcommand();
 
-  if (subcommand === 'coins') {
+  if (subcommand === 's2ucoins') {
     const { data: topCoins } = await supabase
       .from('users')
       .select('user_id, coins')

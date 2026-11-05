@@ -4,6 +4,7 @@ import { getRandomRarity } from '../utils/cards.js';
 import { getTranslation } from '../utils/language.js';
 import { filterBlockedCards } from '../utils/blockFilter.js';
 import { mergeCardImages } from '../utils/imageUtils.js';
+import { formatS2UCoins } from '../utils/currency.js';
 
 const PACKS = [
   { id: '1', name: 'Stella Pack', cost: 2000, cards: 5, type: 'random' },
@@ -203,7 +204,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     .setColor(0xD8A8E8)
     .setTitle(`🎁 ${(pack as any).name} Purchased!`)
     .setDescription(cardList)
-    .setFooter({ text: `💰 -${(pack as any).cost} coins • ${pulled.length} cards acquired` });
+    .setFooter({ text: `Spent ${formatS2UCoins((pack as any).cost)} • ${pulled.length} cards acquired` });
   
   // Generate merged image
   try {

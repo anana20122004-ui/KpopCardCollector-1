@@ -4,14 +4,14 @@ import { getTranslation } from '../utils/language.js';
 
 export const data = new SlashCommandBuilder()
   .setName('pay')
-  .setDescription('Send coins to another user')
+  .setDescription('Send S2UCoins to another user')
   .addUserOption(option =>
     option.setName('user')
       .setDescription('User to pay')
       .setRequired(true))
   .addIntegerOption(option =>
     option.setName('amount')
-      .setDescription('Number of coins to send')
+      .setDescription('Number of S2UCoins to send')
       .setRequired(true)
       .setMinValue(1));
 

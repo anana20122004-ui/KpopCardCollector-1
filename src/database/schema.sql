@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
   user_id TEXT PRIMARY KEY,
   coins INTEGER DEFAULT 0,
   last_daily TIMESTAMP,
+  daily_streak INTEGER NOT NULL DEFAULT 0,
   last_weekly TIMESTAMP,
   last_surf TIMESTAMP,
   last_drop TIMESTAMP,
@@ -11,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
   last_bonanza TIMESTAMP,
   bio TEXT DEFAULT '',
   favorite_card_id INTEGER,
-  profile_color TEXT DEFAULT '#ff69b4',
+  profile_color TEXT DEFAULT '#F6C5D0',
   created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -68,6 +69,26 @@ CREATE TABLE IF NOT EXISTS quiz_questions (
   reward_coins INTEGER DEFAULT 50,
   created_at TIMESTAMP DEFAULT NOW()
 );
+
+-- Staff-managed English lyric snippets for the next-words game.
+CREATE TABLE IF NOT EXISTS lyric_questions (
+  id BIGSERIAL PRIMARY KEY,
+  prompt TEXT NOT NULL,
+  answer TEXT NOT NULL,
+  source TEXT,
+  language TEXT NOT NULL DEFAULT 'en' CHECK (language = 'en'),
+  reward_coins INTEGER NOT NULL DEFAULT 50 CHECK (reward_coins >= 0),
+  created_by TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CONSTRAINT lyric_answer_2_to_6_words CHECK (
+    array_length(regexp_split_to_array(trim(answer), E'\\s+'), 1) BETWEEN 2 AND 6
+  )
+);
+
+ALTER TABLE lyric_questions ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON TABLE lyric_questions FROM PUBLIC, anon, authenticated;
+GRANT SELECT, INSERT ON TABLE lyric_questions TO service_role;
+GRANT USAGE, SELECT ON SEQUENCE lyric_questions_id_seq TO service_role;
 
 -- Blocked staff table (admin blocking staff from addcard)
 CREATE TABLE IF NOT EXISTS blocked_staff (

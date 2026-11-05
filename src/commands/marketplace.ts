@@ -2,6 +2,7 @@ import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from '
 import { supabase } from '../database/supabase.js';
 import { getRarityEmoji } from '../utils/cards.js';
 import { getTranslation } from '../utils/language.js';
+import { formatS2UCoins } from '../utils/currency.js';
 
 export const data = new SlashCommandBuilder()
   .setName('mp')
@@ -16,7 +17,7 @@ export const data = new SlashCommandBuilder()
           .setRequired(true))
       .addIntegerOption(option =>
         option.setName('price')
-          .setDescription('Price in coins')
+          .setDescription('Price in S2UCoins')
           .setRequired(true)
           .setMinValue(1))
       .addIntegerOption(option =>
@@ -122,7 +123,7 @@ async function handleList(interaction: ChatInputCommandInteraction, lang: string
     .setDescription(getTranslation(lang, 'marketplace_list_desc'))
     .addFields(
       { name: getTranslation(lang, 'marketplace_list_codes'), value: codesDisplay },
-      { name: getTranslation(lang, 'marketplace_list_price'), value: `${price} ${lang === 'es' ? 'monedas' : 'coins'}` },
+      { name: getTranslation(lang, 'marketplace_list_price'), value: formatS2UCoins(price) },
       { name: getTranslation(lang, 'marketplace_list_qty'), value: `${quantity}` }
     );
 
@@ -148,7 +149,7 @@ async function handleBrowse(interaction: ChatInputCommandInteraction, lang: stri
       sellerName = seller.username;
     } catch (_) {}
     const sellerHint = lang === 'es' ? `de @${sellerName}` : `from @${sellerName}`;
-    return `**\`${listing.code}\`** | ${getRarityEmoji(card.rarity)} ${card.name} (${card.group}${eraText}) • \`${card.cardcode}\` | ${listing.price} ${lang === 'es' ? 'monedas' : 'coins'} | x${listing.quantity} | *${sellerHint}*`;
+    return `**\`${listing.code}\`** | ${getRarityEmoji(card.rarity)} ${card.name} (${card.group}${eraText}) • \`${card.cardcode}\` | ${formatS2UCoins(listing.price)} | x${listing.quantity} | *${sellerHint}*`;
   }))).join('\n');
 
   const embed = new EmbedBuilder()
@@ -190,8 +191,8 @@ async function handleBuy(interaction: ChatInputCommandInteraction, lang: string)
   if ((buyer as any).coins < price) {
     return interaction.editReply({
       content: lang === 'es'
-        ? `🧚 ¡Necesitas ${price} monedas! Tienes ${(buyer as any).coins} monedas.`
-        : `🧚 You need ${price} coins! You have ${(buyer as any).coins} coins.`
+        ? `Necesitas ${formatS2UCoins(price)}. Tienes ${formatS2UCoins((buyer as any).coins)}.`
+        : `You need ${formatS2UCoins(price)}. You have ${formatS2UCoins((buyer as any).coins)}.`
     });
   }
 
@@ -238,8 +239,8 @@ async function handleBuy(interaction: ChatInputCommandInteraction, lang: string)
     .setDescription(getTranslation(lang, 'marketplace_buy_desc', { card: card.name }))
     .addFields(
       { name: getTranslation(lang, 'marketplace_buy_field_card'), value: `${getRarityEmoji(card.rarity)} ${card.name} (${card.group}${eraText})` },
-      { name: getTranslation(lang, 'marketplace_buy_field_price'), value: `${price} ${lang === 'es' ? 'monedas' : 'coins'}` },
-      { name: getTranslation(lang, 'marketplace_buy_field_balance'), value: `${newBalance} ${lang === 'es' ? 'monedas' : 'coins'}` }
+      { name: getTranslation(lang, 'marketplace_buy_field_price'), value: formatS2UCoins(price) },
+      { name: getTranslation(lang, 'marketplace_buy_field_balance'), value: formatS2UCoins(newBalance) }
     );
 
   await interaction.editReply({ embeds: [embed] });
@@ -255,7 +256,7 @@ async function handleBuy(interaction: ChatInputCommandInteraction, lang: string)
         { name: getTranslation(lang, 'marketplace_buy_field_card'), value: `${getRarityEmoji(card.rarity)} ${card.name} (${card.group}${eraText})` },
         { name: getTranslation(lang, 'marketplace_sold_field_qty'), value: `x${qty}` },
         { name: getTranslation(lang, 'marketplace_sold_field_buyer'), value: `@${interaction.user.username}` },
-        { name: getTranslation(lang, 'marketplace_buy_field_price'), value: `${price} ${lang === 'es' ? 'monedas' : 'coins'}` }
+        { name: getTranslation(lang, 'marketplace_buy_field_price'), value: formatS2UCoins(price) }
       );
     await seller.send({ embeds: [sellerEmbed] });
   } catch (_) {}

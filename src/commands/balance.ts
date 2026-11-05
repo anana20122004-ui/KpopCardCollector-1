@@ -4,7 +4,7 @@ import { getTranslation } from '../utils/language.js';
 
 export const data = new SlashCommandBuilder()
   .setName('balance')
-  .setDescription('Check your coin balance')
+  .setDescription('Check your S2UCoins balance')
   .addUserOption(option =>
     option.setName('user')
       .setDescription('User to check balance for (default: yourself)')
@@ -33,7 +33,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const embed = new EmbedBuilder()
     .setColor(0xFFB6E1)
     .setTitle(user.language === 'es' ? `Saldo de ${targetUser.username}` : `${targetUser.username}'s Balance`)
-    .setDescription(`🧚 **${user.coins}** ${user.language === 'es' ? 'monedas' : 'coins'}`)
+    .setDescription(getTranslation(user.language, 'balance', { coins: user.coins }))
     .setThumbnail(targetUser.displayAvatarURL());
 
   await interaction.editReply({ embeds: [embed] });

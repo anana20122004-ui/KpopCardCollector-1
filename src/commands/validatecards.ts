@@ -47,7 +47,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const missingImageCount = cards.filter((c: any) => !c.image_url).length;
 
   const embed = new EmbedBuilder()
-    .setColor(errors.length > 0 ? 0xFF6B6B : (warnings.length > 0 ? 0xFFD699 : 0x90EE90))
+    .setColor(errors.length > 0 ? 0xF2C4C4 : (warnings.length > 0 ? 0xF3E0C1 : 0xCDECCB))
     .setTitle('🔍 Card Validation Report')
     .addFields(
       { name: 'Total Cards', value: `${totalCards}`, inline: true },

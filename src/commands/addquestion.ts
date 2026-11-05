@@ -23,7 +23,7 @@ export const data = new SlashCommandBuilder()
       .setRequired(true))
   .addIntegerOption(option =>
     option.setName('reward')
-      .setDescription('Coin reward for correct answer')
+      .setDescription('S2UCoins reward for correct answer')
       .setRequired(false));
 
 export async function execute(interaction: ChatInputCommandInteraction) {
@@ -48,7 +48,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       return interaction.editReply(`❌ Failed to add question: ${error.message}`);
     }
 
-    await interaction.editReply(`✅ Added ${type} question: **${answer}** with ${reward} coins.`);
+    await interaction.editReply(`✅ Added ${type} question: **${answer}** with ${reward} S2UCoins.`);
   } catch (error) {
     console.error('Unexpected error:', error);
     await interaction.editReply(`❌ Error: ${String(error)}`);

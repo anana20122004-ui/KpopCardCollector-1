@@ -1,11 +1,12 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { isAdminUser } from '../utils/constants.js';
+import { formatS2UCoins } from '../utils/currency.js';
 
 export const data = new SlashCommandBuilder()
   .setName('payall')
   .setDescription('Pay all registered users (Staff only)')
-  .addIntegerOption(o => o.setName('amount').setDescription('Coins to give each user').setRequired(true).setMinValue(1));
+  .addIntegerOption(o => o.setName('amount').setDescription('S2UCoins to give each user').setRequired(true).setMinValue(1));
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   if (!isAdminUser(interaction.member)) {
@@ -37,7 +38,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       await supabase.from('users').update({ coins: update.coins }).eq('user_id', update.user_id);
     }
 
-    await interaction.editReply(`✅ Paid 💫 **${amount}** coins to **${users.length}** user(s)!`);
+    await interaction.editReply(`✅ Paid ${formatS2UCoins(amount)} to **${users.length}** user(s)!`);
   } catch (error) {
     console.error('Error in payall:', error);
     await interaction.editReply(`❌ Error: ${String(error)}`);

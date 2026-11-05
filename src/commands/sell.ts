@@ -2,6 +2,7 @@ import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from '
 import { supabase } from '../database/supabase.js';
 import { getRarityEmoji } from '../utils/cards.js';
 import { getTranslation } from '../utils/language.js';
+import { formatS2UCoins } from '../utils/currency.js';
 
 const RARITY_PRICES: { [key: number]: number } = {
   5: 10000,
@@ -54,7 +55,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     const price = RARITY_PRICES[card.rarity] || 0;
     totalCoins += price;
-    soldCards.push(`**${card.name}** ${getRarityEmoji(card.rarity)} (\`${card.cardcode}\`) • ${price} ${lang === 'es' ? 'monedas' : 'coins'}`);
+    soldCards.push(`**${card.name}** ${getRarityEmoji(card.rarity)} (\`${card.cardcode}\`) • ${formatS2UCoins(price)}`);
   }
 
   if (totalCoins > 0) {
@@ -75,7 +76,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     .setColor(0xFFB6E1)
     .setTitle(getTranslation(lang, 'sell_title'))
     .setDescription(description)
-    .addFields({ name: getTranslation(lang, 'sell_field_balance'), value: `${user.coins + totalCoins} ${lang === 'es' ? 'monedas' : 'coins'}` });
+    .addFields({ name: getTranslation(lang, 'sell_field_balance'), value: formatS2UCoins(user.coins + totalCoins) });
 
   await interaction.editReply({ embeds: [embed] });
 }

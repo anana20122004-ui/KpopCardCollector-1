@@ -66,7 +66,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 
     const embed = new EmbedBuilder()
-      .setColor(0x90EE90)
+      .setColor(0xCDECCB)
       .setTitle('✨ Commands Reloaded!')
       .addFields(
         { name: 'Commands Registered', value: `${commands.length}`, inline: true },

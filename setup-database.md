@@ -2,6 +2,8 @@
 
 To set up your K-pop card bot database, follow these steps:
 
+> **Current schema note:** Existing projects should run `src/database/migrations/streaks-and-lyrics.sql` in the Supabase SQL Editor. For a fresh database, use `src/database/schema.sql` and `src/database/rpc-functions.sql`; the inline SQL below is the older setup copy.
+
 ## Step 1: Access Supabase SQL Editor
 1. Go to your [Supabase Dashboard](https://app.supabase.com)
 2. Select your project

@@ -15,7 +15,7 @@ const WEEKLY_COOLDOWN_HOURS = 168;
 
 export const data = new SlashCommandBuilder()
   .setName('weekly')
-  .setDescription('Claim your weekly coin reward!');
+  .setDescription('Claim your weekly S2UCoins reward!');
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();
@@ -90,7 +90,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   }).join('\n');
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xF6C5D0)
     .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
     .setTitle(getTranslation(lang, 'weekly_title'))
     .setDescription(cardList)

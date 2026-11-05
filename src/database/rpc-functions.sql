@@ -2,11 +2,15 @@
 CREATE OR REPLACE FUNCTION claim_daily_reward(p_user_id TEXT, p_reward INTEGER, p_cooldown_hours INTEGER)
 RETURNS JSON
 LANGUAGE plpgsql
+SET search_path = public
 AS $$
 DECLARE
   v_user RECORD;
   v_cooldown_end TIMESTAMP;
   v_now TIMESTAMP := NOW();
+  v_next_streak INTEGER;
+  v_bonus_percent INTEGER;
+  v_final_reward INTEGER;
 BEGIN
   SELECT * INTO v_user FROM users WHERE user_id = p_user_id FOR UPDATE;
   
@@ -24,19 +28,67 @@ BEGIN
       );
     END IF;
   END IF;
+
+  -- Staff retain the existing cooldown bypass without farming streak levels.
+  IF COALESCE(p_cooldown_hours, 24) = 0 THEN
+    v_next_streak := GREATEST(COALESCE(v_user.daily_streak, 0), 1);
+  ELSIF v_user.last_daily IS NULL
+    OR v_now > v_user.last_daily + INTERVAL '48 hours'
+    OR COALESCE(v_user.daily_streak, 0) < 1 THEN
+    v_next_streak := 1;
+  ELSE
+    v_next_streak := v_user.daily_streak + 1;
+  END IF;
+
+  v_bonus_percent := LEAST((v_next_streak - 1) * 10, 100);
+  v_final_reward := FLOOR(p_reward::NUMERIC * (100 + v_bonus_percent) / 100)::INTEGER;
   
   UPDATE users 
-  SET coins = coins + p_reward, last_daily = v_now
+  SET coins = coins + v_final_reward,
+      last_daily = v_now,
+      daily_streak = v_next_streak
   WHERE user_id = p_user_id;
   
   RETURN json_build_object(
     'success', true, 
     'old_balance', v_user.coins,
-    'new_balance', v_user.coins + p_reward,
-    'reward', p_reward
+    'new_balance', v_user.coins + v_final_reward,
+    'reward', v_final_reward,
+    'streak', v_next_streak,
+    'bonus_percent', v_bonus_percent
   );
 END;
 $$;
+REVOKE ALL ON FUNCTION public.claim_daily_reward(TEXT, INTEGER, INTEGER) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.claim_daily_reward(TEXT, INTEGER, INTEGER) TO service_role;
+
+-- Atomically award S2UCoins for a correctly answered lyric round.
+CREATE OR REPLACE FUNCTION public.award_lyric_reward(p_user_id TEXT, p_reward INTEGER)
+RETURNS JSON
+LANGUAGE plpgsql
+SET search_path = public
+AS $$
+DECLARE
+  v_new_balance INTEGER;
+BEGIN
+  IF p_reward < 0 THEN
+    RETURN json_build_object('success', false, 'error', 'invalid_reward');
+  END IF;
+
+  UPDATE public.users
+  SET coins = COALESCE(coins, 0) + p_reward
+  WHERE user_id = p_user_id
+  RETURNING coins INTO v_new_balance;
+
+  IF NOT FOUND THEN
+    RETURN json_build_object('success', false, 'error', 'user_not_found');
+  END IF;
+
+  RETURN json_build_object('success', true, 'new_balance', v_new_balance);
+END;
+$$;
+REVOKE ALL ON FUNCTION public.award_lyric_reward(TEXT, INTEGER) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.award_lyric_reward(TEXT, INTEGER) TO service_role;
 
 -- RPC function to claim weekly reward atomically
 CREATE OR REPLACE FUNCTION claim_weekly_reward(p_user_id TEXT, p_reward INTEGER, p_cooldown_hours INTEGER)

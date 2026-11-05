@@ -1,18 +1,19 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { getTranslation } from '../utils/language.js';
+import { getPastelProfileColor, isPastelHex } from '../utils/colors.js';
 
 export const data = new SlashCommandBuilder()
   .setName('profile')
   .setDescription('View or edit your profile')
   .addSubcommand(s => s.setName('view').setDescription('View profile').addUserOption(o => o.setName('user').setDescription('User')))
   .addSubcommand(s => s.setName('bio').setDescription('Edit bio').addStringOption(o => o.setName('text').setDescription('Bio').setRequired(true).setMaxLength(200)))
-  .addSubcommand(s => s.setName('color').setDescription('Edit embed color').addStringOption(o => o.setName('hex').setDescription('#RRGGBB').setRequired(true)))
+  .addSubcommand(s => s.setName('color').setDescription('Set a pastel embed color').addStringOption(o => o.setName('hex').setDescription('Pastel hex, e.g. #F6C5D0').setRequired(true)))
   .addSubcommand(s => s.setName('favorite').setDescription('Set favorite card').addStringOption(o => o.setName('cardcode').setDescription('Card code (e.g., BP001)').setRequired(true)));
 
-async function buildProfileEmbed(targetUser: any, dbUser: any): Promise<EmbedBuilder> {
-  const colorHex = (dbUser.profile_color || '#ff69b4').replace('#', '');
-  const color = parseInt(colorHex, 16) || 0xff69b4;
+async function buildProfileEmbed(targetUser: any, dbUser: any, lang = 'en'): Promise<EmbedBuilder> {
+  const colorHex = getPastelProfileColor(dbUser.profile_color);
+  const color = parseInt(colorHex.slice(1), 16);
   const startDate = dbUser.created_at ? new Date(dbUser.created_at).toLocaleDateString() : 'N/A';
 
   const embed = new EmbedBuilder()
@@ -21,7 +22,7 @@ async function buildProfileEmbed(targetUser: any, dbUser: any): Promise<EmbedBui
     .setDescription(dbUser.bio || '*No bio set*')
     .addFields(
       { name: '📅 Since', value: startDate, inline: true },
-      { name: '💫 Coins', value: `${dbUser.coins ?? 0}`, inline: true }
+      { name: getTranslation(lang, 'coins_label'), value: `${dbUser.coins ?? 0}`, inline: true }
     );
 
   if (dbUser.favorite_card_id) {
@@ -50,7 +51,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (error) console.error('[profile view] DB error:', error);
     if (!user) return interaction.editReply(getTranslation(lang, 'not_started'));
 
-    const embed = await buildProfileEmbed(target, user);
+    const embed = await buildProfileEmbed(target, user, lang);
     return interaction.editReply({ embeds: [embed] });
   }
 
@@ -64,15 +65,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     const { data: updated } = await supabase.from('users').select('*').eq('user_id', userId).maybeSingle();
     if (!updated) return interaction.editReply(`✅ Bio updated!`);
-    const embed = await buildProfileEmbed(interaction.user, updated);
+    const embed = await buildProfileEmbed(interaction.user, updated, lang);
     embed.setFooter({ text: lang === 'es' ? '✅ ¡Biografía actualizada!' : '✅ Bio updated!' });
     return interaction.editReply({ embeds: [embed] });
   }
 
   if (sub === 'color') {
     const hex = interaction.options.getString('hex', true);
-    if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) {
-      return interaction.editReply({ content: `❌ ${getTranslation(lang, 'profile_invalid_hex')} Use format: #RRGGBB` });
+    if (!isPastelHex(hex)) {
+      return interaction.editReply({ content: `❌ ${getTranslation(lang, 'profile_invalid_hex')}` });
     }
     const { error } = await supabase.from('users').update({ profile_color: hex }).eq('user_id', userId);
     if (error) {
@@ -82,7 +83,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     const { data: updated } = await supabase.from('users').select('*').eq('user_id', userId).maybeSingle();
     if (!updated) return interaction.editReply(`✅ Color updated to ${hex}!`);
-    const embed = await buildProfileEmbed(interaction.user, updated);
+    const embed = await buildProfileEmbed(interaction.user, updated, lang);
     embed.setFooter({ text: lang === 'es' ? `✅ Color actualizado a ${hex}` : `✅ Color updated to ${hex}` });
     return interaction.editReply({ embeds: [embed] });
   }
@@ -114,7 +115,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     const { data: updated } = await supabase.from('users').select('*').eq('user_id', userId).maybeSingle();
     if (!updated) return interaction.editReply(`✅ Favorite set to **${(card as any).name}**!`);
-    const embed = await buildProfileEmbed(interaction.user, updated);
+    const embed = await buildProfileEmbed(interaction.user, updated, lang);
     embed.setFooter({ text: lang === 'es' ? `✅ Carta favorita: ${(card as any).name}` : `✅ Favorite card set to ${(card as any).name}` });
     return interaction.editReply({ embeds: [embed] });
   }

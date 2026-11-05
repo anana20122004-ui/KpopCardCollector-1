@@ -10,10 +10,12 @@ A Discord bot that lets users collect, trade, and manage K-pop trading cards wit
 - **Rarity Tiers**: Beautiful color-coded embeds for each rarity level
 
 ### 💰 Economy System
-- **Daily Rewards**: Claim 50 coins every 24 hours
-- **Weekly Rewards**: Claim 300 coins every 7 days
-- **Surf for Coins**: Earn 10-30 coins every hour
-- **Starting Bonus**: New users get 100 coins to begin
+- **Daily Rewards**: Claim 1,000–3,500 S2UCoins every 24 hours, with a growing streak bonus capped at 2×
+- **Weekly Rewards**: Claim 300 S2UCoins every 7 days
+- **Surf for S2UCoins**: Earn 10–30 S2UCoins every hour
+- **Starting Bonus**: New users get 100 S2UCoins to begin
+- **Daily Streaks**: Gain 10% more per consecutive claim; streak resets after 48 hours
+- **Finish the Lyric**: Type the next 2–6 words from an English snippet
 
 ### 🛒 Marketplace
 - **List Cards**: Sell your cards to other users
@@ -30,11 +32,14 @@ A Discord bot that lets users collect, trade, and manage K-pop trading cards wit
 | Command | Description |
 |---------|-------------|
 | `/start` | Initialize your account and start collecting |
-| `/drop` | Open a card pack (costs 50 coins) |
+| `/drop` | Open a card pack (costs 50 S2UCoins) |
 | `/inventory` | View your card collection |
-| `/daily` | Claim daily coin reward (50 coins, 24h cooldown) |
-| `/weekly` | Claim weekly coin reward (300 coins, 7d cooldown) |
-| `/surf` | Surf for coins (10-30 coins, 1h cooldown) |
+| `/daily` | Claim daily S2UCoins; streak bonus grows up to 2× |
+| `/weekly` | Claim weekly reward (300 S2UCoins, 7d cooldown) |
+| `/surf` | Surf for S2UCoins (10–30, 1h cooldown) |
+| `/game lyrics` | Guess the next 2–6 words in an English lyric snippet |
+| `/addlyric` | (Staff) Add an English, rights-cleared lyric snippet |
+| `/leaderboard s2ucoins` | View the top S2UCoins balances |
 | `/cooldowns` | Check all your cooldown timers |
 | `/shop` | Browse the card pack shop |
 | `/mp list` | List a card for sale on the marketplace |
@@ -62,14 +67,20 @@ A Discord bot that lets users collect, trade, and manage K-pop trading cards wit
    - `DISCORD_TOKEN` - Your Discord bot token
    - `DISCORD_CLIENT_ID` - Your Discord application ID
    - `SUPABASE_URL` - Your Supabase project URL
-   - `SUPABASE_KEY` - Your Supabase anon/public key
+   - `SUPABASE_KEY` - Server-only Supabase secret/service-role key (never use it in client code)
 
 3. **Set Up Supabase Database**
    - Follow the instructions in `setup-database.md`
    - Run the SQL schema in your Supabase SQL Editor
    - Optionally add sample cards
+   - For an existing project, run `src/database/migrations/streaks-and-lyrics.sql`
 
-4. **Run the Bot**
+4. **Enable the Lyrics Game**
+   - In Discord Developer Portal, open **Bot → Privileged Gateway Intents**
+   - Enable **Message Content Intent** so the bot can read lyric guesses
+   - Add English snippets that you have permission to use with `/addlyric`
+
+5. **Run the Bot**
    ```bash
    npm run dev
    ```
@@ -81,9 +92,8 @@ A Discord bot that lets users collect, trade, and manage K-pop trading cards wit
 3. Go to the "Bot" section and create a bot
 4. Copy the bot token for `DISCORD_TOKEN`
 5. Copy the application ID from "General Information" for `DISCORD_CLIENT_ID`
-6. Enable these Privileged Gateway Intents:
-   - Server Members Intent (optional)
-   - Message Content Intent (optional)
+6. Enable the **Message Content Intent** under Privileged Gateway Intents for the lyrics game.
+   - Server Members Intent is optional.
 7. Go to OAuth2 → URL Generator
 8. Select scopes: `bot` and `applications.commands`
 9. Select bot permissions: `Send Messages`, `Embed Links`, `Use Slash Commands`
@@ -98,7 +108,7 @@ A Discord bot that lets users collect, trade, and manage K-pop trading cards wit
 
 ## Database Schema
 
-- **users**: User profiles with coins and cooldown tracking
+- **users**: User profiles with S2UCoins balances, daily streaks, and cooldown tracking
 - **cards**: K-pop card catalog with rarities
 - **inventory**: User card ownership with quantities
 - **marketplace**: Card listings for trading

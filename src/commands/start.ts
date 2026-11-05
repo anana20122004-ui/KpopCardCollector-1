@@ -49,7 +49,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   }
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xF6C5D0)
     .setTitle(getTranslation(lang, 'start_title_new'))
     .setDescription(getTranslation(lang, 'start_desc_new'))
     .addFields({ name: getTranslation(lang, 'start_field_coins'), value: `${startingCoins.toLocaleString()}` });

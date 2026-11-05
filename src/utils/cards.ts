@@ -38,11 +38,11 @@ export function getRarityEmoji(rarity: number): string {
 
 export function getRarityColor(rarity: number): number {
   switch (rarity) {
-    case 1: return 0xD3D3D3;
-    case 2: return 0x99FF99;
-    case 3: return 0x69B4FF;
+    case 1: return 0xE8E0EA;
+    case 2: return 0xCDECCB;
+    case 3: return 0xC8DDF2;
     case 4: return 0xD8A8E8;
-    case 5: return 0xFFFF99;
-    default: return 0xD3D3D3;
+    case 5: return 0xF5E8B4;
+    default: return 0xE8E0EA;
   }
 }

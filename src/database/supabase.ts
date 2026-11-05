@@ -9,6 +9,7 @@ export interface User {
   user_id: string;
   coins: number;
   last_daily: string | null;
+  daily_streak: number;
   last_weekly: string | null;
   last_surf: string | null;
   last_drop: string | null;

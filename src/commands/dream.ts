@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { supabase } from '../database/supabase.js';
 import { formatCooldown } from '../utils/cooldowns.js';
+import { formatS2UCoins } from '../utils/currency.js';
 import { isAdminUser } from '../utils/constants.js';
 import { scheduleReminder } from '../utils/reminders.js';
 
@@ -31,7 +32,7 @@ const DREAM_SCENARIOS = [
 
 export const data = new SlashCommandBuilder()
   .setName('dream')
-  .setDescription('Dream about idols and earn coins! ✨');
+  .setDescription('Dream about idols and earn S2UCoins! ✨');
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   const lang = (interaction as any).userLanguage || 'en';
@@ -90,8 +91,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const username = interaction.user.username;
 
   const description = lang === 'es'
-    ? `${scenario}\n\n¡Ganaste **${reward}** monedas! Tu saldo ahora es **${newBalance}** monedas, vuelve ${isStaff ? 'cuando quieras' : nextTimestamp}`
-    : `${scenario}\n\nYou earned **${reward}** coins! Your balance is now **${newBalance}** coins, come back ${isStaff ? 'whenever you want' : nextTimestamp}`;
+    ? `${scenario}\n\n¡Ganaste ${formatS2UCoins(reward)}! Tu saldo ahora es ${formatS2UCoins(newBalance)}, vuelve ${isStaff ? 'cuando quieras' : nextTimestamp}`
+    : `${scenario}\n\nYou earned ${formatS2UCoins(reward)}! Your balance is now ${formatS2UCoins(newBalance)}, come back ${isStaff ? 'whenever you want' : nextTimestamp}`;
 
   const footerText = isStaff
     ? (lang === 'es' ? '⚡ Ventaja de staff: sin cooldown' : '⚡ Staff perk: no cooldown')

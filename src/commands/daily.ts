@@ -13,7 +13,7 @@ const DAILY_COOLDOWN_HOURS = 24;
 
 export const data = new SlashCommandBuilder()
   .setName('daily')
-  .setDescription('Claim your daily coin reward!');
+  .setDescription('Claim your daily S2UCoins reward!');
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   await interaction.deferReply();
@@ -56,12 +56,19 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     return;
   }
 
+  const awardedReward = Number(result.reward ?? dailyReward);
+  const streak = Number(result.streak ?? 1);
+  const bonusPercent = Number(result.bonus_percent ?? 0);
   const { data: allCards } = await supabase.from('cards').select('*').eq('droppable', true);
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+    .setColor(0xF6C5D0)
     .setTitle(getTranslation(lang, 'daily_title'))
-    .setDescription(getTranslation(lang, 'daily_success', { reward: dailyReward }));
+    .setDescription(getTranslation(lang, 'daily_success', { reward: awardedReward }))
+    .addFields({
+      name: getTranslation(lang, 'daily_streak_label'),
+      value: getTranslation(lang, 'daily_streak', { streak, bonus: bonusPercent })
+    });
 
   if (allCards && allCards.length > 0) {
     const availableCards = await filterBlockedCards(allCards, userId);

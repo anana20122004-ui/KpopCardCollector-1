@@ -197,7 +197,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     : (lang === 'es' ? `Inventario de ${targetUser?.username}` : `${targetUser?.username}'s Inventory`);
 
   const embed = new EmbedBuilder()
-    .setColor(0xff69b4)
+      .setColor(0xF6C5D0)
     .setTitle(title)
     .setDescription(cardList)
     .setFooter({ text: getTranslation(lang, 'inventory_footer', { total: filteredInventory.length }) });
