@@ -33,8 +33,10 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   if (!isAdminUser(interaction.member)) {
-    return interaction.editReply('This command is for staff only.');
+    return interaction.reply({ content: 'This command is for staff only.', ephemeral: true });
   }
+
+  await interaction.deferReply({ ephemeral: true });
 
   const prompt = interaction.options.getString('prompt', true).trim();
   const answer = interaction.options.getString('answer', true).trim();
